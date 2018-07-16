@@ -1,18 +1,10 @@
 # v-dropdown
 
-> A Vue2 plugin for dropdown layer container
+A **Vue2** plugin for dropdown layer container
 
-## Build Setup
+## Projects using v-dropdown
 
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-```
-
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+- [v-region](https://github.com/TerryZ/v-region)
+- [v-selectpage](https://github.com/TerryZ/v-selectpage)
+- [v-selectmenu](https://github.com/TerryZ/v-selectmenu)
+- [v-suggest](https://github.com/TerryZ/v-suggest)
