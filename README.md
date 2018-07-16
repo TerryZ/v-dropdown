@@ -8,3 +8,20 @@ A **Vue2** plugin for dropdown layer container
 - [v-selectpage](https://github.com/TerryZ/v-selectpage)
 - [v-selectmenu](https://github.com/TerryZ/v-selectmenu)
 - [v-suggest](https://github.com/TerryZ/v-suggest)
+
+## Install
+
+```bash
+npm i v-dropdown --save
+```
+
+include in your plugin
+
+```js
+import Dropdown from 'v-dropdown';
+export default {
+    components: {
+        'v-dropdown': Dropdown
+    }
+};
+```
