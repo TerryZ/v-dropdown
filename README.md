@@ -2,12 +2,18 @@
 
 A **Vue2** plugin for dropdown layer container
 
+<a href="https://nodei.co/npm/v-selectpage/"><img src="https://nodei.co/npm/v-selectpage.png"></a>
+
+<br><br>
+
 ## Projects using `v-dropdown`
 
 - [v-region](https://github.com/TerryZ/v-region)
 - [v-selectpage](https://github.com/TerryZ/v-selectpage)
 - [v-selectmenu](https://github.com/TerryZ/v-selectmenu)
 - [v-suggest](https://github.com/TerryZ/v-suggest)
+
+<br><br>
 
 ## Install
 
