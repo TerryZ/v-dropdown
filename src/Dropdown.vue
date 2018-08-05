@@ -126,10 +126,7 @@
                 if(this.show){
                     let idx = e.path.findIndex(val=>val.className && val.className.includes(that.dropdownClass));
                     if(e.path.find(val=>val === that.lastCaller)) this.callerBlur = true;
-                    if(idx === -1) {
-                        this.visible(false);
-                        this.$emit('show-change', false);
-                    }
+                    if(idx === -1) this.visible(false);
                 }
             },
             MouseEventPolyfill(){
