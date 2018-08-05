@@ -2,7 +2,7 @@
 
 A **Vue2** plugin for dropdown layer container
 
-<a href="https://nodei.co/npm/v-selectpage/"><img src="https://nodei.co/npm/v-selectpage.png"></a>
+<a href="https://nodei.co/npm/v-dropdown/"><img src="https://nodei.co/npm/v-dropdown.png"></a>
 
 <br><br>
 
