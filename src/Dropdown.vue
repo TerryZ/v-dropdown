@@ -1,9 +1,11 @@
 <template>
-    <div :class="[dropdownClass,{'v-dropdown-embed': embed,'animate-drop': !embed,'drop-up': dropUp}]"
+    <transition :name="animate">
+    <div :class="[dropdownClass,{'v-dropdown-embed': embed}]"
          :style="[styleSheet]"
          v-show="show">
         <slot></slot>
     </div>
+    </transition>
 </template>
 
 <script>
@@ -31,22 +33,35 @@
                 styleSheet: { top: '',left: '' },
                 dropdownClass: 'v-dropdown-container',
                 dropUp: false,
+                callerBlur: false,
                 lastCaller: null
             };
         },
-        watch:{},
+        computed: {
+            animate(){
+                let cls = '';
+                if(!this.embed){
+                    cls = this.dropUp ? 'animate-up' : 'animate-down';
+                }
+                return cls;
+            }
+        },
         methods: {
             visible(state, caller){
                 if(typeof(state) === 'boolean' && this.show !== state){
+                    if(this.callerBlur && state){
+                        this.callerBlur = false;
+                        return;
+                    }
+
                     this.show = state;
                     let that = this;
                     this.$nextTick(()=>{
-                        if(that.show){
-                            if(!that.embed){
-                                that.adjust(caller);
-                                that.lastCaller = caller;
-                            }
-                        }else this.$emit('show-change', false);
+                        if(that.show && !that.embed && caller){
+                            that.adjust(caller);
+                            that.lastCaller = caller;
+                        }
+                        this.$emit('show-change', that.show);
                     });
                 }
             },
@@ -55,8 +70,6 @@
                 let menuPos = this.$el.getBoundingClientRect();
                 let scrollTop = window.pageYOffset, viewHeight = document.documentElement.clientHeight;
                 let srcTop = this.rightClick ? this.y : pos.top + scrollTop;
-
-
 
                 t = this.rightClick ? this.y : pos.top + pos.height + gap + scrollTop;
                 let overDown = false, overUp = false;
@@ -78,7 +91,6 @@
 
                 this.dropUp = info.up;
                 t = info.top;
-
 
                 let scrollLeft = window.pageXOffset,
                     viewWid = document.documentElement.clientWidth,
@@ -112,10 +124,10 @@
             whole(e){
                 let that = this;
                 if(this.show){
-                    // || val.outerHTML !== that.lastCaller.outerHTML)
                     let idx = e.path.findIndex(val=>val.className && val.className.includes(that.dropdownClass));
+                    if(e.path.find(val=>val === that.lastCaller)) this.callerBlur = true;
                     if(idx === -1) {
-                        this.show = false;
+                        this.visible(false);
                         this.$emit('show-change', false);
                     }
                 }
@@ -123,15 +135,14 @@
             MouseEventPolyfill(){
                 if (!('path' in Event.prototype)) {
                     Object.defineProperty(Event.prototype, 'path', {
-                        get: function () {
+                        get() {
                             const path = [];
                             let currentElem = this.target;
                             while (currentElem) {
                                 path.push(currentElem);
                                 currentElem = currentElem.parentElement;
                             }
-                            if (path.indexOf(window) === -1 && path.indexOf(document) === -1)
-                                path.push(document);
+                            if (path.indexOf(window) === -1 && path.indexOf(document) === -1) path.push(document);
                             if (path.indexOf(window) === -1) path.push(window);
                             return path;
                         }
@@ -175,8 +186,6 @@
         left:0;
         vertical-align: middle;
         box-sizing: border-box;
-
-        /*background-color: #F5F5F5;*/
         background-color: white;
         border-radius: 2px;
         box-shadow: 0 3px 12px rgba(0,0,0,0.2);
@@ -185,31 +194,30 @@
         z-index: 3000;
         &.sm_regular { width: auto;min-width: 150px; }
         &.sm_embed { position: relative; }
-        /* Select only */
-        & > .sm_select_ng { background: #fcc; }
-        /*输入框设置了input-block-level样式时的特殊情况修复*/
-        input.sm_input.input-block-level{
-            box-sizing:border-box;
-            height: 30px;
-            line-height: 30px;
-            min-height: 30px;
-            width: 100%;
-        }
-        &.animate-drop {
-            -webkit-animation: dropDownFadeInDown 300ms cubic-bezier(.23,1,.32,1);
-            animation: dropDownFadeInDown 300ms cubic-bezier(.23,1,.32,1);
-            &.drop-up {
-                -webkit-animation: dropDownFadeInUp 300ms cubic-bezier(.23,1,.32,1);
-                animation: dropDownFadeInUp 300ms cubic-bezier(.23,1,.32,1);
-            }
-        }
-
         &.v-dropdown-embed {
             position: relative;
             -webkit-box-shadow: 0 1px 8px rgba(0,0,0,.15);
             box-shadow: 0 1px 8px rgba(0,0,0,.15);
             z-index: 100;
         }
+    }
+
+    .animate-down-enter-active {
+        -webkit-animation: dropDownFadeInDown 300ms cubic-bezier(.23,1,.32,1);
+        animation: dropDownFadeInDown 300ms cubic-bezier(.23,1,.32,1);
+    }
+    .animate-down-leave-active {
+        -webkit-animation: dropDownFadeInDown 200ms cubic-bezier(.23,1,.32,1) reverse;
+        animation: dropDownFadeInDown 200ms cubic-bezier(.23,1,.32,1) reverse;
+    }
+
+    .animate-up-enter-active {
+        -webkit-animation: dropDownFadeInUp 300ms cubic-bezier(.23,1,.32,1);
+        animation: dropDownFadeInUp 300ms cubic-bezier(.23,1,.32,1);
+    }
+    .animate-up-leave-active {
+        -webkit-animation: dropDownFadeInUp 150ms cubic-bezier(.23,1,.32,1) reverse;
+        animation: dropDownFadeInUp 150ms cubic-bezier(.23,1,.32,1) reverse;
     }
 
     @keyframes dropDownFadeInDown {
@@ -220,5 +228,4 @@
         from{ opacity: 0;transform: translate3d(0, 20px, 0); }
         to{ opacity: 1;transform: translate3d(0, 0, 0); }
     }
-
 </style>
