@@ -24,6 +24,19 @@
                 type: Boolean,
                 default: false
             },
+            /**
+             * when the drop-down container is already open, whether to open the drop-down container
+             * again after clicking the caller
+             */
+            reOpen: {
+                type: Boolean,
+                default: false
+            },
+            /**
+             * the width of drop down menu
+             * min-width: 80
+             */
+            width: Number,
             x: Number,
             y: Number
         },
@@ -49,7 +62,8 @@
         methods: {
             visible(state, caller){
                 if(typeof(state) === 'boolean' && this.show !== state){
-                    if(this.callerBlur && state){
+                    if(this.show === state) return;
+                    if(!this.reOpen && this.callerBlur && state){
                         this.callerBlur = false;
                         return;
                     }
@@ -125,7 +139,7 @@
                 let that = this;
                 if(this.show){
                     let idx = e.path.findIndex(val=>val.className && val.className.includes(that.dropdownClass));
-                    if(e.path.find(val=>val === that.lastCaller)) this.callerBlur = true;
+                    if(!this.reOpen && e.path.find(val=>val === that.lastCaller)) this.callerBlur = true;
                     if(idx === -1) this.visible(false);
                 }
             },
@@ -151,6 +165,7 @@
             //console.log(this.$el.style.display)
             //console.log(this.caller)
             this.MouseEventPolyfill();
+            if(this.width) this.styleSheet.width = this.width + 'px';
 
             if(this.embed) this.visible(true);
             else{
