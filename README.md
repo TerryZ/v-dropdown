@@ -21,7 +21,7 @@ A **Vue2** plugin for dropdown layer container
 npm i v-dropdown --save
 ```
 
-include in your plugin
+Include in your plugin
 
 ```js
 import Dropdown from 'v-dropdown';
