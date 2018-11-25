@@ -46,42 +46,54 @@
                 styleSheet: { top: '',left: '' },
                 dropdownClass: 'v-dropdown-container',
                 dropUp: false,
-                callerBlur: false,
                 lastCaller: null
             };
         },
         computed: {
             animate(){
                 let cls = '';
-                if(!this.embed){
-                    cls = this.dropUp ? 'animate-up' : 'animate-down';
-                }
+                if(!this.embed) cls = this.dropUp ? 'animate-up' : 'animate-down';
                 return cls;
             }
         },
         methods: {
-            visible(state, caller){
-                if(typeof(state) === 'boolean' && this.show !== state){
-                    if(this.show === state) return;
-                    if(!this.reOpen && this.callerBlur && state){
-                        this.callerBlur = false;
-                        return;
-                    }
-
-                    this.show = state;
-                    let that = this;
-                    this.$nextTick(()=>{
-                        if(that.show && !that.embed && caller){
-                            that.adjust(caller);
-                            that.lastCaller = caller;
-                        }
-                        this.$emit('show-change', that.show);
-                    });
+            visible(caller){
+                let dir = null;
+                if(!this.show) {
+                    dir = this.getDir(caller);
+                    this.dropUp = dir.up;
                 }
+
+                this.show = !this.show;
+
+                if(this.show && !this.embed && caller){
+                    this.adjust(caller, dir);
+                    this.lastCaller = caller;
+                }
+
+                this.$nextTick(()=>{
+                    this.$emit('show-change', this.show);
+                });
             },
+            //get container show up direction and top axis
             getDir(caller){
                 let pos = caller.getBoundingClientRect(),gap = 5, t = 0, u = false;
-                let menuPos = this.$el.getBoundingClientRect();
+                let menuPos = null;
+
+                if(this.show){
+                    menuPos = this.$el.getBoundingClientRect();
+                }else{
+                    //change hide drop down container way from 'display:none' to 'visibility:hidden',
+                    //be used for get width and height
+                    this.$el.style.visibility = 'hidden';
+                    this.$el.style.display = 'inline-block';
+                    menuPos = this.$el.getBoundingClientRect();
+                    //restore style
+                    this.$el.style.visibility = 'visible';
+                    this.$el.style.display = 'none';
+                }
+
+
                 let scrollTop = window.pageYOffset, viewHeight = document.documentElement.clientHeight;
                 let srcTop = this.rightClick ? this.y : pos.top + scrollTop;
 
@@ -98,10 +110,11 @@
 
                 return {top: t, up: u};
             },
-            adjust(caller){
+            adjust(caller, direction){
                 let pos = caller.getBoundingClientRect(), gap = 5, t = 0, l = 0;
                 let box = this.$el.getBoundingClientRect();
-                let info = this.getDir(caller);
+                let info = direction && Object.keys(direction).length?direction:this.getDir(caller);
+                // let info = this.getDir(caller);
 
                 this.dropUp = info.up;
                 t = info.top;
@@ -138,9 +151,10 @@
             whole(e){
                 let that = this;
                 if(this.show){
+                    let callerClick = false;
                     let idx = e.path.findIndex(val=>val.className && val.className.includes(that.dropdownClass));
-                    if(!this.reOpen && e.path.find(val=>val === that.lastCaller)) this.callerBlur = true;
-                    if(idx === -1) this.visible(false);
+                    if(!this.reOpen && e.path.find(val=>val === that.lastCaller)) callerClick = true;
+                    if(idx === -1 && !callerClick) this.visible();
                 }
             },
             MouseEventPolyfill(){
@@ -162,25 +176,23 @@
             }
         },
         mounted(){
-            //console.log(this.$el.style.display)
-            //console.log(this.caller)
             this.MouseEventPolyfill();
             if(this.width) this.styleSheet.width = this.width + 'px';
 
-            if(this.embed) this.visible(true);
+            if(this.embed) this.visible();
             else{
                 document.body.appendChild(this.$el)
 
                 this.$on('show', this.visible);
                 this.$on('adjust', this.adjust);
-                document.addEventListener('mousedown', this.whole);
+                document.body.addEventListener('mousedown', this.whole);
             }
         },
         destroyed(){
             if(!this.embed) {
                 this.$off('show', this.visible);
                 this.$off('adjust', this.adjust);
-                document.removeEventListener('mousedown', this.whole);
+                document.body.removeEventListener('mousedown', this.whole);
                 this.$el.remove();
             }
         }
