@@ -59,19 +59,18 @@
         methods: {
             visible(caller){
                 let dir = null;
-                if(!this.show) {
+                if(!this.show && !this.embed && caller) {
                     dir = this.getDir(caller);
                     this.dropUp = dir.up;
                 }
 
                 this.show = !this.show;
 
-                if(this.show && !this.embed && caller){
-                    this.adjust(caller, dir);
-                    this.lastCaller = caller;
-                }
-
                 this.$nextTick(()=>{
+                    if(this.show && !this.embed && caller){
+                        this.adjust(caller, dir);
+                        this.lastCaller = caller;
+                    }
                     this.$emit('show-change', this.show);
                 });
             },
@@ -92,7 +91,6 @@
                     this.$el.style.visibility = 'visible';
                     this.$el.style.display = 'none';
                 }
-
 
                 let scrollTop = window.pageYOffset, viewHeight = document.documentElement.clientHeight;
                 let srcTop = this.rightClick ? this.y : pos.top + scrollTop;
@@ -128,7 +126,6 @@
                     center = (left + (wid / 2)) - (box.width / 2),
                     //align right's left
                     right = (left + wid) - box.width;
-
 
                 switch (this.position){
                     case 'left':
