@@ -23,11 +23,23 @@ npm i v-dropdown --save
 
 Include in your plugin
 
-```js
+```vue
+<v-dropdown>
+    some contents you want
+</v-dropdown>
+
+<script>
 import Dropdown from 'v-dropdown';
 export default {
     components: {
         'v-dropdown': Dropdown
     }
 };
+</script>
 ```
+
+<br><br>
+
+## Options
+
+## Events
