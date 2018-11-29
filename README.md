@@ -42,4 +42,15 @@ export default {
 
 ## Options
 
+- position
+- embed
+- right-click
+- re-open
+- width
+- x
+- y
+
 ## Events
+
+- show
+- adjust
