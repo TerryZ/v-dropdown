@@ -1,5 +1,9 @@
 # v-dropdown
 
+[![npm version](https://img.shields.io/npm/v/v-dropdown.svg)](https://www.npmjs.com/package/v-dropdown)
+[![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://mit-license.org/)
+[![npm](https://img.shields.io/npm/dy/v-dropdown.svg)](https://www.npmjs.com/package/v-dropdown)
+
 A **Vue2** plugin for dropdown layer container
 
 <a href="https://nodei.co/npm/v-dropdown/"><img src="https://nodei.co/npm/v-dropdown.png"></a>
