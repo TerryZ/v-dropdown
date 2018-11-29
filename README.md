@@ -6,7 +6,6 @@
 
 A **Vue2** plugin for dropdown layer container
 
-<a href="https://nodei.co/npm/v-dropdown/"><img src="https://nodei.co/npm/v-dropdown.png"></a>
 
 <br><br>
 
@@ -24,6 +23,8 @@ A **Vue2** plugin for dropdown layer container
 ```bash
 npm i v-dropdown --save
 ```
+
+<a href="https://nodei.co/npm/v-dropdown/"><img src="https://nodei.co/npm/v-dropdown.png"></a>
 
 Include in your plugin
 
