@@ -47,17 +47,17 @@ export default {
 
 ## Options
 
-- position
-- embed
-- right-click
-- re-open
-- width
-- x
-- y
+- **position** `string`
+- **embed** `boolean`
+- **right-click** `boolean`
+- **re-open** `boolean`
+- **width** `number`
+- **x** `number`
+- **y** `number`
 
 <br><br>
 
 ## Events
 
-- show
-- adjust
+- **show**
+- **adjust**
