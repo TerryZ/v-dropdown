@@ -48,9 +48,9 @@ export default {
 ## Options
 
 - **position** `string`  
- - `left`
- - `center`
- - `right`
+    - `left`
+    - `center`
+    - `right`
 - **embed** `boolean`
 - **right-click** `boolean`
 - **re-open** `boolean`
