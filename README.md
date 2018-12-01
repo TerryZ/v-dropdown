@@ -48,7 +48,7 @@ export default {
 ## Options
 
 - **position** `string`  
-    - `left`
+    - `left` ( default )
     - `center`
     - `right`
 - **embed** `boolean`
