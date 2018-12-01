@@ -47,7 +47,10 @@ export default {
 
 ## Options
 
-- **position** `string`
+- **position** `string`  
+ - `left`
+ - `center`
+ - `right`
 - **embed** `boolean`
 - **right-click** `boolean`
 - **re-open** `boolean`
