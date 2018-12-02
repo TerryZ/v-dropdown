@@ -55,7 +55,7 @@ export default {
 - **right-click** `boolean`
 - **re-open** `boolean`  
 default: `false`  
-whether the dropdown reopen when dropdown open and dropdown caller click again  
+whether the dropdown reopen when dropdown has been opened and dropdown caller click again  
 - **width** `number`
 - **x** `number`
 - **y** `number`
