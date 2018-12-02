@@ -53,7 +53,9 @@ export default {
     - `right`
 - **embed** `boolean`
 - **right-click** `boolean`
-- **re-open** `boolean`
+- **re-open** `boolean`  
+default: `false`
+whether the dropdown reopn when dropdown open and dropdown caller click again
 - **width** `number`
 - **x** `number`
 - **y** `number`
