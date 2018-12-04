@@ -149,7 +149,9 @@
                 let that = this;
                 if(this.show){
                     let callerClick = false;
-                    let idx = e.path.findIndex(val=>val.className && val.className.includes(that.dropdownClass));
+                    let idx = e.path.findIndex(val=>val.className &&
+                        typeof val.className === 'string' &&
+                        val.className.includes(that.dropdownClass));
                     if(!this.reOpen && e.path.find(val=>val === that.lastCaller)) callerClick = true;
                     if(idx === -1 && !callerClick) this.visible();
                 }
@@ -224,29 +226,33 @@
     }
 
     .animate-down-enter-active {
+        will-change: opacify, transform;
         -webkit-animation: dropDownFadeInDown 300ms cubic-bezier(.23,1,.32,1);
         animation: dropDownFadeInDown 300ms cubic-bezier(.23,1,.32,1);
     }
     .animate-down-leave-active {
+        will-change: opacify, transform;
         -webkit-animation: dropDownFadeInDown 200ms cubic-bezier(.23,1,.32,1) reverse;
         animation: dropDownFadeInDown 200ms cubic-bezier(.23,1,.32,1) reverse;
     }
 
     .animate-up-enter-active {
+        will-change: opacify, transform;
         -webkit-animation: dropDownFadeInUp 300ms cubic-bezier(.23,1,.32,1);
         animation: dropDownFadeInUp 300ms cubic-bezier(.23,1,.32,1);
     }
     .animate-up-leave-active {
+        will-change: opacify, transform;
         -webkit-animation: dropDownFadeInUp 150ms cubic-bezier(.23,1,.32,1) reverse;
         animation: dropDownFadeInUp 150ms cubic-bezier(.23,1,.32,1) reverse;
     }
 
     @keyframes dropDownFadeInDown {
-        from{ opacity: 0;transform: translate3d(0, -20px, 0); }
-        to{ opacity: 1;transform: translate3d(0, 0, 0); }
+        from{ opacity: 0;transform: translate3d(0, -20px, 0);-webkit-transform: translate3d(0, -20px, 0); }
+        to{ opacity: 1;transform: translate3d(0, 0, 0);-webkit-transform: translate3d(0, 0, 0); }
     }
     @keyframes dropDownFadeInUp {
-        from{ opacity: 0;transform: translate3d(0, 20px, 0); }
-        to{ opacity: 1;transform: translate3d(0, 0, 0); }
+        from{ opacity: 0;transform: translate3d(0, 20px, 0);-webkit-transform: translate3d(0, 20px, 0); }
+        to{ opacity: 1;transform: translate3d(0, 0, 0);-webkit-transform: translate3d(0, 0, 0); }
     }
 </style>
