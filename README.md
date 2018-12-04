@@ -51,7 +51,9 @@ export default {
     - `left` ( default )
     - `center`
     - `right`
-- **embed** `boolean`
+- **embed** `boolean`  
+default: `false`  
+the drop down panel embedded in page/component  
 - **right-click** `boolean`
 - **re-open** `boolean`  
 default: `false`  
