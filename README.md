@@ -53,17 +53,17 @@ export default {
     - `right`  
     <br>
 - **embed** `boolean`  
-default: `false`  
+default: *false*  
 the drop down panel embedded in page/component  
-<br>
+<br>  
 - **right-click** `boolean`  
 default: `false`  
 mouse right button click to call dropdown  
-<br>
+<br>  
 - **re-open** `boolean`  
 default: `false`  
 whether the dropdown reopen when dropdown has been opened and dropdown caller click again  
-<br>
+<br>  
 - **width** `number`
 - **x** `number`
 - **y** `number`
