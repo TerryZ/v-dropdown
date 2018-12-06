@@ -50,7 +50,8 @@ export default {
 - **position** `string`  
     - `left` ( default )
     - `center`
-    - `right`
+    - `right`  
+    <br>
 - **embed** `boolean`  
 default: `false`  
 the drop down panel embedded in page/component  
