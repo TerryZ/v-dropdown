@@ -48,7 +48,7 @@ export default {
 ## Options
 
 - **position** `string`  
-    - `left` ( default )
+    - `left` ( *default* )
     - `center`
     - `right`  
     <br>
@@ -56,14 +56,17 @@ export default {
 default: *false*  
 the drop down panel embedded in page/component  
 <br>  
+
 - **right-click** `boolean`  
 default: `false`  
 mouse right button click to call dropdown  
 <br>  
+
 - **re-open** `boolean`  
 default: `false`  
 whether the dropdown reopen when dropdown has been opened and dropdown caller click again  
 <br>  
+
 - **width** `number`
 - **x** `number`
 - **y** `number`
