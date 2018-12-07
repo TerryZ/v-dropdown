@@ -61,7 +61,7 @@ default: `false`
 mouse right button click to call dropdown  
 - **re-open** `boolean`  
 default: `false`  
-whether the dropdown reopen when dropdown has been opened and dropdown caller click again  
+the dropdown whether re-open when it's has been opened and dropdown caller click again  
 - **width** `number`
 - **x** `number`
 - **y** `number`
