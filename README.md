@@ -59,6 +59,8 @@ the drop down panel embedded in page/component
 - **right-click** `boolean`  
 default: `false`  
 mouse right button click to call dropdown  
+- **animated** `boolean|string`  
+default: *true*  
 - **re-open** `boolean`  
 default: `false`  
 the dropdown whether re-open when it's has been opened and dropdown caller click again  
