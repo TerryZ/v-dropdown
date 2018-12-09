@@ -64,7 +64,8 @@ default: *true*
 - **re-open** `boolean`  
 default: `false`  
 the dropdown whether re-open when it's has been opened and dropdown caller click again  
-- **width** `number`
+- **width** `number`  
+specified number to set width  
 - **x** `number`
 - **y** `number`
 
