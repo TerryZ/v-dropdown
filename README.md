@@ -66,8 +66,10 @@ default: `false`
 the dropdown whether re-open when it's has been opened and dropdown caller click again  
 - **width** `number`  
 specified number to set width  
-- **x** `number`
-- **y** `number`
+- **x** `number`  
+mouse right click x axis, work on `right-click` set to `true`
+- **y** `number`  
+mouse right click y axis, work on `right-click` set to `true`
 
 <br><br>
 
