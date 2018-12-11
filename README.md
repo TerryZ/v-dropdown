@@ -75,5 +75,13 @@ mouse right click y axis, work on `right-click` set to `true`
 
 ## Events
 
-- **show**
-- **adjust**
+```vue
+<button type='button' ref='caller'></button>
+<v-dropdown ref='drop'>
+</v-dropdown>
+```
+
+- **show**  
+`this.$refs.drop.$emit('show', this.$refs.caller)`  
+- **adjust**  
+`this.$refs.drop.$emit('adjust')`  
