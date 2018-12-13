@@ -76,9 +76,41 @@ mouse right click y axis, work on `right-click` set to `true`
 ## Events
 
 ```vue
-<button type='button' ref='caller'></button>
-<v-dropdown ref='drop'>
-</v-dropdown>
+<template>
+    <button type='button' ref='caller'></button>
+    <v-dropdown ref='drop' @show-change="showChange">content</v-dropdown>
+</template>
+<script>
+export default {
+    methods: {
+        showChange(val){
+            console.log(val);//true for shown, false for hidden
+        }
+    }
+};
+</script>
+```
+
+- **show-change**  
+the dropdown layer container show state
+
+
+## API
+
+```vue
+<template>
+    <button type='button' ref='caller' @click="click"></button>
+    <v-dropdown ref='drop'>content</v-dropdown>
+</template>
+<script>
+export default {
+    methods: {
+        click(){
+            this.$refs.drop.$emit('api-name', args);
+        }
+    }
+};
+</script>
 ```
 
 - **show**  
