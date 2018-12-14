@@ -91,9 +91,9 @@ export default {
 </script>
 ```
 
-- **show-change**  
+- **show-change** the dropdown layer container show state  
 *arguments*  
-    - val(boolean) - the dropdown layer container show state
+    - val(boolean) - `true` for shown, `false` for hidden
 
 
 ## API
