@@ -92,8 +92,8 @@ export default {
 ```
 
 - **show-change**  
-arguments  
-    -val(boolean) - the dropdown layer container show state
+*arguments*  
+    - val(boolean) - the dropdown layer container show state
 
 
 ## API
