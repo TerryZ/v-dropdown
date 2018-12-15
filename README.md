@@ -27,7 +27,7 @@ npm i v-dropdown --save
 
 <a href="https://nodei.co/npm/v-dropdown/"><img src="https://nodei.co/npm/v-dropdown.png"></a>
 
-Include in your plugin
+Include in your component/plugin/page
 
 ```vue
 <v-dropdown>
