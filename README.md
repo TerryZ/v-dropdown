@@ -46,6 +46,26 @@ export default {
 
 <br><br>
 
+## Use case
+
+```vue
+<button type="button" ref="caller" >Open</button>
+<v-dropdown ref="drop">
+    some contents you want
+</v-dropdown>
+
+<script>
+import Dropdown from 'v-dropdown';
+export default {
+    components: {
+        'v-dropdown': Dropdown
+    }
+};
+</script>
+```
+
+<br><br>
+
 ## Options
 
 - **position** `string`  
