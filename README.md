@@ -115,6 +115,7 @@ export default {
 *arguments*  
     - val(boolean) - `true` for shown, `false` for hidden
 
+<br><br>
 
 ## API
 
