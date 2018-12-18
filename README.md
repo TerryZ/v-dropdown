@@ -50,7 +50,7 @@ export default {
 
 ```vue
 <button type="button" ref="caller" >Open</button>
-<v-dropdown ref="drop">
+<v-dropdown ref="drop" @show-change="showChange">
     some contents you want
 </v-dropdown>
 
@@ -59,6 +59,16 @@ import Dropdown from 'v-dropdown';
 export default {
     components: {
         'v-dropdown': Dropdown
+    },
+    data(){
+        return {
+            show: false
+        };
+    },
+    methods: {
+        showChange(val){
+            this.show = val;
+        }
     }
 };
 </script>
