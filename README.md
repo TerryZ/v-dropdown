@@ -78,7 +78,7 @@ export default {
 
 ## Options
 
-- **position** `string`  
+- **align** `string`  
     - `left` ( *default* )
     - `center`
     - `right`  
