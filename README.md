@@ -152,7 +152,7 @@ export default {
 `this.$refs.drop.$emit('show', this.$refs.caller)`  
 *arguments*  
     - caller(HTMLDOMELEMENT) - open the caller of the drop down, the drop down layer will align to caller  
-- **adjust** adjust drop down layer positiion, make it align to caller
+- **adjust** adjust drop down layer positiion, make it align to caller  
 `this.$refs.drop.$emit('adjust')`  
 *arguments*  
     - caller(HTMLDOMELEMENT) - open the caller of the drop down, the drop down layer will align to caller  
