@@ -68,6 +68,9 @@ export default {
     methods: {
         showChange(val){
             this.show = val;
+        },
+        open(){
+            if(!this.show) this.$refs.drop.$emit('show', this.$refs.caller);
         }
     }
 };
@@ -146,6 +149,8 @@ export default {
 ```
 
 - **show**  
+*arguments*  
+    - open the caller of the drop down, the drop down layer will align to caller  
 `this.$refs.drop.$emit('show', this.$refs.caller)`  
 - **adjust**  
 `this.$refs.drop.$emit('adjust')`  
