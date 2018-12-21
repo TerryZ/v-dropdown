@@ -49,7 +49,7 @@ export default {
 ## Use case
 
 ```vue
-<button type="button" ref="caller" >Open</button>
+<button type="button" ref="caller" @click="open" >Open</button>
 <v-dropdown ref="drop" @show-change="showChange">
     some contents you want
 </v-dropdown>
