@@ -49,10 +49,12 @@ export default {
 ## Use case
 
 ```vue
-<button type="button" ref="caller" @click="open" >Open</button>
-<v-dropdown ref="drop" @show-change="showChange">
-    some contents you want
-</v-dropdown>
+<template>
+    <button type="button" ref="caller" @click="open" >Open</button>
+    <v-dropdown ref="drop" @show-change="showChange">
+        some contents you want
+    </v-dropdown>
+</template>
 
 <script>
 import Dropdown from 'v-dropdown';
