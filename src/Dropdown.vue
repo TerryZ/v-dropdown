@@ -61,80 +61,73 @@
         },
         methods: {
             visible(caller){
-                let dir = null;
                 this.$nextTick(()=>{
                     //calculation show direction(up or down) and top axis
-                    if(!this.show && !this.embed && caller) {
-                        dir = this.getDir(caller);
-                        this.dropUp = dir.up;
-                    }
+                    if(!this.show && !this.embed && caller) this.adjust(caller);
 
                     this.show = !this.show;
 
-                    this.$nextTick(()=>{
-                        if(this.show && !this.embed && caller){
-                            this.adjust(caller, dir);
-                            this.lastCaller = caller;
-                        }
-                    });
+                    this.lastCaller = caller;
                     this.$emit('show-change', this.show);
                 });
             },
-            //get container show up direction and top axis
-            getDir(caller){
-                let pos = caller.getBoundingClientRect(),gap = 5, t = 0, u = false, menuPos = null;
+            adjust(caller){
+                const pos = caller.getBoundingClientRect();
+                let menu = null;
 
-                if(this.show) menuPos = this.$el.getBoundingClientRect();
+                if(this.show) menu = this.$el.getBoundingClientRect();
                 else{
                     //change hide drop down container way from 'display:none' to 'visibility:hidden',
                     //be used for get width and height
                     this.$el.style.visibility = 'hidden';
                     this.$el.style.display = 'inline-block';
-                    menuPos = this.$el.getBoundingClientRect();
+                    menu = this.$el.getBoundingClientRect();
                     //restore style
                     this.$el.style.visibility = 'visible';
                     this.$el.style.display = 'none';
                 }
 
-                let scrollTop = window.pageYOffset, viewHeight = document.documentElement.clientHeight;
-                let srcTop = this.rightClick ? this.y : pos.top + scrollTop;
+                this.adjustTop(pos, menu);
+                this.adjustLeft(pos, menu);
+            },
+            //get container show up direction and top axis
+            adjustTop(pos, menu){
+                const gap = 5,
+                    scrollTop = window.pageYOffset,
+                    viewHeight = document.documentElement.clientHeight,
+                    srcTop = this.rightClick ? this.y : pos.top + scrollTop;
+                let t = 0, u = false;
 
                 t = this.rightClick ? this.y : pos.top + pos.height + gap + scrollTop;
                 let overDown = false, overUp = false;
                 //list over screen
-                if((t + menuPos.height) > (scrollTop + viewHeight)) overDown = true;
-                if((srcTop - gap - menuPos.height) < 0) overUp = true;
+                if((t + menu.height) > (scrollTop + viewHeight)) overDown = true;
+                if((srcTop - gap - menu.height) < 0) overUp = true;
 
                 if(!overUp && overDown){
-                    t = srcTop - gap - menuPos.height;
+                    t = srcTop - gap - menu.height;
                     u = true;
                 }
-                return {top: t, up: u};
+                this.dropUp = u;
+                this.styleSheet.top = `${t}px`;
             },
-            adjust(caller, direction){
-                let pos = caller.getBoundingClientRect(), t = 0, l = 0,
-                    box = this.$el.getBoundingClientRect(),
-                    info = direction && Object.keys(direction).length?direction:this.getDir(caller);
-
-                this.dropUp = info.up;
-                t = info.top;
-
-                let scrollLeft = window.pageXOffset,
-                    viewWid = document.documentElement.clientWidth,
-                    wid = this.rightClick ? 0 : pos.width,
+            adjustLeft(pos, menu){
+                const scrollLeft = window.pageXOffset,
+                    viewWid = document.documentElement.clientWidth;
+                let l = 0, wid = this.rightClick ? 0 : pos.width,
                     //align left's left
                     left = this.rightClick ? this.x : pos.left + scrollLeft,
                     //align center's left
-                    center = (left + (wid / 2)) - (box.width / 2),
+                    center = (left + (wid / 2)) - (menu.width / 2),
                     //align right's left
-                    right = (left + wid) - box.width;
+                    right = (left + wid) - menu.width;
 
                 switch (this.align){
                     case 'left':
-                        l = (left + box.width) > (scrollLeft + viewWid) ? right : left;
+                        l = (left + menu.width) > (scrollLeft + viewWid) ? right : left;
                         break;
                     case 'center':
-                        if((center + box.width) > (scrollLeft + viewWid)) l = right;
+                        if((center + menu.width) > (scrollLeft + viewWid)) l = right;
                         else if(right < scrollLeft) l = left;
                         else l = center;
                         break;
@@ -143,8 +136,7 @@
                         break;
                 }
 
-                this.styleSheet.top = t + 'px';
-                this.styleSheet.left = l + 'px';
+                this.styleSheet.left = `${l}px`;
             },
             whole(e){
                 if(this.show){
@@ -222,34 +214,24 @@
         }
     }
 
-    .animate-down-enter-active {
-        will-change: opacify, transform;
-        -webkit-animation: dropDownFadeInDown 300ms cubic-bezier(.23,1,.32,1);
-        animation: dropDownFadeInDown 300ms cubic-bezier(.23,1,.32,1);
-    }
-    .animate-down-leave-active {
-        will-change: opacify, transform;
-        -webkit-animation: dropDownFadeInDown 200ms cubic-bezier(.23,1,.32,1) reverse;
-        animation: dropDownFadeInDown 200ms cubic-bezier(.23,1,.32,1) reverse;
-    }
-
+    .animate-down-enter-active,
     .animate-up-enter-active {
-        will-change: opacify, transform;
-        -webkit-animation: dropDownFadeInUp 300ms cubic-bezier(.23,1,.32,1);
-        animation: dropDownFadeInUp 300ms cubic-bezier(.23,1,.32,1);
-    }
-    .animate-up-leave-active {
-        will-change: opacify, transform;
-        -webkit-animation: dropDownFadeInUp 150ms cubic-bezier(.23,1,.32,1) reverse;
-        animation: dropDownFadeInUp 150ms cubic-bezier(.23,1,.32,1) reverse;
+        -webkit-transition: opacity 300ms, transform 300ms cubic-bezier(0.23,1,0.32,1);
+                transition: opacity 300ms, transform 300ms cubic-bezier(0.23,1,0.32,1);
     }
 
-    @keyframes dropDownFadeInDown {
-        from{ opacity: 0;transform: translate3d(0, -20px, 0);-webkit-transform: translate3d(0, -20px, 0); }
-        to{ opacity: 1;transform: translate3d(0, 0, 0);-webkit-transform: translate3d(0, 0, 0); }
+    .animate-down-leave-active,
+    .animate-up-leave-active {
+        -webkit-transition: opacity 100ms;
+                transition: opacity 100ms;
     }
-    @keyframes dropDownFadeInUp {
-        from{ opacity: 0;transform: translate3d(0, 20px, 0);-webkit-transform: translate3d(0, 20px, 0); }
-        to{ opacity: 1;transform: translate3d(0, 0, 0);-webkit-transform: translate3d(0, 0, 0); }
-    }
+
+    .animate-down-enter,
+    .animate-down-leave-to,
+    .animate-up-enter,
+    .animate-up-leave-to { opacity: 0; }
+
+
+    .animate-down-enter { transform: translate3d(0, -20px, 0);-webkit-transform: translate3d(0, -20px, 0); }
+    .animate-up-enter { transform: translate3d(0, 20px, 0);-webkit-transform: translate3d(0, 20px, 0); }
 </style>
