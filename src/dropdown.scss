@@ -52,9 +52,9 @@ $duration: 200ms;
 @mixin show-up-animation($start){
     opacity: 0;
     //transform: scale3d(1,0,1);
-    //transform-origin: center bottom;
-    -webkit-transform: translateY($start) scale(0.95);
-            transform: translateY($start) scale(0.95);
+    //transform-origin: center bottom; scale(0.95)
+    -webkit-transform: translateY($start) scaleY(0.93);
+            transform: translateY($start) scaleY(0.93);
 }
 
 .animate-down-enter,

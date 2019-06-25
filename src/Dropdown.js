@@ -39,7 +39,7 @@ export default {
             default: false
         },
 		disabled: {
-        	type: Boolean,
+			type: Boolean,
 			default: false
 		},
 		/**
@@ -63,7 +63,7 @@ export default {
 		 * true: block
 		 */
 		fullWidth: {
-        	type: Boolean,
+			type: Boolean,
 			default: false
 		}
     },
@@ -89,7 +89,7 @@ export default {
 		const children = [];
         //the dropdown layer caller
 		if(this.$slots.caller && Object.keys(this.$slots.caller).length && !this.embed){
-        	children.push(this.$slots.caller);
+			children.push(this.$slots.caller);
 		}
 		//the dropdown layer container
 		children.push(h('transition',{
@@ -113,20 +113,20 @@ export default {
 		},this.$slots.default)]));
 
         return h('div',{
-        	class: {
-        		'v-dropdown-caller': true,
+			class: {
+				'v-dropdown-caller': true,
 				'v-dropdown-caller--full-width': this.fullWidth
 			},
 			on: {
-        		click: e=>{
-        			if(this.embed || this.rightClick || this.manual) return;
-        			e.stopPropagation();
-        			this.visible();
+				click: e=>{
+					if(this.embed || this.rightClick || this.manual) return;
+					e.stopPropagation();
+					this.visible();
 				},
 				//mouse right button click
 				contextmenu: e=>{
 					if(this.embed || this.manual || !this.rightClick) return;
-        			e.stopPropagation();
+					e.stopPropagation();
 					e.preventDefault();
 
 					const info = this.scrollInfo();
@@ -139,18 +139,20 @@ export default {
     },
     methods: {
         visible(outside = false){
-        	if(this.disabled) return;
+			if(this.disabled) return;
 			/**
 			 * do not toggle show/close when 'toggle' option is set to false
 			 */
 			if(this.show && !this.toggle && !outside) return;
-			/**
-			 * calculation display direction(up or down) and top axis
-			 */
-			if(!this.show && !this.embed && this.$slots.caller) this.adjust();
+			this.$nextTick(()=>{
+				/**
+				 * calculation display direction(up or down) and top axis
+				 */
+				if(!this.show && !this.embed && this.$slots.caller) this.adjust();
 
-			this.show = !this.show;
-			this.$emit('show', this.show);
+				this.show = !this.show;
+				this.$emit('show', this.show);
+			});
         },
 		/**
 		 * the dropdown container outside click handle
@@ -258,9 +260,9 @@ export default {
 		 * @returns {Array|EventTarget[]|*}
 		 */
 		eventPath(e){
-        	if('composedPath' in e) return e.composedPath();
-        	if('path' in e) return e.path;
-        	//polyfill
+			if('composedPath' in e) return e.composedPath();
+			if('path' in e) return e.path;
+			//polyfill
 			const path = [];
 			let currentElem = e.target;
 			while (currentElem) {
@@ -282,7 +284,7 @@ export default {
         }
     },
 	beforeDestroy(){
-    	//remove drop down layer
+		//remove drop down layer
 		if(!this.embed) {
 			document.body.removeEventListener('mousedown', this.whole);
 			this.$refs.dropdown.remove();
