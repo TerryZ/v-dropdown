@@ -144,15 +144,13 @@ export default {
 			 * do not toggle show/close when 'toggle' option is set to false
 			 */
 			if(this.show && !this.toggle && !outside) return;
-			this.$nextTick(()=>{
-				/**
-				 * calculation display direction(up or down) and top axis
-				 */
-				if(!this.show && !this.embed && this.$slots.caller) this.adjust();
+			/**
+			 * calculation display direction(up or down) and top axis
+			 */
+			if(!this.show && !this.embed && this.$slots.caller) this.adjust();
 
-				this.show = !this.show;
-				this.$emit('show', this.show);
-			});
+			this.show = !this.show;
+			this.$emit('show', this.show);
         },
 		/**
 		 * the dropdown container outside click handle
