@@ -48,13 +48,14 @@ div.v-dropdown-container{
 //.animate-down-enter { transform: translate3d(0, -20px, 0);-webkit-transform: translate3d(0, -20px, 0); }
 //.animate-up-enter { transform: translate3d(0, 20px, 0);-webkit-transform: translate3d(0, 20px, 0); }
 
-$duration: 200ms;
+$duration: 100ms;
 @mixin show-up-animation($start){
     opacity: 0;
     //transform: scale3d(1,0,1);
-    //transform-origin: center bottom; scale(0.95)
-    -webkit-transform: translateY($start) scaleY(0.93);
-            transform: translateY($start) scaleY(0.93);
+    //transform-origin: center bottom;
+    //scale(0.95)
+    -webkit-transform: translateY($start);
+            transform: translateY($start);
 }
 
 .animate-down-enter,
