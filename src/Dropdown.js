@@ -213,15 +213,16 @@ export default {
                 viewHeight = document.documentElement.clientHeight,
                 srcTop = this.rightClick ? this.y : pos.top + scrollTop;
             let t = this.rightClick ? this.y : pos.top + pos.height + gap + scrollTop;
-            let overDown = false, overUp = false;
+            let overDown = false, overUp = false, up = false;
             //list over screen
             if((t + menu.height) > (scrollTop + viewHeight)) overDown = true;
             if((srcTop - gap - menu.height) < 0) overUp = true;
 
             if(!overUp && overDown){
                 t = srcTop - gap - menu.height;
-				this.dropUp = true;
+				up = true;
             }
+			this.dropUp = up;
             this.styleSheet.top = `${t}px`;
         },
         adjustLeft(pos, menu){
