@@ -17,6 +17,10 @@ export default {
             type: Boolean,
             default: false
         },
+		border: {
+			type: Boolean,
+			default: true
+		},
 		/**
 		 * mouse right click caller area to display dropdown
 		 */
@@ -99,7 +103,8 @@ export default {
 		},[h('div',{
 			class: {
 				[this.dropdownClass]: true,
-				'v-dropdown-embed': this.embed
+				'v-dropdown-embed': this.embed,
+				'v-dropdown-no-border': !this.border
 			},
 			style: this.styleSheet,
 			directives: [{name: 'show', value: this.show}],

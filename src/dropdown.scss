@@ -25,6 +25,10 @@ div.v-dropdown-container{
         @include shadow(1px, 6px, 0.12);
         z-index: 100;
     }
+    &.v-dropdown-no-border{
+        border: 0;
+        @include shadow(3px, 8px, 0.25);
+    }
 }
 
 //.animate-down-enter-active,
