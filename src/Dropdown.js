@@ -221,7 +221,7 @@ export default {
             let overDown = false, overUp = false, up = false;
             //list over screen
             if((t + menu.height) > (scrollTop + viewHeight)) overDown = true;
-            if((srcTop - gap - menu.height) < 0) overUp = true;
+            if((srcTop - gap - menu.height) < scrollTop) overUp = true;
 
             if(!overUp && overDown){
                 t = srcTop - gap - menu.height;
