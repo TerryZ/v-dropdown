@@ -1,0 +1,60 @@
+shadow(blur, transparent, v-shadow = 3px)
+  -webkit-box-shadow 0 v-shadow blur rgba(0,0,0,transparent)
+  -moz-box-shadow 0 v-shadow blur rgba(0,0,0,transparent)
+  box-shadow 0 v-shadow blur rgba(0,0,0,transparent)
+
+animation(start = -6px)
+  -webkit-transform translateY(start)
+  transform translateY(start)
+  opacity 0
+
+duration = 150ms
+down = animate-down
+up = animate-up
+
+div.v-dropdown-caller
+  display inline-block
+  &.v-dropdown-caller--full-width
+    display block
+div.v-dropdown-container
+  display inline-block
+  border 1px solid #D6D7D7
+  margin 0
+  padding 0
+  position absolute
+  top 0
+  left 0
+  box-sizing border-box
+  background-color white
+  -webkit-border-radius 2px
+  border-radius 2px
+  z-index 3000
+  shadow(12px, 0.2)
+  will-change opacity, transform
+  &.v-dropdown-embed
+    position relative
+    box-shadow 0 1px 6px rgba(0,0,0,0.12) !important
+    z-index 100
+  &.v-dropdown-no-border
+    border 0
+    shadow(8px, 0.25)
+
+.{down}-enter
+.{down}-leave-to
+  animation()
+.{up}-enter
+.{up}-leave-to
+  animation(6px)
+.{down}-enter-active
+.{down}-leave-active
+.{up}-enter-active
+.{up}-leave-active
+  -webkit-transition opacity duration, transform duration
+  transition opacity duration, transform duration
+.{down}-enter-to
+.{down}-leave
+.{up}-enter-to
+.{up}-leave
+  -webkit-transform none
+  transform none
+  opacity 1

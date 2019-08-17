@@ -29,6 +29,14 @@ module.exports = {
         ],
       },
       {
+        test: /\.styl$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'stylus-loader'
+        ],
+      },
+      {
         test: /\.sass$/,
         use: [
           'vue-style-loader',

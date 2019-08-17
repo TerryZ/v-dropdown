@@ -1,16 +1,13 @@
 {
   "name": "v-dropdown",
   "description": "A Vue2 plugin for dropdown layer container",
-  "version": "2.0.6",
+  "version": "2.1.0",
   "author": "TerryZ <terry5@foxmail.com>",
   "license": "MIT",
   "main": "dist/v-dropdown.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
-  },
-  "dependencies": {
-    "vue": "^2.6.10"
   },
   "keywords": [
     "javascript",
@@ -36,6 +33,9 @@
     "file-loader": "^1.1.4",
     "node-sass": "^4.11.0",
     "sass-loader": "^6.0.6",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "vue": "^2.6.10",
     "vue-loader": "^13.7.3",
     "vue-template-compiler": "^2.6.10",
     "webpack": "^3.6.0",

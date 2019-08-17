@@ -1,4 +1,4 @@
-import drop from './Dropdown';
+import drop from './Dropdown'
 
-export default drop;
-export { drop as Dropdown };
+export default drop
+export { drop as Dropdown }
