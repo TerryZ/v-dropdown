@@ -18,16 +18,17 @@ div.v-dropdown-caller
     display block
 div.v-dropdown-container
   display inline-block
-  border 1px solid #D6D7D7
   margin 0
   padding 0
-  position absolute
   top 0
   left 0
+  border 1px solid #D6D7D7
+  position absolute
   box-sizing border-box
   background-color white
   -webkit-border-radius 2px
   border-radius 2px
+  overflow hidden
   z-index 3000
   shadow(12px, 0.2)
   will-change opacity, transform
@@ -37,7 +38,7 @@ div.v-dropdown-container
     z-index 100
   &.v-dropdown-no-border
     border 0
-    shadow(8px, 0.25)
+    shadow(8px, 0.3)
 
 .{down}-enter
 .{down}-leave-to
