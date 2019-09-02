@@ -82,23 +82,19 @@ export default {
     - `center`
     - `right`  
     <br>
-- **embed** `boolean`  
+- **embed** `boolean` the drop down panel embedded in page/component  
 default: *false*  
-the drop down panel embedded in page/component  
-- **right-click** `boolean`  
+
+- **right-click** `boolean` mouse right button click to call dropdown  
 default: *false*  
-mouse right button click to call dropdown  
+
 - **animated** `boolean|string`  
 default: *true*  
-- **toggle** `boolean`  
+- **toggle** `boolean` click trigger and display dropdown container and trigger click again whether to close dropdown  
 default: *false*  
-click trigger and display dropdown container and trigger click again whether to close dropdown  
-- **width** `number`  
-custom dropdown container width(px)   
-- **full-width** `boolean`  
+- **width** `number` custom dropdown container width(px)
+- **full-width** `boolean` the dropdown trigger display type, `true` for block, `false` for inline-block
 default: *false*  
-the dropdown trigger display type, `true` for block, `false` for inline-block
-
 
 ## Events
 
