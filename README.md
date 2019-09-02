@@ -2,11 +2,7 @@
 
 A **Vue2** plugin for dropdown container layer
 
-
-
-
-
-<br><br>
+## Live Examples on [CodePen](https://codepen.io/terry05/pen/BggbrK)
 
 ## Projects using `v-dropdown`
 
@@ -15,29 +11,27 @@ A **Vue2** plugin for dropdown container layer
 - [v-selectmenu](https://github.com/TerryZ/v-selectmenu)
 - [v-suggest](https://github.com/TerryZ/v-suggest)
 
-<br><br>
+## Installation
 
-## Install
+<a href="https://nodei.co/npm/v-dropdown/"><img src="https://nodei.co/npm/v-dropdown.png"></a>
 
 ```bash
 npm i v-dropdown --save
 ```
 
-<a href="https://nodei.co/npm/v-dropdown/"><img src="https://nodei.co/npm/v-dropdown.png"></a>
-
-Include in your component/plugin/page
+Include and install plugin in your component/plugin/page
 
 ```vue
 <v-dropdown>
-    some contents you want
+  some contents you want
 </v-dropdown>
 
 <script>
 import Dropdown from 'v-dropdown';
 export default {
-    components: {
-        'v-dropdown': Dropdown
-    }
+  components: {
+    'v-dropdown': Dropdown
+  }
 };
 </script>
 ```
@@ -48,38 +42,39 @@ export default {
 
 ```vue
 <template>
-    <button type="button" ref="caller" @click="open" >Open</button>
-    <v-dropdown ref="drop" @show-change="showChange">
-        some contents you want
-    </v-dropdown>
+  <v-dropdown ref="drop" @show="showChange">
+    <!-- named slot -->
+    <template #caller>
+      <button type="button" class="btn">Open</button>
+    </template>
+    
+    <div>
+      some contents you want
+    </div>
+  </v-dropdown>
 </template>
 
 <script>
 import Dropdown from 'v-dropdown';
 export default {
-    components: {
-        'v-dropdown': Dropdown
-    },
-    data(){
-        return {
-            show: false
-        };
-    },
-    methods: {
-        showChange(val){
-            this.show = val;
-        },
-        open(){
-            if(!this.show) this.$refs.drop.$emit('show', this.$refs.caller);
-        }
+  components: {
+    'v-dropdown': Dropdown
+  },
+  data(){
+    return {
+      show: false
     }
+  },
+  methods: {
+    showChange(val){
+      this.show = val;
+    }
+  }
 };
 </script>
 ```
 
-<br><br>
-
-## Options
+## Props
 
 - **align** `string`  
     - `left` ( *default* )
