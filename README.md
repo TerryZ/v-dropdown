@@ -38,15 +38,14 @@ export default {
 </script>
 ```
 
-<br><br>
-
 ## Use case
 
 ```vue
 <template>
-  <v-dropdown ref="drop" @show="showChange">
+  <v-dropdown @show="showChange">
     <!-- named slot -->
     <template #caller>
+      <!-- dropdown container trigger -->
       <button type="button" class="btn">Open</button>
     </template>
     
@@ -91,17 +90,15 @@ default: *false*
 mouse right button click to call dropdown  
 - **animated** `boolean|string`  
 default: *true*  
-- **re-open** `boolean`  
+- **toggle** `boolean`  
 default: *false*  
-the dropdown whether re-open when it's has been opened and dropdown caller click again  
+click trigger and display dropdown container and trigger click again whether to close dropdown  
 - **width** `number`  
-specified number to set width  
-- **x** `number`  
-mouse right click x axis, work on `right-click` set to `true`
-- **y** `number`  
-mouse right click y axis, work on `right-click` set to `true`
+custom dropdown container width(px)   
+- **full-width** `boolean`  
+default: *false*  
+the dropdown trigger display type, `true` for block, `false` for inline-block
 
-<br><br>
 
 ## Events
 
@@ -131,17 +128,20 @@ export default {
 
 ```vue
 <template>
-    <button type='button' ref='caller' @click="click"></button>
-    <v-dropdown ref='drop'>content</v-dropdown>
+  <v-dropdown ref='drop'>
+    <template #caller>
+      <button type='button' class="btn">Button</button>
+    </template>
+  </v-dropdown>
 </template>
 <script>
 export default {
-    methods: {
-        click(){
-            this.$refs.drop.$emit('api-name', args);
-        }
+  methods: {
+    click(){
+      this.$refs.drop.$emit('api-name', args);
     }
-};
+  }
+}
 </script>
 ```
 
