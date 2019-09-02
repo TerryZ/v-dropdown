@@ -22,9 +22,11 @@ npm i v-dropdown --save
 Include and install plugin in your component/plugin/page
 
 ```vue
-<v-dropdown>
-  some contents you want
-</v-dropdown>
+<template>
+  <v-dropdown>
+    some contents you want
+  </v-dropdown>
+</template>
 
 <script>
 import Dropdown from 'v-dropdown';
