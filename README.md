@@ -2,7 +2,7 @@
 
 A **Vue2** plugin for dropdown container layer
 
-## Live Examples on [CodePen](https://codepen.io/terry05/pen/BggbrK)
+### Live Examples on [CodePen](https://codepen.io/terry05/pen/BggbrK)
 
 ## Projects using `v-dropdown`
 
