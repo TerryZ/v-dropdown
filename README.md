@@ -104,21 +104,26 @@ default: *false*
 
 ```vue
 <template>
-    <button type='button' ref='caller'></button>
-    <v-dropdown ref='drop' @show-change="showChange">content</v-dropdown>
+  <v-dropdown @show="showChange">
+    <template #caller>
+      <button type='button' ref='caller'>trigger</button>
+    </template>
+
+    <div>content</div>
+  </v-dropdown>
 </template>
 <script>
 export default {
-    methods: {
-        showChange(val){
-            console.log(val);//true for shown, false for hidden
-        }
+  methods: {
+    showChange(val){
+      console.log(val);//true for shown, false for hidden
     }
-};
+  }
+}
 </script>
 ```
 
-- **show-change** the dropdown layer container show state  
+- **show** the dropdown layer container show state  
 *arguments*  
     - val(boolean) - `true` for shown, `false` for hidden
 
