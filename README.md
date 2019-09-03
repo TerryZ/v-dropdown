@@ -17,7 +17,7 @@ Live Examples on [CodePen](https://codepen.io/terry05/pen/BggbrK)
 
 <a href="https://nodei.co/npm/v-dropdown/"><img src="https://nodei.co/npm/v-dropdown.png"></a>
 
-```npm
+```node
 npm i v-dropdown --save
 ```
 
