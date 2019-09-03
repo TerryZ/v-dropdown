@@ -79,10 +79,10 @@ export default {
 
 ## Props
 
-- **align** `string`  
-    - `left` ( *default* )
-    - `center`
-    - `right`  
+- **align** `string` changed direction of alignment the dropdown container to trigger
+  - left ( *default* )
+  - center
+  - right
 - **embed** `boolean` the drop down panel embedded in page/component  
 default: *false*
 - **right-click** `boolean` mouse right button click to call dropdown  
@@ -93,6 +93,11 @@ default: *true*
 default: *false*
 - **width** `number` custom dropdown container width(px)
 - **full-width** `boolean` the dropdown trigger display type, `true` for block, `false` for inline-block
+default: *false*
+- **disabled** `boolean` You can disable the menu. Disabled menus can't be opened
+default: *false*
+- **animated** `string|boolean`
+- **manual** `boolean` disabled auto open/close the dropdown container, when **manual** set to `false`, you can call `visible` methods to manual open/close the dropdown container
 default: *false*
 
 ## Events
@@ -117,8 +122,6 @@ export default {
 *arguments*  
     - val(boolean) - `true` for shown, `false` for hidden
 
-<br><br>
-
 ## API
 
 ```vue
@@ -133,14 +136,14 @@ export default {
 export default {
   methods: {
     click(){
-      this.$refs.drop.$emit('api-name', args);
+      this.$refs.drop.visible();
     }
   }
 }
 </script>
 ```
 
-- **show** open the drop down layer  
+- **visible** open the drop down layer  
 `this.$refs.drop.$emit('show', this.$refs.caller)`  
 *arguments*  
     - caller(HTMLDOMELEMENT) - open the caller of the drop down, the drop down layer will align to caller  
