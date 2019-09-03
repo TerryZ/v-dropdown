@@ -2,7 +2,9 @@
 
 A **Vue2** plugin for dropdown container layer
 
-### Live Examples on [CodePen](https://codepen.io/terry05/pen/BggbrK)
+## Examples
+
+Live Examples on [CodePen](https://codepen.io/terry05/pen/BggbrK)
 
 ## Projects using `v-dropdown`
 
@@ -81,20 +83,17 @@ export default {
     - `left` ( *default* )
     - `center`
     - `right`  
-    <br>
 - **embed** `boolean` the drop down panel embedded in page/component  
-default: *false*  
-
+default: *false*
 - **right-click** `boolean` mouse right button click to call dropdown  
-default: *false*  
-
+default: *false*
 - **animated** `boolean|string`  
-default: *true*  
+default: *true*
 - **toggle** `boolean` click trigger and display dropdown container and trigger click again whether to close dropdown  
-default: *false*  
+default: *false*
 - **width** `number` custom dropdown container width(px)
 - **full-width** `boolean` the dropdown trigger display type, `true` for block, `false` for inline-block
-default: *false*  
+default: *false*
 
 ## Events
 
