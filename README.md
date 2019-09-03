@@ -17,19 +17,13 @@ Live Examples on [CodePen](https://codepen.io/terry05/pen/BggbrK)
 
 <a href="https://nodei.co/npm/v-dropdown/"><img src="https://nodei.co/npm/v-dropdown.png"></a>
 
-```bash
+```npm
 npm i v-dropdown --save
 ```
 
 Include and install plugin in your component/plugin/page
 
 ```vue
-<template>
-  <v-dropdown>
-    some contents you want
-  </v-dropdown>
-</template>
-
 <script>
 import Dropdown from 'v-dropdown';
 export default {
