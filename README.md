@@ -8,9 +8,9 @@ Live Examples on [CodePen](https://codepen.io/terry05/pen/BggbrK)
 
 ## Projects using `v-dropdown`
 
-- [v-region](https://github.com/TerryZ/v-region)
 - [v-selectpage](https://github.com/TerryZ/v-selectpage)
 - [v-selectmenu](https://github.com/TerryZ/v-selectmenu)
+- [v-region](https://github.com/TerryZ/v-region)
 - [v-suggest](https://github.com/TerryZ/v-suggest)
 
 ## Installation
