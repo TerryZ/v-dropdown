@@ -92,12 +92,12 @@ default: *true*
 - **toggle** `boolean` click trigger and display dropdown container and trigger click again whether to close dropdown  
 default: *false*
 - **width** `number` custom dropdown container width(px)
-- **full-width** `boolean` the dropdown trigger display type, `true` for block, `false` for inline-block
+- **full-width** `boolean` the dropdown trigger display type, `true` for block, `false` for inline-block  
 default: *false*
-- **disabled** `boolean` You can disable the menu. Disabled menus can't be opened
+- **disabled** `boolean` You can disable the menu. Disabled menus can't be opened  
 default: *false*
 - **animated** `string|boolean`
-- **manual** `boolean` disabled auto open/close the dropdown container, when **manual** set to `false`, you can call `visible` methods to manual open/close the dropdown container
+- **manual** `boolean` disabled auto open/close the dropdown container, when **manual** set to `false`, you can call `visible` methods to manual open/close the dropdown container  
 default: *false*
 
 ## Events
@@ -143,11 +143,7 @@ export default {
 </script>
 ```
 
-- **visible** open the drop down layer  
-`this.$refs.drop.$emit('show', this.$refs.caller)`  
-*arguments*  
-    - caller(HTMLDOMELEMENT) - open the caller of the drop down, the drop down layer will align to caller  
-- **adjust** adjust drop down layer positiion, make it align to caller  
-`this.$refs.drop.$emit('adjust')`  
-*arguments*  
-    - caller(HTMLDOMELEMENT) - open the caller of the drop down, the drop down layer will align to caller  
+- **visible** open/close the drop down container  
+`this.$refs.drop.visible()`  
+- **adjust** adjust drop down layer positiion, make it align to trigger  
+`this.$refs.drop.adjust()`  
