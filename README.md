@@ -81,34 +81,40 @@ export default {
 
 Changed direction of alignment the dropdown container to trigger
 
-### embed `boolean`
+#### embed `boolean`
+
+Default: `false`
 
 The drop down panel embedded in page/component
 
-Default: *false*
+#### right-click `boolean`
+Default: `false`
+Mouse right button click to call dropdown
 
+#### animated `boolean|string`
+Default: `true`
 
+#### toggle `boolean`
+Default: `false`
+Click trigger and display dropdown container and trigger click again whether to close dropdown
 
-- **align** `string` changed direction of alignment the dropdown container to trigger
-  - left ( *default* )
-  - center
-  - right
-- **embed** `boolean` the drop down panel embedded in page/component  
-default: *false*
-- **right-click** `boolean` mouse right button click to call dropdown  
-default: *false*
-- **animated** `boolean|string`  
-default: *true*
-- **toggle** `boolean` click trigger and display dropdown container and trigger click again whether to close dropdown  
-default: *false*
-- **width** `number` custom dropdown container width(px)
-- **full-width** `boolean` the dropdown trigger display type, `true` for block, `false` for inline-block  
-default: *false*
-- **disabled** `boolean` You can disable the menu. Disabled menus can't be opened  
-default: *false*
-- **animated** `string|boolean`
-- **manual** `boolean` disabled auto open/close the dropdown container, when **manual** set to `false`, you can call `visible` methods to manual open/close the dropdown container  
-default: *false*
+#### width `number`
+
+Custom dropdown container width(px)
+
+#### full-width `boolean`
+Default: `false`
+The dropdown trigger display type, `true` for block, `false` for inline-block
+
+#### disabled `boolean`
+Default: `false`
+You can disable the menu. Disabled menus can't be opened
+
+#### animated `string|boolean`
+
+#### manual `boolean`
+Default: `false`
+Disabled auto open/close the dropdown container, when **manual** set to `false`, you can call `visible` methods to manual open/close the dropdown container
 
 ## Events
 
