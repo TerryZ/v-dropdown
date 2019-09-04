@@ -79,25 +79,13 @@ export default {
 - center
 - right
 
-#### align `string`
-
-- left `default`
-- center
-- right
-
-Changed direction of alignment the dropdown container to trigger
-
-#### embed `boolean`
+**embed** `boolean` the drop down panel embedded in page/component
 
 Default: `false`
 
-The drop down panel embedded in page/component
-
-#### right-click `boolean`
+**right-click** `boolean` mouse right button click to call dropdown
 
 Default: `false`
-
-Mouse right button click to call dropdown
 
 #### animated `boolean|string`
 
