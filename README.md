@@ -75,19 +75,17 @@ export default {
 
 ### align `string`
 
-changed direction of alignment the dropdown container to trigger
-
-available options
-
-- left (`default`)
+- left `default`
 - center
 - right
 
+Changed direction of alignment the dropdown container to trigger
+
 ### embed `boolean`
 
-the drop down panel embedded in page/component
+The drop down panel embedded in page/component
 
-default: *false*
+Default: *false*
 
 
 
