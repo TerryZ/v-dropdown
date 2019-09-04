@@ -88,14 +88,19 @@ Default: `false`
 The drop down panel embedded in page/component
 
 #### right-click `boolean`
+
 Default: `false`
+
 Mouse right button click to call dropdown
 
 #### animated `boolean|string`
+
 Default: `true`
 
 #### toggle `boolean`
+
 Default: `false`
+
 Click trigger and display dropdown container and trigger click again whether to close dropdown
 
 #### width `number`
@@ -103,17 +108,23 @@ Click trigger and display dropdown container and trigger click again whether to 
 Custom dropdown container width(px)
 
 #### full-width `boolean`
+
 Default: `false`
+
 The dropdown trigger display type, `true` for block, `false` for inline-block
 
 #### disabled `boolean`
+
 Default: `false`
+
 You can disable the menu. Disabled menus can't be opened
 
 #### animated `string|boolean`
 
 #### manual `boolean`
+
 Default: `false`
+
 Disabled auto open/close the dropdown container, when **manual** set to `false`, you can call `visible` methods to manual open/close the dropdown container
 
 ## Events
