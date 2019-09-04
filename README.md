@@ -111,7 +111,7 @@ Custom dropdown container width(px)
 
 Default: `false`
 
-The dropdown trigger display type, `true` for block, `false` for inline-block
+The dropdown trigger display type, **true** for `block`, **false** for `inline-block`
 
 #### disabled `boolean`
 
