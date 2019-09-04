@@ -73,7 +73,7 @@ export default {
 
 ## Props
 
-### align `string`
+#### align `string`
 
 - left `default`
 - center
