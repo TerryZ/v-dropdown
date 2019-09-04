@@ -73,6 +73,12 @@ export default {
 
 ## Props
 
+**align** `string` changed direction of alignment the dropdown container to trigger
+
+- left `default`
+- center
+- right
+
 #### align `string`
 
 - left `default`
