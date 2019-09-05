@@ -73,27 +73,38 @@ export default {
 
 ## Props
 
-**align** `'left' (string)` changed direction of alignment the dropdown container to trigger
+**align** `'left' (string)`  
+changed direction of alignment the dropdown container to trigger
 
-- left
-- center
-- right
+- 'left'
+- 'center'
+- 'right'
 
-**embed** `false (boolean)` the drop down panel embedded in page/component
+**embed** `false (boolean)`  
+the drop down panel embedded in page/component
 
-**right-click** `false (boolean)` mouse right button click to call dropdown
+**right-click** `false (boolean)`  
+mouse right button click to call dropdown
 
 **animated** `true (boolean|string)`
 
-**toggle** `false (boolean)` click trigger and display dropdown container and trigger click again whether to close dropdown
+**toggle** `false (boolean)`  
+click trigger and display dropdown container and trigger click again whether to close dropdown
 
-**width** `undefined (number)` custom dropdown container width(px)
+**width** `undefined (number)`  
+custom dropdown container width(px)
 
-**full-width** `false (boolean)` the dropdown trigger display type, **true** for `block`, **false** for `inline-block`
+**full-width** `false (boolean)`  
+the dropdown trigger display type
 
-**disabled** `false (boolean)` you can disable the menu. Disabled menus can't be opened
+- true - `display: black`
+- false - `display: inline-block`
 
-**manual** `false (boolean)` disabled auto open/close the dropdown container, when **manual** set to `false`, you can call `visible` methods to manual open/close the dropdown container
+**disabled** `false (boolean)`  
+you can disable the menu. Disabled menus can't be opened
+
+**manual** `false (boolean)`  
+disabled auto open/close the dropdown container, when **manual** set to `false`, you can call `visible` methods to manual open/close the dropdown container
 
 ## Events
 
