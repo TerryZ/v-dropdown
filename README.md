@@ -79,47 +79,21 @@ export default {
 - center
 - right
 
-**embed** `boolean` the drop down panel embedded in page/component
+**embed** `false (boolean)` the drop down panel embedded in page/component
 
-Default: `false`
+**right-click** `false (boolean)` mouse right button click to call dropdown
 
-**right-click** `boolean` mouse right button click to call dropdown
+**animated** `true (boolean|string)`
 
-Default: `false`
+**toggle** `false (boolean)` click trigger and display dropdown container and trigger click again whether to close dropdown
 
-#### animated `boolean|string`
+**width** `undefined (number)` custom dropdown container width(px)
 
-Default: `true`
+**full-width** `false (boolean)` the dropdown trigger display type, **true** for `block`, **false** for `inline-block`
 
-#### toggle `boolean`
+**disabled** `false (boolean)` you can disable the menu. Disabled menus can't be opened
 
-Default: `false`
-
-Click trigger and display dropdown container and trigger click again whether to close dropdown
-
-#### width `number`
-
-Custom dropdown container width(px)
-
-#### full-width `boolean`
-
-Default: `false`
-
-The dropdown trigger display type, **true** for `block`, **false** for `inline-block`
-
-#### disabled `boolean`
-
-Default: `false`
-
-You can disable the menu. Disabled menus can't be opened
-
-#### animated `string|boolean`
-
-#### manual `boolean`
-
-Default: `false`
-
-Disabled auto open/close the dropdown container, when **manual** set to `false`, you can call `visible` methods to manual open/close the dropdown container
+**manual** `false (boolean)` disabled auto open/close the dropdown container, when **manual** set to `false`, you can call `visible` methods to manual open/close the dropdown container
 
 ## Events
 
