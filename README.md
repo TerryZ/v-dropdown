@@ -112,7 +112,7 @@ disabled auto open/close the dropdown container, when **manual** set to `false`,
 <template>
   <v-dropdown @show="showChange">
     <template #caller>
-      <button type='button' ref='caller'>trigger</button>
+      <button type='button' class="btn">trigger</button>
     </template>
 
     <div>content</div>
@@ -122,7 +122,8 @@ disabled auto open/close the dropdown container, when **manual** set to `false`,
 export default {
   methods: {
     showChange(val){
-      console.log(val);//true for shown, false for hidden
+      //true for shown, false for hidden
+      console.log(val)
     }
   }
 }
@@ -132,10 +133,10 @@ export default {
 ### show(state)
 the dropdown layer container show state
 
-**state** `boolean`
+- **state** `boolean`
   
-- `true` for shown
-- `false` for hidden
+  - `true` for shown
+  - `false` for hidden
 
 ## API
 
@@ -151,7 +152,7 @@ the dropdown layer container show state
 export default {
   methods: {
     click(){
-      this.$refs.drop.visible();
+      this.$refs.drop.visible()
     }
   }
 }
