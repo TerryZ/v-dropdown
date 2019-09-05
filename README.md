@@ -97,7 +97,7 @@ custom dropdown container width(px)
 **full-width** `false (boolean)`  
 the dropdown trigger display type
 
-- true - `display: black`
+- true - `display: block`
 - false - `display: inline-block`
 
 **disabled** `false (boolean)`  
@@ -129,9 +129,13 @@ export default {
 </script>
 ```
 
-- **show** the dropdown layer container show state  
-*arguments*  
-    - val(boolean) - `true` for shown, `false` for hidden
+### show(state)
+the dropdown layer container show state
+
+**state** `boolean`
+  
+- `true` for shown
+- `false` for hidden
 
 ## API
 
@@ -154,7 +158,8 @@ export default {
 </script>
 ```
 
-- **visible** open/close the drop down container  
-`this.$refs.drop.visible()`  
-- **adjust** adjust drop down layer positiion, make it align to trigger  
-`this.$refs.drop.adjust()`  
+**visible()**  
+open/close the drop down container  
+
+**adjust()**  
+adjust drop down layer positiion, make it align to trigger  
