@@ -18,19 +18,19 @@ Live Examples on [CodePen](https://codepen.io/terry05/pen/BggbrK)
 <a href="https://nodei.co/npm/v-dropdown/"><img src="https://nodei.co/npm/v-dropdown.png"></a>
 
 ```
-npm i v-dropdown --save
+npm i -S v-dropdown
 ```
 
 Include and install plugin in your component/plugin/page
 
 ```vue
 <script>
-import Dropdown from 'v-dropdown';
+import Dropdown from 'v-dropdown'
 export default {
   components: {
     'v-dropdown': Dropdown
   }
-};
+}
 </script>
 ```
 
@@ -52,7 +52,7 @@ export default {
 </template>
 
 <script>
-import Dropdown from 'v-dropdown';
+import Dropdown from 'v-dropdown'
 export default {
   components: {
     'v-dropdown': Dropdown
@@ -64,10 +64,10 @@ export default {
   },
   methods: {
     showChange(val){
-      this.show = val;
+      this.show = val
     }
   }
-};
+}
 </script>
 ```
 
