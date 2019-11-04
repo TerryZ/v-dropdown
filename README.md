@@ -57,13 +57,13 @@ export default {
   components: {
     'v-dropdown': Dropdown
   },
-  data(){
+  data () {
     return {
       show: false
     }
   },
   methods: {
-    showChange(val){
+    showChange (val) {
       this.show = val
     }
   }
