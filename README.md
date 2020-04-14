@@ -151,7 +151,7 @@ the dropdown layer container show state
 <script>
 export default {
   methods: {
-    click(){
+    click () {
       this.$refs.drop.visible()
     }
   }
