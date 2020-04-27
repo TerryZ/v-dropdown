@@ -122,7 +122,7 @@ disabled auto open/close the dropdown container, when **manual** set to `false`,
 export default {
   methods: {
     showChange (val) {
-      //true for shown, false for hidden
+      // true for shown, false for hidden
       console.log(val)
     }
   }
