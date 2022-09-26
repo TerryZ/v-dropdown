@@ -1,61 +1,35 @@
-import './dropdown.styl'
+import './dropdown.sass'
 
 export default {
   name: 'v-dropdown',
   props: {
-    /**
-     * align with the dropdown layer direction
-     */
-    align: {
-      type: String,
-      default: 'left'
-    },
+    /** align direction */
+    align: { type: String, default: 'left' },
     /**
      * dropdown layer embedded to page/component
      */
-    embed: {
-      type: Boolean,
-      default: false
-    },
-    border: {
-      type: Boolean,
-      default: true
-    },
+    embed: { type: Boolean, default: false },
+    border: { type: Boolean, default: true },
     /**
      * mouse right click caller area to display dropdown
      */
-    rightClick: {
-      type: Boolean,
-      default: false
-    },
+    rightClick: { type: Boolean, default: false },
     /**
      * click caller and display dropdown, the caller click again whether to close dropdown
      */
-    toggle: {
-      type: Boolean,
-      default: true
-    },
+    toggle: { type: Boolean, default: true },
     /**
      * manual show / close the dropdown
      */
-    manual: {
-      type: Boolean,
-      default: false
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
+    manual: { type: Boolean, default: false },
+    disabled: { type: Boolean, default: false },
     /**
      * open / close dropdown animation
      * true: use default animation
      * false: don't show animation
      * string value: customized animation
      */
-    animated: {
-      type: [String, Boolean],
-      default: true
-    },
+    animated: { type: [String, Boolean], default: true },
     /**
      * the width of drop down menu
      * min-width: 80
@@ -66,10 +40,7 @@ export default {
      * false: inline-block
      * true: block
      */
-    fullWidth: {
-      type: Boolean,
-      default: false
-    }
+    fullWidth: { type: Boolean, default: false }
   },
   data () {
     return {
