@@ -1,3 +1,4 @@
+import { ref, reactive, computed, h, onMounted, onBeforeUnmount, onUnmounted } from 'vue'
 import './dropdown.sass'
 
 export default {
@@ -15,7 +16,8 @@ export default {
      */
     rightClick: { type: Boolean, default: false },
     /**
-     * click caller and display dropdown, the caller click again whether to close dropdown
+     * click caller and display dropdown, the
+     * caller click again whether to close dropdown
      */
     toggle: { type: Boolean, default: true },
     /**
@@ -42,119 +44,65 @@ export default {
      */
     fullWidth: { type: Boolean, default: false }
   },
-  data () {
-    return {
-      show: false,
-      styleSheet: { top: '', left: '' },
-      dropdownClass: 'v-dropdown-container',
-      dropUp: false,
-      x: null,
-      y: null
-    }
-  },
-  computed: {
-    animate () {
-      if (typeof this.animated === 'string') return this.animated
-      if (!this.embed && this.animated) return this.dropUp ? 'animate-up' : 'animate-down'
+  emits: ['show'],
+  setup (props, { slots, emit }) {
+    const show = ref(false)
+    const styleSheet = reactive({ top: '', left: '' })
+    const dropdownClass = ref('v-dropdown-container')
+    const dropUp = ref(false)
+    const x = ref(null)
+    const y = ref(null)
+
+    const animate = computed(() => {
+      if (typeof props.animated === 'string') {
+        return props.animated
+      }
+      if (!props.embed && props.animated) {
+        return dropUp.value ? 'animate-up' : 'animate-down'
+      }
       return ''
-    }
-  },
-  render (h) {
-    // console.log(this.animate)
-    const children = []
-    // the dropdown layer caller
-    if ('caller' in this.$scopedSlots && !this.embed) {
-      children.push(this.$scopedSlots.caller())
-    }
-    // the dropdown layer container
-    children.push(h('transition', {
-      props: {
-        name: this.animate
-      }
-    }, [h('div', {
-      class: {
-        [this.dropdownClass]: true,
-        'v-dropdown-embed': this.embed,
-        'v-dropdown-no-border': !this.border
-      },
-      style: this.styleSheet,
-      directives: [{ name: 'show', value: this.show }],
-      ref: 'dropdown',
-      on: {
-        mousedown: e => {
-          // do not close dropdown container layer when do some operations in that
-          e.stopPropagation()
-        }
-      }
-    }, this.$slots.default)]))
+    })
 
-    return h('div', {
-      class: {
-        'v-dropdown-caller': true,
-        'v-dropdown-caller--full-width': this.fullWidth
-      },
-      on: {
-        click: e => {
-          if (this.embed || this.rightClick || this.manual) return
-          e.stopPropagation()
-          this.visible()
-        },
-        // mouse right button click
-        contextmenu: e => {
-          if (this.embed || this.manual || !this.rightClick) return
-          e.stopPropagation()
-          e.preventDefault()
-
-          const info = this.scrollInfo()
-          this.x = e.pageX || (e.clientX + info.x)
-          this.y = e.pageY || (e.clientY + info.y)
-          this.visible()
-        }
-      }
-    }, children)
-  },
-  methods: {
-    visible (outside = false) {
-      if (this.disabled) return
+    function visible (outside = false) {
+      if (props.disabled) return
       /**
        * do not toggle show/close when 'toggle' option is set to false
        */
-      if (this.show && !this.toggle && !outside) return
+      if (show.value && !props.toggle && !outside) return
       /**
        * calculation display direction(up or down) and top axis
        */
-      if (!this.show && !this.embed && this.$slots.caller) this.adjust()
+      if (!show.value && !props.embed && 'caller' in slots) adjust()
 
-      this.show = !this.show
-      this.$emit('show', this.show)
-    },
+      show.value = !show.value
+      emit('show', show.value)
+    }
     /**
      * the dropdown container outside click handle
      * @param e - MouseEvent
      */
-    whole (e) {
-      if (this.show) {
-        /**
-         * is caller element click
-         */
-        const inCaller = this.eventPath(e).findIndex(val => val === this.$el) !== -1
-        /**
-         * do not toggle show/close when 'toggle' option is set to false
-         */
-        if (inCaller && !this.toggle && !this.rightClick) return
-        /**
-         * close the dropdown when clicking outside the dropdown container
-         * reopen the dropdown when right-click in caller(rightClick = true)
-         */
-        if (!inCaller || (inCaller && this.rightClick)) {
-          this.visible(true)
-        }
+    function whole (e) {
+      if (!show.value) return
+      /**
+       * is caller element click
+       */
+      const inCaller = this.eventPath(e).findIndex(val => val === this.$el) !== -1
+      /**
+       * do not toggle show/close when 'toggle' option is set to false
+       */
+      if (inCaller && !this.toggle && !this.rightClick) return
+      /**
+       * close the dropdown when clicking outside the dropdown container
+       * reopen the dropdown when right-click in caller(rightClick = true)
+       */
+      if (!inCaller || (inCaller && this.rightClick)) {
+        this.visible(true)
       }
-    },
+    }
     /**
      * adjust dropdown display position
      */
-    adjust () {
+    function adjust () {
       const pos = this.$el.getBoundingClientRect()
       let menu = null
 
@@ -176,13 +124,13 @@ export default {
 
       this.adjustTop(pos, menu)
       this.styleSheet.left = `${this.adjustLeft(pos, menu)}px`
-    },
+    }
     /**
      * calculation direction and top axis
      * @param pos
      * @param menu
      */
-    adjustTop (pos, menu) {
+    function adjustTop (pos, menu) {
       const gap = 5
       const scrollTop = window.pageYOffset
       const viewHeight = document.documentElement.clientHeight
@@ -199,8 +147,8 @@ export default {
       }
       this.dropUp = up
       this.styleSheet.top = `${t}px`
-    },
-    adjustLeft (pos, menu) {
+    }
+    function adjustLeft (pos, menu) {
       const scrollLeft = window.pageXOffset; const viewWid = document.documentElement.clientWidth
       const wid = this.rightClick ? 0 : pos.width
       // align left's left
@@ -218,8 +166,8 @@ export default {
           else return center
         case 'right': return (right < scrollLeft) ? left : right
       }
-    },
-    scrollInfo () {
+    }
+    function scrollInfo () {
       const supportPageOffset = window.pageXOffset !== undefined
       const isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat')
 
@@ -227,13 +175,13 @@ export default {
         x: supportPageOffset ? window.pageXOffset : isCSS1Compat ? document.documentElement.scrollLeft : document.body.scrollLeft,
         y: supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop
       }
-    },
+    }
     /**
      * returns the event’s path which is an array of the objects on which listeners will be invoked
      * @param e - MouseEvent
      * @returns {Array|EventTarget[]|*}
      */
-    eventPath (e) {
+    function eventPath (e) {
       if ('composedPath' in e) return e.composedPath()
       if ('path' in e) return e.path
       // polyfill
@@ -247,23 +195,78 @@ export default {
       if (path.indexOf(window) === -1) path.push(window)
       return path
     }
-  },
-  mounted () {
-    if (this.width) this.styleSheet.width = this.width + 'px'
-    if (this.embed) this.visible()
-    else {
-      document.body.appendChild(this.$refs.dropdown)
-      document.body.addEventListener('mousedown', this.whole)
+
+    onMounted(() => {
+      if (props.width) {
+        styleSheet.width = props.width + 'px'
+      }
+      if (props.embed) {
+        visible()
+      } else {
+        document.body.appendChild(this.$refs.dropdown)
+        document.body.addEventListener('mousedown', whole)
+      }
+    })
+    onBeforeUnmount(() => {
+      // remove drop down layer
+      if (!this.embed) {
+        document.body.removeEventListener('mousedown', whole)
+        this.$refs.dropdown.remove()
+      }
+    })
+    onUnmounted(() => {
+      if (!props.embed) this.$el.remove()
+    })
+
+    return () => {
+      // console.log(this.animate)
+      const children = []
+      // the dropdown layer caller
+      if ('caller' in slots && !props.embed) {
+        children.push(slots.caller())
+      }
+      // the dropdown layer container
+      children.push(h('transition', {
+        props: {
+          name: animate.value
+        }
+      }, [h('div', {
+        class: {
+          [dropdownClass.value]: true,
+          'v-dropdown-embed': props.embed,
+          'v-dropdown-no-border': !props.border
+        },
+        style: styleSheet.value,
+        directives: [{ name: 'show', value: show.value }],
+        ref: 'dropdown',
+        onMousedown: e => {
+          // do not close dropdown container layer when do some operations in that
+          e.stopPropagation()
+        }
+      }, slots.default())]))
+
+      return h('div', {
+        class: {
+          'v-dropdown-caller': true,
+          'v-dropdown-caller--full-width': props.fullWidth
+        },
+        onClick: e => {
+          if (props.embed || props.rightClick || props.manual) return
+          e.stopPropagation()
+          visible()
+        },
+        // mouse right button click
+        onContextmenu: e => {
+          if (this.embed || this.manual || !this.rightClick) return
+          e.stopPropagation()
+          e.preventDefault()
+
+          const info = scrollInfo()
+          this.x = e.pageX || (e.clientX + info.x)
+          this.y = e.pageY || (e.clientY + info.y)
+          visible()
+        }
+      }, children)
     }
-  },
-  beforeDestroy () {
-    // remove drop down layer
-    if (!this.embed) {
-      document.body.removeEventListener('mousedown', this.whole)
-      this.$refs.dropdown.remove()
-    }
-  },
-  destroyed () {
-    if (!this.embed) this.$el.remove()
   }
 }

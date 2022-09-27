@@ -15,9 +15,9 @@ Live Examples on [CodePen](https://codepen.io/terry05/pen/BggbrK)
 
 ## Installation
 
-<a href="https://nodei.co/npm/v-dropdown/"><img src="https://nodei.co/npm/v-dropdown.png"></a>
+[![https://nodei.co/npm/v-dropdown.png?downloads=true&downloadRank=true&stars=true](https://nodei.co/npm/v-dropdown.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/v-dropdown)
 
-```
+```sh
 npm i -S v-dropdown
 ```
 
@@ -44,7 +44,7 @@ export default {
       <!-- dropdown container trigger -->
       <button type="button" class="btn">Open</button>
     </template>
-    
+
     <div>
       some contents you want
     </div>
@@ -73,37 +73,37 @@ export default {
 
 ## Props
 
-**align** `'left' (string)`  
+**align** `'left' (string)`
 changed direction of alignment the dropdown container to trigger
 
 - 'left'
 - 'center'
 - 'right'
 
-**embed** `false (boolean)`  
+**embed** `false (boolean)`
 the drop down panel embedded in page/component
 
-**right-click** `false (boolean)`  
+**right-click** `false (boolean)`
 mouse right button click to call dropdown
 
 **animated** `true (boolean|string)`
 
-**toggle** `false (boolean)`  
+**toggle** `false (boolean)`
 click trigger and display dropdown container and trigger click again whether to close dropdown
 
-**width** `undefined (number)`  
+**width** `undefined (number)`
 custom dropdown container width(px)
 
-**full-width** `false (boolean)`  
+**full-width** `false (boolean)`
 the dropdown trigger display type
 
 - true - `display: block`
 - false - `display: inline-block`
 
-**disabled** `false (boolean)`  
+**disabled** `false (boolean)`
 you can disable the menu. Disabled menus can't be opened
 
-**manual** `false (boolean)`  
+**manual** `false (boolean)`
 disabled auto open/close the dropdown container, when **manual** set to `false`, you can call `visible` methods to manual open/close the dropdown container
 
 ## Events
@@ -131,10 +131,11 @@ export default {
 ```
 
 ### show(state)
+
 the dropdown layer container show state
 
 - **state** `boolean`
-  
+
   - `true` for shown
   - `false` for hidden
 
@@ -159,8 +160,8 @@ export default {
 </script>
 ```
 
-**visible()**  
-open/close the drop down container  
+**visible()**
+open/close the drop down container
 
-**adjust()**  
-adjust drop down layer positiion, make it align to trigger  
+**adjust()**
+adjust drop down layer position, make it align to trigger
