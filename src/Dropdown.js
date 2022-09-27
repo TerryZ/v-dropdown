@@ -90,13 +90,13 @@ export default {
       /**
        * do not toggle show/close when 'toggle' option is set to false
        */
-      if (inCaller && !this.toggle && !this.rightClick) return
+      if (inCaller && !props.toggle && !props.rightClick) return
       /**
        * close the dropdown when clicking outside the dropdown container
        * reopen the dropdown when right-click in caller(rightClick = true)
        */
-      if (!inCaller || (inCaller && this.rightClick)) {
-        this.visible(true)
+      if (!inCaller || (inCaller && props.rightClick)) {
+        visible(true)
       }
     }
     /**
@@ -251,13 +251,17 @@ export default {
           'v-dropdown-caller--full-width': props.fullWidth
         },
         onClick: e => {
-          if (props.embed || props.rightClick || props.manual) return
+          if (props.embed || props.rightClick || props.manual) {
+            return
+          }
           e.stopPropagation()
           visible()
         },
         // mouse right button click
         onContextmenu: e => {
-          if (this.embed || this.manual || !this.rightClick) return
+          if (props.embed || props.manual || !props.rightClick) {
+            return
+          }
           e.stopPropagation()
           e.preventDefault()
 
