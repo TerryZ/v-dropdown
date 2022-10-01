@@ -1,61 +1,61 @@
-shadow(blur, transparent, v-shadow = 3px)
-  -webkit-box-shadow 0 v-shadow blur rgba(0,0,0,transparent)
-  -moz-box-shadow 0 v-shadow blur rgba(0,0,0,transparent)
-  box-shadow 0 v-shadow blur rgba(0,0,0,transparent)
+@mixin shadow($blur, $transparent, $shadow: 3px)
+  -webkit-box-shadow: 0 $shadow $blur rgba(0,0,0,$transparent)
+  -moz-box-shadow: 0 $shadow $blur rgba(0,0,0,$transparent)
+  box-shadow: 0 $shadow $blur rgba(0,0,0,$transparent)
 
-animation(start = -6px)
-  -webkit-transform translateY(start)
-  transform translateY(start)
-  opacity 0
+@mixin animation($start: -6px)
+  -webkit-transform: translateY($start)
+  transform: translateY($start)
+  opacity: 0
 
-duration = 150ms
-down = animate-down
-up = animate-up
+$duration: 150ms
+$down: animate-down
+$up: animate-up
 
 div.v-dropdown-caller
-  display inline-block
+  display: inline-block
   &.v-dropdown-caller--full-width
-    display block
+    display: block
 div.v-dropdown-container
-  display inline-block
-  margin 0
-  padding 0
-  top 0
-  left 0
-  border 1px solid #D6D7D7
-  position absolute
-  box-sizing border-box
-  background-color white
-  -webkit-border-radius 2px
-  border-radius 2px
-  overflow hidden
-  z-index 3000
-  shadow(12px, 0.2)
-  will-change opacity, transform
+  display: inline-block
+  margin: 0
+  padding: 0
+  top: 0
+  left: 0
+  border: 1px solid #D6D7D7
+  position: absolute
+  box-sizing: border-box
+  background-color: white
+  -webkit-border-radius: 2px
+  border-radius: 2px
+  overflow: hidden
+  z-index: 3000
+  @include shadow(12px, 0.2)
+  will-change: opacity, transform
   &.v-dropdown-embed
-    position relative
-    box-shadow 0 1px 6px rgba(0,0,0,0.12) !important
-    z-index 100
+    position: relative
+    box-shadow: 0 1px 6px rgba(0,0,0,0.12) !important
+    z-index: 100
   &.v-dropdown-no-border
-    border 0
-    shadow(8px, 0.3)
+    border: 0
+    @include shadow(8px, 0.3)
 
-.{down}-enter
-.{down}-leave-to
-  animation()
-.{up}-enter
-.{up}-leave-to
-  animation(6px)
-.{down}-enter-active
-.{down}-leave-active
-.{up}-enter-active
-.{up}-leave-active
-  -webkit-transition opacity duration, transform duration
-  transition opacity duration, transform duration
-.{down}-enter-to
-.{down}-leave
-.{up}-enter-to
-.{up}-leave
-  -webkit-transform none
-  transform none
-  opacity 1
+.#{$down}-enter
+.#{$down}-leave-to
+  @include animation()
+.#{$up}-enter
+.#{$up}-leave-to
+  @include animation(6px)
+.#{$down}-enter-active
+.#{$down}-leave-active
+.#{$up}-enter-active
+.#{$up}-leave-active
+  -webkit-transition: opacity $duration, transform $duration
+  transition: opacity $duration, transform $duration
+.#{$down}-enter-to
+.#{$down}-leave
+.#{$up}-enter-to
+.#{$up}-leave
+  -webkit-transform: none
+  transform: none
+  opacity: 1

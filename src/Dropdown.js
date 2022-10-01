@@ -1,4 +1,14 @@
-import { ref, reactive, computed, h, onMounted, onBeforeUnmount, onUnmounted } from 'vue'
+import {
+  ref,
+  reactive,
+  computed,
+  h,
+  withDirectives,
+  vShow,
+  onMounted,
+  onBeforeUnmount,
+  onUnmounted
+} from 'vue'
 import './dropdown.sass'
 
 export default {
@@ -48,10 +58,12 @@ export default {
   setup (props, { slots, emit }) {
     const show = ref(false)
     const styleSheet = reactive({ top: '', left: '' })
-    const dropdownClass = ref('v-dropdown-container')
     const dropUp = ref(false)
     const x = ref(null)
     const y = ref(null)
+
+    const root = ref(null)
+    const container = ref(null)
 
     const animate = computed(() => {
       if (typeof props.animated === 'string') {
@@ -83,10 +95,11 @@ export default {
      */
     function whole (e) {
       if (!show.value) return
+
       /**
        * is caller element click
        */
-      const inCaller = this.eventPath(e).findIndex(val => val === this.$el) !== -1
+      const inCaller = e.composedPath().findIndex(val => val === root.value) !== -1
       /**
        * do not toggle show/close when 'toggle' option is set to false
        */
@@ -103,27 +116,28 @@ export default {
      * adjust dropdown display position
      */
     function adjust () {
-      const pos = this.$el.getBoundingClientRect()
+      const pos = root.value.getBoundingClientRect()
       let menu = null
 
-      if (this.show) menu = this.$refs.dropdown.getBoundingClientRect()
-      else {
+      if (show.value) {
+        menu = container.value.getBoundingClientRect()
+      } else {
         /**
          * change the way to hide dropdown container from 'display:none' to 'visibility:hidden'
          * be used for get width and height
          */
-        this.$refs.dropdown.style.visibility = 'hidden'
-        this.$refs.dropdown.style.display = 'inline-block'
-        menu = this.$refs.dropdown.getBoundingClientRect()
+        container.value.style.visibility = 'hidden'
+        container.value.style.display = 'inline-block'
+        menu = container.value.getBoundingClientRect()
         /**
          * restore dropdown style after getting position data
          */
-        this.$refs.dropdown.style.visibility = 'visible'
-        this.$refs.dropdown.style.display = 'none'
+        container.value.style.visibility = 'visible'
+        container.value.style.display = 'none'
       }
 
-      this.adjustTop(pos, menu)
-      this.styleSheet.left = `${this.adjustLeft(pos, menu)}px`
+      adjustTop(pos, menu)
+      styleSheet.left = `${adjustLeft(pos, menu)}px`
     }
     /**
      * calculation direction and top axis
@@ -134,31 +148,38 @@ export default {
       const gap = 5
       const scrollTop = window.pageYOffset
       const viewHeight = document.documentElement.clientHeight
-      const srcTop = this.rightClick ? this.y : pos.top + scrollTop
-      let t = this.rightClick ? this.y : pos.top + pos.height + gap + scrollTop
-      let overDown = false; let overUp = false; let up = false
+      const srcTop = props.rightClick ? y.value : pos.top + scrollTop
+      let t = props.rightClick ? y.value : pos.top + pos.height + gap + scrollTop
+      let overDown = false
+      let overUp = false
+      let up = false
       // list over screen
-      if ((t + menu.height) > (scrollTop + viewHeight)) overDown = true
-      if ((srcTop - gap - menu.height) < scrollTop) overUp = true
+      if ((t + menu.height) > (scrollTop + viewHeight)) {
+        overDown = true
+      }
+      if ((srcTop - gap - menu.height) < scrollTop) {
+        overUp = true
+      }
 
       if (!overUp && overDown) {
         t = srcTop - gap - menu.height
         up = true
       }
-      this.dropUp = up
-      this.styleSheet.top = `${t}px`
+      dropUp.value = up
+      styleSheet.top = `${t}px`
     }
     function adjustLeft (pos, menu) {
-      const scrollLeft = window.pageXOffset; const viewWid = document.documentElement.clientWidth
-      const wid = this.rightClick ? 0 : pos.width
+      const scrollLeft = window.pageXOffset
+      const viewWid = document.documentElement.clientWidth
+      const wid = props.rightClick ? 0 : pos.width
       // align left's left
-      const left = this.rightClick ? this.x : pos.left + scrollLeft
+      const left = props.rightClick ? x.value : pos.left + scrollLeft
       // align center's left
       const center = (left + (wid / 2)) - (menu.width / 2)
       // align right's left
       const right = (left + wid) - menu.width
 
-      switch (this.align) {
+      switch (props.align) {
         case 'left': return (left + menu.width) > (scrollLeft + viewWid) ? right : left
         case 'center':
           if ((center + menu.width) > (scrollLeft + viewWid)) return right
@@ -176,25 +197,6 @@ export default {
         y: supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop
       }
     }
-    /**
-     * returns the event’s path which is an array of the objects on which listeners will be invoked
-     * @param e - MouseEvent
-     * @returns {Array|EventTarget[]|*}
-     */
-    function eventPath (e) {
-      if ('composedPath' in e) return e.composedPath()
-      if ('path' in e) return e.path
-      // polyfill
-      const path = []
-      let currentElem = e.target
-      while (currentElem) {
-        path.push(currentElem)
-        currentElem = currentElem.parentElement
-      }
-      if (path.indexOf(window) === -1 && path.indexOf(document) === -1) path.push(document)
-      if (path.indexOf(window) === -1) path.push(window)
-      return path
-    }
 
     onMounted(() => {
       if (props.width) {
@@ -203,53 +205,58 @@ export default {
       if (props.embed) {
         visible()
       } else {
-        document.body.appendChild(this.$refs.dropdown)
+        document.body.appendChild(container.value)
         document.body.addEventListener('mousedown', whole)
       }
     })
     onBeforeUnmount(() => {
       // remove drop down layer
-      if (!this.embed) {
+      if (!props.embed) {
         document.body.removeEventListener('mousedown', whole)
-        this.$refs.dropdown.remove()
+        container.value.remove()
       }
     })
     onUnmounted(() => {
-      if (!props.embed) this.$el.remove()
+      if (!props.embed) {
+        root.value.remove()
+      }
     })
 
     return () => {
-      // console.log(this.animate)
       const children = []
       // the dropdown layer caller
       if ('caller' in slots && !props.embed) {
         children.push(slots.caller())
       }
+      const dropdownContainer = withDirectives(h('div', {
+        class: {
+          'v-dropdown-container': true,
+          'v-dropdown-embed': props.embed,
+          'v-dropdown-no-border': !props.border
+        },
+        style: styleSheet.value,
+        ref: container,
+        onMousedown: e => {
+          // do not close dropdown container layer when
+          // do some operations in that
+          e.stopPropagation()
+        }
+      }, slots.default()), [
+        [vShow, show.value]
+      ])
       // the dropdown layer container
       children.push(h('transition', {
         props: {
           name: animate.value
         }
-      }, [h('div', {
-        class: {
-          [dropdownClass.value]: true,
-          'v-dropdown-embed': props.embed,
-          'v-dropdown-no-border': !props.border
-        },
-        style: styleSheet.value,
-        directives: [{ name: 'show', value: show.value }],
-        ref: 'dropdown',
-        onMousedown: e => {
-          // do not close dropdown container layer when do some operations in that
-          e.stopPropagation()
-        }
-      }, slots.default())]))
+      }, [dropdownContainer]))
 
       return h('div', {
         class: {
           'v-dropdown-caller': true,
           'v-dropdown-caller--full-width': props.fullWidth
         },
+        ref: root,
         onClick: e => {
           if (props.embed || props.rightClick || props.manual) {
             return
@@ -266,8 +273,8 @@ export default {
           e.preventDefault()
 
           const info = scrollInfo()
-          this.x = e.pageX || (e.clientX + info.x)
-          this.y = e.pageY || (e.clientY + info.y)
+          x.value = e.pageX || (e.clientX + info.x)
+          y.value = e.pageY || (e.clientY + info.y)
           visible()
         }
       }, children)
