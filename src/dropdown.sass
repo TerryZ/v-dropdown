@@ -40,22 +40,22 @@ div.v-dropdown-container
     border: 0
     @include shadow(8px, 0.3)
 
-.#{$down}-enter
+.#{$down}-enter-from,
 .#{$down}-leave-to
   @include animation()
-.#{$up}-enter
+.#{$up}-enter-from,
 .#{$up}-leave-to
   @include animation(6px)
-.#{$down}-enter-active
-.#{$down}-leave-active
-.#{$up}-enter-active
+.#{$down}-enter-active,
+.#{$down}-leave-active,
+.#{$up}-enter-active,
 .#{$up}-leave-active
   -webkit-transition: opacity $duration, transform $duration
   transition: opacity $duration, transform $duration
-.#{$down}-enter-to
-.#{$down}-leave
-.#{$up}-enter-to
-.#{$up}-leave
+.#{$down}-enter-to,
+.#{$down}-leave-from,
+.#{$up}-enter-to,
+.#{$up}-leave-from
   -webkit-transform: none
   transform: none
   opacity: 1

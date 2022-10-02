@@ -125,7 +125,7 @@
       <dropdown
         :manual="true"
         @show="showChange"
-        ref="dropdown"
+        ref="dropdownInput"
       >
         <template #caller>
           <input
@@ -313,6 +313,8 @@ const show = ref(false)
 const query = ref('')
 const disabled = ref(false)
 
+const dropdownInput = ref(null)
+
 const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 function showChange (state) {
@@ -321,10 +323,10 @@ function showChange (state) {
 
 watch(query, val => {
   if (val === '3') {
-    this.$refs.dropdown.visible()
+    dropdownInput.value.visible()
   } else {
-    if (this.show) {
-      this.$refs.dropdown.visible()
+    if (show.value) {
+      dropdownInput.value.visible()
     }
   }
 })
