@@ -37,16 +37,16 @@ export default {
      * caller click again whether to close dropdown
      */
     toggle: { type: Boolean, default: true },
-    /**
-     * manual show / close the dropdown
-     */
+    /** manual show / close the dropdown */
     manual: { type: Boolean, default: false },
     disabled: { type: Boolean, default: false },
     /**
      * open / close dropdown animation
-     * true: use default animation
-     * false: don't show animation
-     * string value: customized animation
+     *
+     * {boolean}
+     *   - true: use default animation
+     *   - false: don't show animation
+     * {string} customized animation
      */
     animated: { type: [String, Boolean], default: true },
     /**
@@ -98,23 +98,17 @@ export default {
     }
     /**
      * the dropdown container outside click handle
-     * @param e - MouseEvent
+     * @param {MouseEvent} e - event object
      */
     function whole (e) {
       if (!show.value) return
 
-      /**
-       * is caller element click
-       */
+      // is caller element click
       const inCaller = e.composedPath().findIndex(val => val === root.value) !== -1
-      /**
-       * do not toggle show/close when 'toggle' option is set to false
-       */
+      // do not toggle show/close when 'toggle' option is set to false
       if (inCaller && !props.toggle && !props.rightClick) return
-      /**
-       * close the dropdown when clicking outside the dropdown container
-       * reopen the dropdown when right-click in caller(rightClick = true)
-       */
+      // close the dropdown when clicking outside the dropdown container
+      // reopen the dropdown when right-click in caller(rightClick = true)
       if (!inCaller || (inCaller && props.rightClick)) {
         visible(true)
       }
@@ -185,7 +179,7 @@ export default {
       if ('caller' in slots && !props.embed) {
         children.push(slots.caller())
       }
-      const dropdownContainer = withDirectives(h('div', {
+      const containerOption = {
         class: {
           'v-dropdown-container': true,
           'v-dropdown-embed': props.embed,
@@ -198,12 +192,14 @@ export default {
           // do some operations in that
           e.stopPropagation()
         }
-      }, slots.default()), [
-        [vShow, show.value]
-      ])
+      }
+      const dropdownContainer = withDirectives(
+        h('div', containerOption, slots.default()),
+        [[vShow, show.value]]
+      )
       // the dropdown layer container
       children.push(
-        h(Transition, { name: animate.value }, [dropdownContainer])
+        h(Transition, { name: animate.value }, () => [dropdownContainer])
       )
 
       return h('div', {

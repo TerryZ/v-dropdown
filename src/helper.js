@@ -32,8 +32,8 @@ export function adjustTop (props, y, rootRect, containerRect) {
   const gap = 5
   const scrollTop = window.pageYOffset
   const viewHeight = document.documentElement.clientHeight
-  const srcTop = props.rightClick ? y.value : rootRect.top + scrollTop
-  let t = props.rightClick ? y.value : rootRect.top + rootRect.height + gap + scrollTop
+  const srcTop = props.rightClick ? y : rootRect.top + scrollTop
+  let t = props.rightClick ? y : rootRect.top + rootRect.height + gap + scrollTop
   let overDown = false
   let overUp = false
   let up = false
@@ -68,18 +68,24 @@ export function adjustLeft (props, x, rootRect, containerRect) {
   const viewWid = document.documentElement.clientWidth
   const wid = props.rightClick ? 0 : rootRect.width
   // align left's left
-  const left = props.rightClick ? x.value : rootRect.left + scrollLeft
+  const left = props.rightClick ? x : rootRect.left + scrollLeft
   // align center's left
   const center = (left + (wid / 2)) - (containerRect.width / 2)
   // align right's left
   const right = (left + wid) - containerRect.width
 
   switch (props.align) {
-    case 'left': return (left + containerRect.width) > (scrollLeft + viewWid) ? right : left
+    case 'left':
+      return (left + containerRect.width) > (scrollLeft + viewWid) ? right : left
     case 'center':
-      if ((center + containerRect.width) > (scrollLeft + viewWid)) return right
-      else if (right < scrollLeft) return left
-      else return center
-    case 'right': return (right < scrollLeft) ? left : right
+      if ((center + containerRect.width) > (scrollLeft + viewWid)) {
+        return right
+      } else if (right < scrollLeft) {
+        return left
+      } else {
+        return center
+      }
+    case 'right':
+      return (right < scrollLeft) ? left : right
   }
 }
