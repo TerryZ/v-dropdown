@@ -89,3 +89,48 @@ export function adjustLeft (props, x, rootRect, containerRect) {
       return (right < scrollLeft) ? left : right
   }
 }
+
+/**
+ * Get mouse x and y axis
+ * @param {MouseEvent} e - mouse event object
+ */
+export function useMouseContextMenu (e) {
+  const scrollPoint = scrollInfo()
+
+  return {
+    x: e.pageX || (e.clientX + scrollPoint.x),
+    y: e.pageY || (e.clientY + scrollPoint.y)
+  }
+}
+
+export function getContainerClasses (props) {
+  return {
+    'v-dropdown-container': true,
+    'v-dropdown-embed': props.embed,
+    'v-dropdown-no-border': !props.border
+  }
+}
+
+function isHidden (el) {
+  return window.getComputedStyle(el).display === 'none'
+}
+
+export function getElementRect (el) {
+  if (isHidden(el)) {
+    /**
+     * change the way to hide dropdown container from
+     * 'display:none' to 'visibility:hidden'
+     * be used for get width and height
+     */
+    el.style.visibility = 'hidden'
+    el.style.display = 'inline-block'
+    const rect = el.getBoundingClientRect()
+    /**
+      * restore dropdown style after getting position data
+      */
+    el.style.visibility = 'visible'
+    el.style.display = 'none'
+    return rect
+  }
+  return el.getBoundingClientRect()
+}

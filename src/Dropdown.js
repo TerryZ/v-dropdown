@@ -13,9 +13,11 @@ import {
   onUnmounted
 } from 'vue'
 import {
-  scrollInfo,
   adjustLeft,
-  adjustTop
+  adjustTop,
+  getContainerClasses,
+  getElementRect,
+  useMouseContextMenu
 } from './helper'
 
 export default {
@@ -29,12 +31,12 @@ export default {
     embed: { type: Boolean, default: false },
     border: { type: Boolean, default: true },
     /**
-     * mouse right click caller area to display dropdown
+     * mouse right click trigger area to display dropdown
      */
     rightClick: { type: Boolean, default: false },
     /**
-     * click caller and display dropdown, the
-     * caller click again whether to close dropdown
+     * click trigger and display dropdown, and
+     * click again whether to close dropdown
      */
     toggle: { type: Boolean, default: true },
     /** manual show / close the dropdown */
@@ -61,7 +63,7 @@ export default {
      */
     fullWidth: { type: Boolean, default: false }
   },
-  emits: ['show'],
+  emits: ['visible-change'],
   setup (props, { slots, emit, expose }) {
     const show = ref(false)
     const styleSheet = reactive({ top: '', left: '' })
@@ -91,10 +93,23 @@ export default {
       /**
        * calculation display direction(up or down) and top axis
        */
-      if (!show.value && !props.embed && 'caller' in slots) adjust()
+      if (!show.value && !props.embed && 'trigger' in slots) adjust()
 
       show.value = !show.value
-      emit('show', show.value)
+      emit('visible-change', show.value)
+    }
+    /**
+     * adjust dropdown display position
+     */
+    function adjust () {
+      const rootRect = root.value.getBoundingClientRect()
+      const containerRect = getElementRect(container.value)
+      const result = adjustTop(props, y.value, rootRect, containerRect)
+      const left = adjustLeft(props, x.value, rootRect, containerRect)
+
+      dropUp.value = result.dropUp
+      styleSheet.top = `${result.top}px`
+      styleSheet.left = `${left}px`
     }
     /**
      * the dropdown container outside click handle
@@ -103,45 +118,15 @@ export default {
     function whole (e) {
       if (!show.value) return
 
-      // is caller element click
-      const inCaller = e.composedPath().findIndex(val => val === root.value) !== -1
+      // is trigger element click
+      const inTrigger = e.composedPath().some(val => val === root.value)
       // do not toggle show/close when 'toggle' option is set to false
-      if (inCaller && !props.toggle && !props.rightClick) return
+      if (inTrigger && !props.toggle && !props.rightClick) return
       // close the dropdown when clicking outside the dropdown container
-      // reopen the dropdown when right-click in caller(rightClick = true)
-      if (!inCaller || (inCaller && props.rightClick)) {
+      // reopen the dropdown when right-click in trigger(rightClick = true)
+      if (!inTrigger || (inTrigger && props.rightClick)) {
         visible(true)
       }
-    }
-    /**
-     * adjust dropdown display position
-     */
-    function adjust () {
-      const rootRect = root.value.getBoundingClientRect()
-      let containerRect = null
-
-      if (show.value) {
-        containerRect = container.value.getBoundingClientRect()
-      } else {
-        /**
-         * change the way to hide dropdown container from
-         * 'display:none' to 'visibility:hidden'
-         * be used for get width and height
-         */
-        container.value.style.visibility = 'hidden'
-        container.value.style.display = 'inline-block'
-        containerRect = container.value.getBoundingClientRect()
-        /**
-         * restore dropdown style after getting position data
-         */
-        container.value.style.visibility = 'visible'
-        container.value.style.display = 'none'
-      }
-
-      const result = adjustTop(props, y.value, rootRect, containerRect)
-      dropUp.value = result.dropUp
-      styleSheet.top = `${result.top}px`
-      styleSheet.left = `${adjustLeft(props, x.value, rootRect, containerRect)}px`
     }
 
     onMounted(() => {
@@ -157,15 +142,17 @@ export default {
     })
     onBeforeUnmount(() => {
       // remove drop down layer
-      if (!props.embed) {
-        document.body.removeEventListener('mousedown', whole)
-        container.value.remove()
+      if (props.embed) {
+        return
       }
+      document.body.removeEventListener('mousedown', whole)
+      container.value.remove()
     })
     onUnmounted(() => {
-      if (!props.embed) {
-        root.value && root.value.remove()
+      if (props.embed) {
+        return
       }
+      root.value && root.value.remove()
     })
 
     expose({
@@ -175,23 +162,17 @@ export default {
 
     return () => {
       const children = []
-      // the dropdown layer caller
-      if ('caller' in slots && !props.embed) {
-        children.push(slots.caller())
+      // the dropdown trigger
+      if ('trigger' in slots && !props.embed) {
+        children.push(slots.trigger())
       }
       const containerOption = {
-        class: {
-          'v-dropdown-container': true,
-          'v-dropdown-embed': props.embed,
-          'v-dropdown-no-border': !props.border
-        },
+        class: getContainerClasses(props),
         style: styleSheet,
         ref: container,
-        onMousedown: e => {
-          // do not close dropdown container layer when
-          // do some operations in that
-          e.stopPropagation()
-        }
+        // do not close dropdown container layer when
+        // do some operations in that
+        onMousedown: e => e.stopPropagation()
       }
       const dropdownContainer = withDirectives(
         h('div', containerOption, slots.default()),
@@ -202,10 +183,10 @@ export default {
         h(Transition, { name: animate.value }, () => [dropdownContainer])
       )
 
-      return h('div', {
+      const dropdownOption = {
         class: {
-          'v-dropdown-caller': true,
-          'v-dropdown-caller--full-width': props.fullWidth
+          'v-dropdown-trigger': true,
+          'v-dropdown-trigger--full-width': props.fullWidth
         },
         ref: root,
         onClick: e => {
@@ -223,12 +204,13 @@ export default {
           e.stopPropagation()
           e.preventDefault()
 
-          const info = scrollInfo()
-          x.value = e.pageX || (e.clientX + info.x)
-          y.value = e.pageY || (e.clientY + info.y)
+          const point = useMouseContextMenu(e)
+          x.value = point.x
+          y.value = point.y
           visible()
         }
-      }, children)
+      }
+      return h('div', dropdownOption, children)
     }
   }
 }

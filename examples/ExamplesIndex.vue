@@ -11,7 +11,7 @@
     </h5>
     <p>
       <dropdown>
-        <template #caller>
+        <template #trigger>
           <button
             type="button"
             class="btn btn-secondary"
@@ -41,7 +41,7 @@
     </h5>
     <p>
       <dropdown :toggle="false">
-        <template #caller>
+        <template #trigger>
           <input
             type="text"
             class="form-control"
@@ -60,7 +60,7 @@
     </h5>
     <p>
       <dropdown :border="false">
-        <template #caller>
+        <template #trigger>
           <button
             type="button"
             class="btn btn-secondary"
@@ -102,7 +102,7 @@
     </div>
     <p>
       <dropdown :disabled="disabled">
-        <template #caller>
+        <template #trigger>
           <button
             type="button"
             class="btn btn-secondary"
@@ -124,10 +124,10 @@
     <p>
       <dropdown
         :manual="true"
-        @show="showChange"
+        @visible-change="visibleChange"
         ref="dropdownInput"
       >
-        <template #caller>
+        <template #trigger>
           <input
             type="text"
             class="form-control"
@@ -152,7 +152,7 @@
       <div class="col-md-4">
         <div>左对齐</div>
         <dropdown>
-          <template #caller>
+          <template #trigger>
             <button
               type="button"
               class="btn btn-secondary"
@@ -170,7 +170,7 @@
       <div class="col-md-4">
         <div>居中对齐</div>
         <dropdown align="center">
-          <template #caller>
+          <template #trigger>
             <button
               type="button"
               class="btn btn-secondary"
@@ -188,7 +188,7 @@
       <div class="col-md-4">
         <div>右对齐</div>
         <dropdown align="right">
-          <template #caller>
+          <template #trigger>
             <button
               type="button"
               class="btn btn-secondary"
@@ -210,7 +210,7 @@
     </h5>
     <p>
       <dropdown :embed="true">
-        <template #caller>
+        <template #trigger>
           <button
             type="button"
             class="btn btn-secondary"
@@ -234,7 +234,7 @@
         :border="false"
         :cover="true"
       >
-        <template #caller>
+        <template #trigger>
           <button
             type="button"
             class="btn btn-secondary"
@@ -267,7 +267,7 @@
       :toggle="false"
       :full-width="true"
     >
-      <template #caller>
+      <template #trigger>
         <div
           class="card text-center bg-light text-secondary justify-content-center"
           style="height: 20rem;font-size: 30px;"
@@ -287,7 +287,7 @@
     </h5>
     <div>
       <dropdown :width="350">
-        <template #caller>
+        <template #trigger>
           <button
             type="button"
             class="btn btn-secondary"
@@ -317,8 +317,8 @@ const dropdownInput = ref(null)
 
 const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-function showChange (state) {
-  show.value = state
+function visibleChange (val) {
+  show.value = val
 }
 
 watch(query, val => {
