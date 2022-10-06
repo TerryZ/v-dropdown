@@ -57,15 +57,15 @@ export default {
      */
     width: Number,
     /**
-     * container with
-     * false: inline-block
-     * true: block
+     * container width
+     * - false: inline-block
+     * - true: block
      */
     fullWidth: { type: Boolean, default: false }
   },
   emits: ['visible-change'],
   setup (props, { slots, emit, expose }) {
-    const show = ref(false)
+    const visible = ref(false)
     const styleSheet = reactive({ top: '', left: '' })
     const dropUp = ref(false)
     const x = ref(null)
@@ -84,25 +84,25 @@ export default {
       return ''
     })
 
-    function visible (outside = false) {
+    function display (outside = false) {
       if (props.disabled) return
       /**
        * do not toggle show/close when 'toggle' option is set to false
        */
-      if (show.value && !props.toggle && !outside) return
+      if (visible.value && !props.toggle && !outside) return
       /**
        * calculation display direction(up or down) and top axis
        */
-      if (!show.value && !props.embed && 'trigger' in slots) adjust()
+      if (!visible.value && !props.embed && 'trigger' in slots) adjust()
 
-      show.value = !show.value
-      emit('visible-change', show.value)
+      visible.value = !visible.value
+      emit('visible-change', visible.value)
     }
     /**
      * adjust dropdown display position
      */
     function adjust () {
-      const rootRect = root.value.getBoundingClientRect()
+      const rootRect = getElementRect(root.value)
       const containerRect = getElementRect(container.value)
       const result = adjustTop(props, y.value, rootRect, containerRect)
       const left = adjustLeft(props, x.value, rootRect, containerRect)
@@ -116,7 +116,7 @@ export default {
      * @param {MouseEvent} e - event object
      */
     function whole (e) {
-      if (!show.value) return
+      if (!visible.value) return
 
       // is trigger element click
       const inTrigger = e.composedPath().some(val => val === root.value)
@@ -125,7 +125,7 @@ export default {
       // close the dropdown when clicking outside the dropdown container
       // reopen the dropdown when right-click in trigger(rightClick = true)
       if (!inTrigger || (inTrigger && props.rightClick)) {
-        visible(true)
+        display(true)
       }
     }
 
@@ -134,19 +134,18 @@ export default {
         styleSheet.width = props.width + 'px'
       }
       if (props.embed) {
-        visible()
+        display()
       } else {
         document.body.appendChild(container.value)
         document.body.addEventListener('mousedown', whole)
       }
     })
     onBeforeUnmount(() => {
-      // remove drop down layer
       if (props.embed) {
         return
       }
       document.body.removeEventListener('mousedown', whole)
-      container.value.remove()
+      container.value.remove() // remove dropdown container
     })
     onUnmounted(() => {
       if (props.embed) {
@@ -156,7 +155,7 @@ export default {
     })
 
     expose({
-      visible,
+      display,
       adjust
     })
 
@@ -176,7 +175,7 @@ export default {
       }
       const dropdownContainer = withDirectives(
         h('div', containerOption, slots.default()),
-        [[vShow, show.value]]
+        [[vShow, visible.value]]
       )
       // the dropdown layer container
       children.push(
@@ -194,9 +193,9 @@ export default {
             return
           }
           e.stopPropagation()
-          visible()
+          display()
         },
-        // mouse right button click
+        // mouse right button click trigger area
         onContextmenu: e => {
           if (props.embed || props.manual || !props.rightClick) {
             return
@@ -207,7 +206,7 @@ export default {
           const point = useMouseContextMenu(e)
           x.value = point.x
           y.value = point.y
-          visible()
+          display()
         }
       }
       return h('div', dropdownOption, children)

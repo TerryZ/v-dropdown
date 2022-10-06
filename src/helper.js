@@ -37,7 +37,7 @@ export function adjustTop (props, y, rootRect, containerRect) {
   let overDown = false
   let overUp = false
   let up = false
-  // list over screen
+  // dropdown container over viewport
   if ((t + containerRect.height) > (scrollTop + viewHeight)) {
     overDown = true
   }
@@ -50,10 +50,7 @@ export function adjustTop (props, y, rootRect, containerRect) {
     up = true
   }
 
-  return {
-    dropUp: up,
-    top: t
-  }
+  return { dropUp: up, top: t }
 }
 /**
  * Calculation left axis

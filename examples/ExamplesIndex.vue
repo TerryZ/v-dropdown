@@ -7,16 +7,16 @@
     <hr>
 
     <h5 class="mt-5 mb-3">
-      默认
+      Default
     </h5>
-    <p>
+    <div>
       <dropdown>
         <template #trigger>
           <button
             type="button"
             class="btn btn-secondary"
           >
-            dropdown
+            dropdown trigger
           </button>
         </template>
         <div class="p-5">
@@ -34,12 +34,12 @@
           <div>0123456789012345678901234567890123456789</div>
         </div>
       </dropdown>
-    </p>
+    </div>
 
     <h5 class="mt-5 mb-3">
-      关闭循环切换
+      Disabled loop switch
     </h5>
-    <p>
+    <div>
       <dropdown :toggle="false">
         <template #trigger>
           <input
@@ -53,19 +53,19 @@
           <div>0123456789</div>
         </div>
       </dropdown>
-    </p>
+    </div>
 
     <h5 class="mt-5 mb-3">
-      无边框样式
+      No border
     </h5>
-    <p>
+    <div>
       <dropdown :border="false">
         <template #trigger>
           <button
             type="button"
             class="btn btn-secondary"
           >
-            dropdown
+            dropdown trigger
           </button>
         </template>
         <div class="p-5">
@@ -83,31 +83,31 @@
           <div>0123456789012345678901234567890123456789</div>
         </div>
       </dropdown>
-    </p>
+    </div>
 
     <h5 class="mt-5 mb-3">
-      禁用
+      Disabled
     </h5>
     <div class="custom-control custom-switch mb-3">
       <input
         type="checkbox"
-        class="custom-control-input"
+        class="custom-control-input me-2"
         id="customSwitch1"
         v-model="disabled"
       >
       <label
         class="custom-control-label"
         for="customSwitch1"
-      >禁止打开 dropdown</label>
+      >Disabled to open dropdown</label>
     </div>
-    <p>
+    <div>
       <dropdown :disabled="disabled">
         <template #trigger>
           <button
             type="button"
             class="btn btn-secondary"
           >
-            dropdown
+            dropdown trigger
           </button>
         </template>
         <div class="p-5">
@@ -116,12 +116,12 @@
           <div>0123456789</div>
         </div>
       </dropdown>
-    </p>
+    </div>
 
     <h5 class="mt-5 mb-3">
-      手动显示/关闭 dropdown
+      Manual open / close dropdown
     </h5>
-    <p>
+    <div>
       <dropdown
         :manual="true"
         @visible-change="visibleChange"
@@ -143,21 +143,21 @@
           />
         </div>
       </dropdown>
-    </p>
+    </div>
 
     <h5 class="mt-5 mb-3">
-      对齐方向
+      Direction
     </h5>
     <div class="row">
       <div class="col-md-4">
-        <div>左对齐</div>
+        <div>Align left</div>
         <dropdown>
           <template #trigger>
             <button
               type="button"
               class="btn btn-secondary"
             >
-              dropdown
+              dropdown trigger
             </button>
           </template>
           <div class="p-5">
@@ -168,14 +168,14 @@
         </dropdown>
       </div>
       <div class="col-md-4">
-        <div>居中对齐</div>
+        <div>Align center</div>
         <dropdown align="center">
           <template #trigger>
             <button
               type="button"
               class="btn btn-secondary"
             >
-              dropdown
+              dropdown trigger
             </button>
           </template>
           <div class="p-5">
@@ -186,14 +186,14 @@
         </dropdown>
       </div>
       <div class="col-md-4">
-        <div>右对齐</div>
+        <div>Align right</div>
         <dropdown align="right">
           <template #trigger>
             <button
               type="button"
               class="btn btn-secondary"
             >
-              dropdown
+              dropdown trigger
             </button>
           </template>
           <div class="p-5">
@@ -206,16 +206,16 @@
     </div>
 
     <h5 class="mt-5 mb-3">
-      嵌入页面
+      Embedded
     </h5>
-    <p>
+    <div>
       <dropdown :embed="true">
         <template #trigger>
           <button
             type="button"
             class="btn btn-secondary"
           >
-            dropdown
+            dropdown trigger
           </button>
         </template>
         <div class="p-5">
@@ -224,12 +224,12 @@
           <div>0123456789</div>
         </div>
       </dropdown>
-    </p>
+    </div>
 
     <h5 class="mt-5 mb-3">
-      覆盖模式
+      Cover mode ?
     </h5>
-    <p>
+    <div>
       <dropdown
         :border="false"
         :cover="true"
@@ -239,7 +239,7 @@
             type="button"
             class="btn btn-secondary"
           >
-            dropdown
+            dropdown trigger
           </button>
         </template>
         <div class="p-5">
@@ -257,10 +257,10 @@
           <div>0123456789012345678901234567890123456789</div>
         </div>
       </dropdown>
-    </p>
+    </div>
 
     <h5 class="mt-5 mb-3">
-      鼠标右键
+      Context menu
     </h5>
     <dropdown
       :right-click="true"
@@ -269,10 +269,13 @@
     >
       <template #trigger>
         <div
-          class="card text-center bg-light text-secondary justify-content-center"
+          class="
+            d-flex align-items-center rounded-3
+            bg-light text-secondary justify-content-center
+          "
           style="height: 20rem;font-size: 30px;"
         >
-          鼠标右键点击
+          Mouse right click this area
         </div>
       </template>
       <div class="p-5">
@@ -283,7 +286,7 @@
     </dropdown>
 
     <h5 class="mt-5 mb-3">
-      指定宽度
+      Specify width
     </h5>
     <div>
       <dropdown :width="350">
@@ -292,7 +295,7 @@
             type="button"
             class="btn btn-secondary"
           >
-            dropdown
+            dropdown trigger
           </button>
         </template>
         <div class="p-5">
@@ -309,7 +312,7 @@
 import { ref, watch } from 'vue'
 import Dropdown from '@/Dropdown'
 
-const show = ref(false)
+const visible = ref(false)
 const query = ref('')
 const disabled = ref(false)
 
@@ -318,15 +321,15 @@ const dropdownInput = ref(null)
 const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 function visibleChange (val) {
-  show.value = val
+  visible.value = val
 }
 
 watch(query, val => {
   if (val === '3') {
-    dropdownInput.value.visible()
+    dropdownInput.value.display()
   } else {
-    if (show.value) {
-      dropdownInput.value.visible()
+    if (visible.value) {
+      dropdownInput.value.display()
     }
   }
 })
