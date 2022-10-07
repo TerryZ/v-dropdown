@@ -19,7 +19,7 @@
             dropdown trigger
           </button>
         </template>
-        <div class="p-5">
+        <div class="p-3">
           <div>0123456789012345678901234567890123456789</div>
           <div>0123456789012345678901234567890123456789</div>
           <div>0123456789012345678901234567890123456789</div>
@@ -310,7 +310,7 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import Dropdown from '@/Dropdown'
+import Dropdown from '@/'
 
 const visible = ref(false)
 const query = ref('')
