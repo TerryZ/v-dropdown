@@ -129,6 +129,13 @@ export default {
       }
     }
 
+    onBeforeUnmount(() => {
+      if (props.embed) {
+        return
+      }
+      document.body.removeEventListener('mousedown', whole)
+      container.value.remove() // remove dropdown container
+    })
     onMounted(() => {
       if (props.width) {
         styleSheet.width = props.width + 'px'
@@ -139,13 +146,6 @@ export default {
         document.body.appendChild(container.value)
         document.body.addEventListener('mousedown', whole)
       }
-    })
-    onBeforeUnmount(() => {
-      if (props.embed) {
-        return
-      }
-      document.body.removeEventListener('mousedown', whole)
-      container.value.remove() // remove dropdown container
     })
     onUnmounted(() => {
       if (props.embed) {

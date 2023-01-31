@@ -43,24 +43,24 @@
     "vue": "^3.2.0"
   },
   "dependencies": {
-    "vue": "^3.2.40"
+    "vue": "^3.2.45"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
-    "@vitejs/plugin-vue": "^3.1.2",
-    "@vitejs/plugin-vue-jsx": "^2.0.1",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vitejs/plugin-vue-jsx": "^3.0.0",
     "@vue/eslint-config-standard": "^8.0.1",
-    "@vue/test-utils": "^2.1.0",
-    "bootstrap": "^5.2.2",
+    "@vue/test-utils": "^2.2.8",
+    "bootstrap": "^5.2.3",
     "c8": "^7.12.0",
-    "eslint": "^8.25.0",
-    "eslint-plugin-vue": "^9.6.0",
-    "jsdom": "^20.0.1",
-    "sass": "^1.55.0",
-    "sass-loader": "^13.1.0",
-    "typescript": "^4.8.4",
-    "vite": "^3.1.6",
-    "vite-plugin-css-injected-by-js": "^2.1.0",
-    "vitest": "^0.24.0"
+    "eslint": "^8.33.0",
+    "eslint-plugin-vue": "^9.9.0",
+    "jsdom": "^21.1.0",
+    "sass": "^1.57.1",
+    "sass-loader": "^13.2.0",
+    "typescript": "^4.9.4",
+    "vite": "^4.0.4",
+    "vite-plugin-css-injected-by-js": "^2.4.0",
+    "vitest": "^0.28.3"
   }
 }

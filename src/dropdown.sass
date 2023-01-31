@@ -1,12 +1,11 @@
-@mixin shadow($blur, $transparent, $shadow: 3px)
-  -webkit-box-shadow: 0 $shadow $blur rgba(0,0,0,$transparent)
-  -moz-box-shadow: 0 $shadow $blur rgba(0,0,0,$transparent)
-  box-shadow: 0 $shadow $blur rgba(0,0,0,$transparent)
+@mixin shadow($blur, $transparent: 0.2, $y: 3px)
+  -webkit-box-shadow: 0 $y $blur rgba(0,0,0,$transparent)
+  -moz-box-shadow: 0 $y $blur rgba(0,0,0,$transparent)
+  box-shadow: 0 $y $blur rgba(0,0,0,$transparent)
 
 @mixin animation($start: -6px)
-  -webkit-font-smoothing: subpixel-antialiased
-  -webkit-transform: translateY($start) translateZ(0) scale(1.0, 1.0)
-  transform: translateY($start) translateZ(0) scale(1.0, 1.0)
+  // transform: perspective(1px) translateY($start) translateZ(0) scale(1.0, 1.0)
+  transform: perspective(1px) translateY($start)
   opacity: 0
 
 // 0 12px 32px rgba(0, 0, 0, .1), 0 2px 6px rgba(0, 0, 0, .08)
@@ -19,6 +18,11 @@ div.v-dropdown-trigger
   &.v-dropdown-trigger--full-width
     display: block
 div.v-dropdown-container
+  -webkit-backface-visibility: hidden
+  -moz-backface-visibility: hidden
+  backface-visibility: hidden
+  -webkit-font-smoothing: subpixel-antialiased
+
   display: inline-block
   margin: 0
   padding: 0
@@ -28,19 +32,18 @@ div.v-dropdown-container
   position: absolute
   box-sizing: border-box
   background-color: white
-  -webkit-border-radius: 2px
-  border-radius: 2px
+  border-radius: .3rem
   overflow: hidden
   z-index: 3000
-  @include shadow(12px, 0.2)
-  will-change: opacity, transform
+  @include shadow(25px, 0.2, 15px)
+  will-change: opacity, transform, top, left
   &.v-dropdown-embed
     position: relative
     box-shadow: 0 1px 6px rgba(0,0,0,0.12) !important
     z-index: 100
   &.v-dropdown-no-border
     border: 0
-    @include shadow(8px, 0.3)
+    @include shadow(20px)
 
 .#{$down}-enter-from,
 .#{$down}-leave-to
