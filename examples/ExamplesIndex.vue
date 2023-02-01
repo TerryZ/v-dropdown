@@ -131,7 +131,7 @@
           <input
             type="text"
             class="form-control"
-            v-model="query"
+            @input="inputChange"
             placeholder="try enter 3"
           >
         </template>
@@ -203,27 +203,6 @@
           </div>
         </dropdown>
       </div>
-    </div>
-
-    <h5 class="mt-5 mb-3">
-      Embedded
-    </h5>
-    <div>
-      <dropdown :embed="true">
-        <template #trigger>
-          <button
-            type="button"
-            class="btn btn-secondary"
-          >
-            dropdown trigger
-          </button>
-        </template>
-        <div class="p-5">
-          <div>0123456789</div>
-          <div>0123456789</div>
-          <div>0123456789</div>
-        </div>
-      </dropdown>
     </div>
 
     <h5 class="mt-5 mb-3">
@@ -309,11 +288,10 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import Dropdown from '@/'
 
 const visible = ref(false)
-const query = ref('')
 const disabled = ref(false)
 
 const dropdownInput = ref(null)
@@ -323,14 +301,13 @@ const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 function visibleChange (val) {
   visible.value = val
 }
-
-watch(query, val => {
-  if (val === '3') {
+function inputChange (e) {
+  if (e.target.value === '3') {
     dropdownInput.value.display()
   } else {
     if (visible.value) {
       dropdownInput.value.display()
     }
   }
-})
+}
 </script>

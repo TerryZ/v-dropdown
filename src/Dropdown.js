@@ -25,10 +25,6 @@ export default {
   props: {
     /** align direction */
     align: { type: String, default: 'left' },
-    /**
-     * dropdown layer embedded to page/component
-     */
-    embed: { type: Boolean, default: false },
     border: { type: Boolean, default: true },
     /**
      * mouse right click trigger area to display dropdown
@@ -78,7 +74,7 @@ export default {
       if (typeof props.animated === 'string') {
         return props.animated
       }
-      if (!props.embed && props.animated) {
+      if (props.animated) {
         return dropUp.value ? 'animate-up' : 'animate-down'
       }
       return ''
@@ -93,7 +89,7 @@ export default {
       /**
        * calculation display direction(up or down) and top axis
        */
-      if (!visible.value && !props.embed && 'trigger' in slots) adjust()
+      if (!visible.value && 'trigger' in slots) adjust()
 
       visible.value = !visible.value
       emit('visible-change', visible.value)
@@ -129,28 +125,18 @@ export default {
       }
     }
 
-    onBeforeUnmount(() => {
-      if (props.embed) {
-        return
-      }
-      document.body.removeEventListener('mousedown', whole)
-      container.value.remove() // remove dropdown container
-    })
     onMounted(() => {
       if (props.width) {
         styleSheet.width = props.width + 'px'
       }
-      if (props.embed) {
-        display()
-      } else {
-        document.body.appendChild(container.value)
-        document.body.addEventListener('mousedown', whole)
-      }
+      document.body.appendChild(container.value)
+      document.body.addEventListener('mousedown', whole)
+    })
+    onBeforeUnmount(() => {
+      document.body.removeEventListener('mousedown', whole)
+      container.value.remove() // remove dropdown container
     })
     onUnmounted(() => {
-      if (props.embed) {
-        return
-      }
       root.value && root.value.remove()
     })
 
@@ -162,7 +148,7 @@ export default {
     return () => {
       const children = []
       // the dropdown trigger
-      if ('trigger' in slots && !props.embed) {
+      if ('trigger' in slots) {
         children.push(slots.trigger())
       }
       const containerOption = {
@@ -189,7 +175,7 @@ export default {
         },
         ref: root,
         onClick: e => {
-          if (props.embed || props.rightClick || props.manual) {
+          if (props.rightClick || props.manual) {
             return
           }
           e.stopPropagation()
@@ -197,7 +183,7 @@ export default {
         },
         // mouse right button click trigger area
         onContextmenu: e => {
-          if (props.embed || props.manual || !props.rightClick) {
+          if (props.manual || !props.rightClick) {
             return
           }
           e.stopPropagation()

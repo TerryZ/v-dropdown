@@ -18,10 +18,10 @@ div.v-dropdown-trigger
   &.v-dropdown-trigger--full-width
     display: block
 div.v-dropdown-container
+  -webkit-font-smoothing: subpixel-antialiased
   -webkit-backface-visibility: hidden
   -moz-backface-visibility: hidden
   backface-visibility: hidden
-  -webkit-font-smoothing: subpixel-antialiased
 
   display: inline-block
   margin: 0
@@ -37,10 +37,6 @@ div.v-dropdown-container
   z-index: 3000
   @include shadow(25px, 0.2, 15px)
   will-change: opacity, transform, top, left
-  &.v-dropdown-embed
-    position: relative
-    box-shadow: 0 1px 6px rgba(0,0,0,0.12) !important
-    z-index: 100
   &.v-dropdown-no-border
     border: 0
     @include shadow(20px)

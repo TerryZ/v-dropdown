@@ -80,9 +80,6 @@ changed direction of alignment the dropdown container to trigger
 - 'center'
 - 'right'
 
-**embed** `false (boolean)`
-the drop down panel embedded in page/component
-
 **right-click** `false (boolean)`
 mouse right button click to call dropdown
 
