@@ -1,3 +1,6 @@
+export const TRIGGER_CLICK = 'click'
+export const TRIGGER_HOVER = 'hover'
+
 /**
  * Get scroll info
  * @returns {{ x: number, y: number}}

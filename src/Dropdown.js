@@ -17,7 +17,9 @@ import {
   adjustTop,
   getContainerClasses,
   getElementRect,
-  useMouseContextMenu
+  useMouseContextMenu,
+  TRIGGER_CLICK,
+  TRIGGER_HOVER
 } from './helper'
 
 export default {
@@ -26,9 +28,7 @@ export default {
     /** align direction */
     align: { type: String, default: 'left' },
     border: { type: Boolean, default: true },
-    /**
-     * mouse right click trigger area to display dropdown
-     */
+    /* mouse right click trigger area to display dropdown */
     rightClick: { type: Boolean, default: false },
     /**
      * click trigger and display dropdown, and
@@ -57,7 +57,8 @@ export default {
      * - false: inline-block
      * - true: block
      */
-    fullWidth: { type: Boolean, default: false }
+    fullWidth: { type: Boolean, default: false },
+    trigger: { type: String, default: TRIGGER_CLICK }
   },
   emits: ['visible-change'],
   setup (props, { slots, emit, expose }) {
@@ -78,6 +79,9 @@ export default {
         return dropUp.value ? 'animate-up' : 'animate-down'
       }
       return ''
+    })
+    const isTriggerHover = computed(() => {
+      return props.trigger === TRIGGER_HOVER
     })
 
     function display (outside = false) {
@@ -174,8 +178,20 @@ export default {
           'v-dropdown-trigger--full-width': props.fullWidth
         },
         ref: root,
+        onMouseenter: e => {
+          if (!isTriggerHover.value) return
+
+          e.stopPropagation()
+          display()
+        },
+        onMouseleave: e => {
+          if (!isTriggerHover.value) return
+
+          e.stopPropagation()
+          display()
+        },
         onClick: e => {
-          if (props.rightClick || props.manual) {
+          if (isTriggerHover.value || props.rightClick || props.manual) {
             return
           }
           e.stopPropagation()
