@@ -4,6 +4,7 @@ import {
   ref,
   reactive,
   computed,
+  watch,
   h,
   withDirectives,
   vShow,
@@ -19,7 +20,9 @@ import {
   getElementRect,
   useMouseContextMenu,
   TRIGGER_CLICK,
-  TRIGGER_HOVER
+  TRIGGER_HOVER,
+  HOVER_RESPONSE_TIME,
+  useAnimate
 } from './helper'
 
 export default {
@@ -67,22 +70,19 @@ export default {
     const dropUp = ref(false)
     const x = ref(null)
     const y = ref(null)
+    const enterTrigger = ref(false)
+    const enterContainer = ref(false)
+    const timeout = ref(undefined)
 
     const root = ref(null)
     const container = ref(null)
 
-    const animate = computed(() => {
-      if (typeof props.animated === 'string') {
-        return props.animated
-      }
-      if (props.animated) {
-        return dropUp.value ? 'animate-up' : 'animate-down'
-      }
-      return ''
-    })
-    const isTriggerHover = computed(() => {
+    const animate = useAnimate(props, dropUp)
+    const isTriggerByHover = computed(() => {
       return props.trigger === TRIGGER_HOVER
     })
+
+    watch(visible, val => emit('visible-change', val))
 
     function display (outside = false) {
       if (props.disabled) return
@@ -95,8 +95,20 @@ export default {
        */
       if (!visible.value && 'trigger' in slots) adjust()
 
-      visible.value = !visible.value
-      emit('visible-change', visible.value)
+      if (isTriggerByHover.value) {
+        window.clearTimeout(timeout.value)
+        timeout.value = window.setTimeout(() => {
+          if (visible.value) {
+            if (enterTrigger.value || enterContainer.value) return
+            visible.value = false
+          } else {
+            visible.value = true
+          }
+          // visible.value = !visible.value
+        }, HOVER_RESPONSE_TIME)
+      } else {
+        visible.value = !visible.value
+      }
     }
     /**
      * adjust dropdown display position
@@ -138,7 +150,8 @@ export default {
     })
     onBeforeUnmount(() => {
       document.body.removeEventListener('mousedown', whole)
-      container.value.remove() // remove dropdown container
+      // remove dropdown container
+      container.value && container.value.remove()
     })
     onUnmounted(() => {
       root.value && root.value.remove()
@@ -153,8 +166,12 @@ export default {
       const children = []
       // the dropdown trigger
       if ('trigger' in slots) {
-        children.push(slots.trigger())
+        children.push(slots.trigger({
+          visible: visible.value,
+          disabled: props.disabled
+        }))
       }
+
       const containerOption = {
         class: getContainerClasses(props),
         style: styleSheet,
@@ -162,6 +179,18 @@ export default {
         // do not close dropdown container layer when
         // do some operations in that
         onMousedown: e => e.stopPropagation()
+      }
+      if (isTriggerByHover.value) {
+        containerOption.onMouseenter = e => {
+          e.stopPropagation()
+          enterContainer.value = true
+          display()
+        }
+        containerOption.onMouseleave = e => {
+          e.stopPropagation()
+          enterContainer.value = false
+          display()
+        }
       }
       const dropdownContainer = withDirectives(
         h('div', containerOption, slots.default()),
@@ -177,31 +206,32 @@ export default {
           'v-dropdown-trigger': true,
           'v-dropdown-trigger--full-width': props.fullWidth
         },
-        ref: root,
-        onMouseenter: e => {
-          if (!isTriggerHover.value) return
+        ref: root
+      }
 
+      if (isTriggerByHover.value) {
+        dropdownOption.onMouseenter = e => {
+          e.stopPropagation()
+          enterTrigger.value = true
+          display()
+        }
+        dropdownOption.onMouseleave = e => {
+          e.stopPropagation()
+          enterTrigger.value = false
+          display()
+        }
+      } else {
+        dropdownOption.onClick = e => {
+          if (props.rightClick || props.manual) return
           e.stopPropagation()
           display()
-        },
-        onMouseleave: e => {
-          if (!isTriggerHover.value) return
+        }
+      }
 
-          e.stopPropagation()
-          display()
-        },
-        onClick: e => {
-          if (isTriggerHover.value || props.rightClick || props.manual) {
-            return
-          }
-          e.stopPropagation()
-          display()
-        },
-        // mouse right button click trigger area
-        onContextmenu: e => {
-          if (props.manual || !props.rightClick) {
-            return
-          }
+      // mouse right click to trigger dropdown
+      if (props.rightClick) {
+        dropdownOption.onContextmenu = e => {
+          if (props.manual) return
           e.stopPropagation()
           e.preventDefault()
 
@@ -211,6 +241,7 @@ export default {
           display()
         }
       }
+
       return h('div', dropdownOption, children)
     }
   }

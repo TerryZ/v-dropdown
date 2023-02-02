@@ -37,13 +37,16 @@
         </dropdown>
       </div>
       <div class="col-md-6">
-        <dropdown trigger="hover">
+        <dropdown
+          trigger="hover"
+          @visible-change="hoverVisibleChange"
+        >
           <template #trigger>
             <button
               type="button"
               class="btn btn-secondary"
             >
-              dropdown trigger
+              dropdown trigger(hover)
             </button>
           </template>
           <div class="p-3">
@@ -65,7 +68,7 @@
     </div>
 
     <h5 class="mt-5 mb-3">
-      Disabled loop switch
+      Disabled loop switch dropdown
     </h5>
     <div>
       <dropdown :toggle="false">
@@ -88,12 +91,12 @@
     </h5>
     <div>
       <dropdown :border="false">
-        <template #trigger>
+        <template #trigger="{ visible: dropVisible, disabled: dropDisabled }">
           <button
             type="button"
             class="btn btn-secondary"
           >
-            dropdown trigger
+            visible: {{ dropVisible }}, disabled: {{ dropDisabled }}
           </button>
         </template>
         <div class="p-5">
@@ -328,6 +331,9 @@ const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 function visibleChange (val) {
   visible.value = val
+}
+function hoverVisibleChange (val) {
+  console.log(val)
 }
 function inputChange (e) {
   if (e.target.value === '3') {

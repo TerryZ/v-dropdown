@@ -1,5 +1,21 @@
+import { computed } from 'vue'
+
 export const TRIGGER_CLICK = 'click'
 export const TRIGGER_HOVER = 'hover'
+export const HOVER_RESPONSE_TIME = 150
+export const GAP = 5
+
+export function useAnimate (props, dropUp) {
+  return computed(() => {
+    if (typeof props.animated === 'string') {
+      return props.animated
+    }
+    if (props.animated) {
+      return dropUp.value ? 'animate-up' : 'animate-down'
+    }
+    return ''
+  })
+}
 
 /**
  * Get scroll info
@@ -32,11 +48,10 @@ export function scrollInfo () {
  * @return {{ dropUp: boolean, top: number }}
  */
 export function adjustTop (props, y, rootRect, containerRect) {
-  const gap = 5
   const scrollTop = window.pageYOffset
   const viewHeight = document.documentElement.clientHeight
   const srcTop = props.rightClick ? y : rootRect.top + scrollTop
-  let t = props.rightClick ? y : rootRect.top + rootRect.height + gap + scrollTop
+  let t = props.rightClick ? y : rootRect.top + rootRect.height + GAP + scrollTop
   let overDown = false
   let overUp = false
   let up = false
@@ -44,12 +59,12 @@ export function adjustTop (props, y, rootRect, containerRect) {
   if ((t + containerRect.height) > (scrollTop + viewHeight)) {
     overDown = true
   }
-  if ((srcTop - gap - containerRect.height) < scrollTop) {
+  if ((srcTop - GAP - containerRect.height) < scrollTop) {
     overUp = true
   }
 
   if (!overUp && overDown) {
-    t = srcTop - gap - containerRect.height
+    t = srcTop - GAP - containerRect.height
     up = true
   }
 
@@ -125,8 +140,8 @@ export function getElementRect (el) {
     el.style.display = 'inline-block'
     const rect = el.getBoundingClientRect()
     /**
-      * restore dropdown style after getting position data
-      */
+     * restore dropdown style after getting position data
+     */
     el.style.visibility = 'visible'
     el.style.display = 'none'
     return rect
