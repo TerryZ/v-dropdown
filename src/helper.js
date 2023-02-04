@@ -1,41 +1,26 @@
 import { computed } from 'vue'
+import { scrollInfo } from './util'
+export { getElementRect } from './util'
 
 export const TRIGGER_CLICK = 'click'
 export const TRIGGER_HOVER = 'hover'
+export const TRIGGER_CONTEXTMENU = 'contextmenu'
 export const HOVER_RESPONSE_TIME = 150
 export const GAP = 5
 
-export function useAnimate (props, dropUp) {
-  return computed(() => {
-    if (typeof props.animated === 'string') {
-      return props.animated
-    }
-    if (props.animated) {
-      return dropUp.value ? 'animate-up' : 'animate-down'
-    }
-    return ''
-  })
+export function getAnimate (props, dropUp) {
+  if (typeof props.animated === 'string') {
+    return props.animated
+  }
+  if (!props.animated) return ''
+  return dropUp.value ? 'animate-up' : 'animate-down'
 }
 
-/**
- * Get scroll info
- * @returns {{ x: number, y: number}}
- */
-export function scrollInfo () {
-  const supportPageOffset = window.pageXOffset !== undefined
-  const isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat')
-
+export function useState (props) {
   return {
-    x: supportPageOffset
-      ? window.pageXOffset
-      : isCSS1Compat
-        ? document.documentElement.scrollLeft
-        : document.body.scrollLeft,
-    y: supportPageOffset
-      ? window.pageYOffset
-      : isCSS1Compat
-        ? document.documentElement.scrollTop
-        : document.body.scrollTop
+    isTriggerByClick: props.trigger === TRIGGER_CLICK,
+    isTriggerByHover: props.trigger === TRIGGER_HOVER,
+    isTriggerByContextmenu: props.trigger === TRIGGER_CONTEXTMENU
   }
 }
 
@@ -48,10 +33,11 @@ export function scrollInfo () {
  * @return {{ dropUp: boolean, top: number }}
  */
 export function adjustTop (props, y, rootRect, containerRect) {
+  const { isTriggerByContextmenu } = useState(props)
   const scrollTop = window.pageYOffset
   const viewHeight = document.documentElement.clientHeight
-  const srcTop = props.rightClick ? y : rootRect.top + scrollTop
-  let t = props.rightClick ? y : rootRect.top + rootRect.height + GAP + scrollTop
+  const srcTop = isTriggerByContextmenu ? y : rootRect.top + scrollTop
+  let t = isTriggerByContextmenu ? y : rootRect.top + rootRect.height + GAP + scrollTop
   let overDown = false
   let overUp = false
   let up = false
@@ -79,11 +65,12 @@ export function adjustTop (props, y, rootRect, containerRect) {
  * @returns {number}
  */
 export function adjustLeft (props, x, rootRect, containerRect) {
+  const { isTriggerByContextmenu } = useState(props)
   const scrollLeft = window.pageXOffset
   const viewWid = document.documentElement.clientWidth
-  const wid = props.rightClick ? 0 : rootRect.width
+  const wid = isTriggerByContextmenu ? 0 : rootRect.width
   // align left's left
-  const left = props.rightClick ? x : rootRect.left + scrollLeft
+  const left = isTriggerByContextmenu ? x : rootRect.left + scrollLeft
   // align center's left
   const center = (left + (wid / 2)) - (containerRect.width / 2)
   // align right's left
@@ -123,28 +110,4 @@ export function getContainerClasses (props) {
     'v-dropdown-container': true,
     'v-dropdown-no-border': !props.border
   }
-}
-
-function isHidden (el) {
-  return window.getComputedStyle(el).display === 'none'
-}
-
-export function getElementRect (el) {
-  if (isHidden(el)) {
-    /**
-     * change the way to hide dropdown container from
-     * 'display:none' to 'visibility:hidden'
-     * be used for get width and height
-     */
-    el.style.visibility = 'hidden'
-    el.style.display = 'inline-block'
-    const rect = el.getBoundingClientRect()
-    /**
-     * restore dropdown style after getting position data
-     */
-    el.style.visibility = 'visible'
-    el.style.display = 'none'
-    return rect
-  }
-  return el.getBoundingClientRect()
 }

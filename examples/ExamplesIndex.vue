@@ -273,7 +273,7 @@
       Context menu
     </h5>
     <dropdown
-      :right-click="true"
+      trigger="contextmenu"
       :toggle="false"
       :full-width="true"
     >

@@ -3,7 +3,6 @@ import './dropdown.sass'
 import {
   ref,
   reactive,
-  computed,
   watch,
   h,
   withDirectives,
@@ -14,15 +13,15 @@ import {
   onUnmounted
 } from 'vue'
 import {
+  TRIGGER_CLICK,
+  HOVER_RESPONSE_TIME,
   adjustLeft,
   adjustTop,
   getContainerClasses,
   getElementRect,
+  getAnimate,
   useMouseContextMenu,
-  TRIGGER_CLICK,
-  TRIGGER_HOVER,
-  HOVER_RESPONSE_TIME,
-  useAnimate
+  useState
 } from './helper'
 
 export default {
@@ -31,8 +30,6 @@ export default {
     /** align direction */
     align: { type: String, default: 'left' },
     border: { type: Boolean, default: true },
-    /* mouse right click trigger area to display dropdown */
-    rightClick: { type: Boolean, default: false },
     /**
      * click trigger and display dropdown, and
      * click again whether to close dropdown
@@ -61,12 +58,18 @@ export default {
      * - true: block
      */
     fullWidth: { type: Boolean, default: false },
+    /**
+     * dropdown trigger method
+     * - `click` default
+     * - `hover`
+     * - `contextmenu`
+     */
     trigger: { type: String, default: TRIGGER_CLICK }
   },
   emits: ['visible-change'],
   setup (props, { slots, emit, expose }) {
     const visible = ref(false)
-    const styleSheet = reactive({ top: '', left: '' })
+    const styleSheet = reactive({ top: '', left: '', width: '' })
     const dropUp = ref(false)
     const x = ref(null)
     const y = ref(null)
@@ -77,10 +80,11 @@ export default {
     const root = ref(null)
     const container = ref(null)
 
-    const animate = useAnimate(props, dropUp)
-    const isTriggerByHover = computed(() => {
-      return props.trigger === TRIGGER_HOVER
-    })
+    const {
+      isTriggerByClick,
+      isTriggerByHover,
+      isTriggerByContextmenu
+    } = useState(props)
 
     watch(visible, val => emit('visible-change', val))
 
@@ -95,20 +99,30 @@ export default {
        */
       if (!visible.value && 'trigger' in slots) adjust()
 
-      if (isTriggerByHover.value) {
-        window.clearTimeout(timeout.value)
-        timeout.value = window.setTimeout(() => {
-          if (visible.value) {
-            if (enterTrigger.value || enterContainer.value) return
-            visible.value = false
-          } else {
-            visible.value = true
-          }
-          // visible.value = !visible.value
-        }, HOVER_RESPONSE_TIME)
-      } else {
-        visible.value = !visible.value
-      }
+      window.clearTimeout(timeout.value)
+      timeout.value = window.setTimeout(() => {
+        if (visible.value) {
+          if (enterTrigger.value || enterContainer.value) return
+          visible.value = false
+        } else {
+          visible.value = true
+        }
+        // visible.value = !visible.value
+      }, isTriggerByHover ? HOVER_RESPONSE_TIME : 0)
+      // if (isTriggerByHover) {
+      //   window.clearTimeout(timeout.value)
+      //   timeout.value = window.setTimeout(() => {
+      //     if (visible.value) {
+      //       if (enterTrigger.value || enterContainer.value) return
+      //       visible.value = false
+      //     } else {
+      //       visible.value = true
+      //     }
+      //     // visible.value = !visible.value
+      //   }, HOVER_RESPONSE_TIME)
+      // } else {
+      //   visible.value = !visible.value
+      // }
     }
     /**
      * adjust dropdown display position
@@ -133,16 +147,16 @@ export default {
       // is trigger element click
       const inTrigger = e.composedPath().some(val => val === root.value)
       // do not toggle show/close when 'toggle' option is set to false
-      if (inTrigger && !props.toggle && !props.rightClick) return
-      // close the dropdown when clicking outside the dropdown container
+      if (inTrigger && !props.toggle && !isTriggerByContextmenu) return
+      // close the dropdown when clicking outside of the dropdown container
       // reopen the dropdown when right-click in trigger(rightClick = true)
-      if (!inTrigger || (inTrigger && props.rightClick)) {
+      if (!inTrigger || (inTrigger && isTriggerByContextmenu)) {
         display(true)
       }
     }
 
     onMounted(() => {
-      if (props.width) {
+      if (typeof props.width !== 'undefined') {
         styleSheet.width = props.width + 'px'
       }
       document.body.appendChild(container.value)
@@ -153,9 +167,7 @@ export default {
       // remove dropdown container
       container.value && container.value.remove()
     })
-    onUnmounted(() => {
-      root.value && root.value.remove()
-    })
+    onUnmounted(() => { root.value && root.value.remove() })
 
     expose({
       display,
@@ -180,7 +192,7 @@ export default {
         // do some operations in that
         onMousedown: e => e.stopPropagation()
       }
-      if (isTriggerByHover.value) {
+      if (isTriggerByHover) {
         containerOption.onMouseenter = e => {
           e.stopPropagation()
           enterContainer.value = true
@@ -198,7 +210,7 @@ export default {
       )
       // the dropdown layer container
       children.push(
-        h(Transition, { name: animate.value }, () => [dropdownContainer])
+        h(Transition, { name: getAnimate(props, dropUp) }, () => [dropdownContainer])
       )
 
       const dropdownOption = {
@@ -209,7 +221,7 @@ export default {
         ref: root
       }
 
-      if (isTriggerByHover.value) {
+      if (isTriggerByHover) {
         dropdownOption.onMouseenter = e => {
           e.stopPropagation()
           enterTrigger.value = true
@@ -220,16 +232,14 @@ export default {
           enterTrigger.value = false
           display()
         }
-      } else {
+      } else if (isTriggerByClick) {
         dropdownOption.onClick = e => {
-          if (props.rightClick || props.manual) return
+          if (props.manual) return
           e.stopPropagation()
           display()
         }
-      }
-
-      // mouse right click to trigger dropdown
-      if (props.rightClick) {
+      } else if (isTriggerByContextmenu) {
+        // mouse right click to trigger dropdown
         dropdownOption.onContextmenu = e => {
           if (props.manual) return
           e.stopPropagation()

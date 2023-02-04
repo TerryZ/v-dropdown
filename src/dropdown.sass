@@ -9,34 +9,33 @@
   opacity: 0
 
 // 0 12px 32px rgba(0, 0, 0, .1), 0 2px 6px rgba(0, 0, 0, .08)
-$duration: 200ms
+$duration: 250ms
 $down: animate-down
 $up: animate-up
 
-div.v-dropdown-trigger
+.v-dropdown-trigger
   display: inline-block
   &.v-dropdown-trigger--full-width
     display: block
-div.v-dropdown-container
+.v-dropdown-container
   -webkit-font-smoothing: subpixel-antialiased
   -webkit-backface-visibility: hidden
   -moz-backface-visibility: hidden
   backface-visibility: hidden
-
   display: inline-block
   margin: 0
   padding: 0
+  position: absolute
   top: 0
   left: 0
   border: 1px solid #D6D7D7
-  position: absolute
   box-sizing: border-box
   background-color: white
   border-radius: .3rem
   overflow: hidden
   z-index: 3000
-  @include shadow(25px, 0.2, 15px)
   will-change: opacity, transform, top, left
+  @include shadow(25px, 0.2, 15px)
   &.v-dropdown-no-border
     border: 0
     @include shadow(20px)
@@ -51,12 +50,5 @@ div.v-dropdown-container
 .#{$down}-leave-active,
 .#{$up}-enter-active,
 .#{$up}-leave-active
-  -webkit-transition: opacity 100ms, transform $duration
-  transition: opacity 100ms, transform $duration
-.#{$down}-enter-to,
-.#{$down}-leave-from,
-.#{$up}-enter-to,
-.#{$up}-leave-from
-  -webkit-transform: none
-  transform: none
-  opacity: 1
+  -webkit-transition: all $duration ease-out
+  transition: all $duration ease-out
