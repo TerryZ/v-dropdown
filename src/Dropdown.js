@@ -70,12 +70,9 @@ export default {
   setup (props, { slots, emit, expose }) {
     const visible = ref(false)
     const styleSheet = reactive({ top: '', left: '', width: '' })
+    const position = reactive({ x: null, y: null })
     const dropUp = ref(false)
-    const x = ref(null)
-    const y = ref(null)
-    const enterTrigger = ref(false)
-    const enterContainer = ref(false)
-    const timeout = ref(undefined)
+    const timeout = ref(null)
 
     const root = ref(null)
     const container = ref(null)
@@ -88,50 +85,39 @@ export default {
 
     watch(visible, val => emit('visible-change', val))
 
-    function display (outside = false) {
+    function display () {
+      if (props.disabled) return
+      /**
+       * calculation display direction(up or down) and top axis
+       */
+      if ('trigger' in slots) adjust()
+
+      window.clearTimeout(timeout.value)
+      timeout.value = window.setTimeout(() => {
+        visible.value = true
+      }, isTriggerByHover ? HOVER_RESPONSE_TIME : 0)
+    }
+    function close (outside = false) {
       if (props.disabled) return
       /**
        * do not toggle show/close when 'toggle' option is set to false
        */
-      if (visible.value && !props.toggle && !outside) return
-      /**
-       * calculation display direction(up or down) and top axis
-       */
-      if (!visible.value && 'trigger' in slots) adjust()
+      if (!props.toggle && !outside) return
 
       window.clearTimeout(timeout.value)
       timeout.value = window.setTimeout(() => {
-        if (visible.value) {
-          if (enterTrigger.value || enterContainer.value) return
-          visible.value = false
-        } else {
-          visible.value = true
-        }
-        // visible.value = !visible.value
+        visible.value = false
       }, isTriggerByHover ? HOVER_RESPONSE_TIME : 0)
-      // if (isTriggerByHover) {
-      //   window.clearTimeout(timeout.value)
-      //   timeout.value = window.setTimeout(() => {
-      //     if (visible.value) {
-      //       if (enterTrigger.value || enterContainer.value) return
-      //       visible.value = false
-      //     } else {
-      //       visible.value = true
-      //     }
-      //     // visible.value = !visible.value
-      //   }, HOVER_RESPONSE_TIME)
-      // } else {
-      //   visible.value = !visible.value
-      // }
     }
-    /**
-     * adjust dropdown display position
-     */
+    function toggleVisible () {
+      visible.value ? close() : display()
+    }
+    // adjust dropdown display position
     function adjust () {
       const rootRect = getElementRect(root.value)
       const containerRect = getElementRect(container.value)
-      const result = adjustTop(props, y.value, rootRect, containerRect)
-      const left = adjustLeft(props, x.value, rootRect, containerRect)
+      const result = adjustTop(props, position.y, rootRect, containerRect)
+      const left = adjustLeft(props, position.x, rootRect, containerRect)
 
       dropUp.value = result.dropUp
       styleSheet.top = `${result.top}px`
@@ -149,9 +135,9 @@ export default {
       // do not toggle show/close when 'toggle' option is set to false
       if (inTrigger && !props.toggle && !isTriggerByContextmenu) return
       // close the dropdown when clicking outside of the dropdown container
-      // reopen the dropdown when right-click in trigger(rightClick = true)
+      // reopen the dropdown when right-click in trigger(trigger = `contextmenu`)
       if (!inTrigger || (inTrigger && isTriggerByContextmenu)) {
-        display(true)
+        close(true)
       }
     }
 
@@ -171,6 +157,8 @@ export default {
 
     expose({
       display,
+      close,
+      toggleVisible,
       adjust
     })
 
@@ -179,7 +167,7 @@ export default {
       // the dropdown trigger
       if ('trigger' in slots) {
         children.push(slots.trigger({
-          visible: visible.value,
+          visible,
           disabled: props.disabled
         }))
       }
@@ -193,16 +181,8 @@ export default {
         onMousedown: e => e.stopPropagation()
       }
       if (isTriggerByHover) {
-        containerOption.onMouseenter = e => {
-          e.stopPropagation()
-          enterContainer.value = true
-          display()
-        }
-        containerOption.onMouseleave = e => {
-          e.stopPropagation()
-          enterContainer.value = false
-          display()
-        }
+        containerOption.onMouseenter = display
+        containerOption.onMouseleave = close
       }
       const dropdownContainer = withDirectives(
         h('div', containerOption, slots.default()),
@@ -222,21 +202,13 @@ export default {
       }
 
       if (isTriggerByHover) {
-        dropdownOption.onMouseenter = e => {
-          e.stopPropagation()
-          enterTrigger.value = true
-          display()
-        }
-        dropdownOption.onMouseleave = e => {
-          e.stopPropagation()
-          enterTrigger.value = false
-          display()
-        }
+        dropdownOption.onMouseenter = display
+        dropdownOption.onMouseleave = close
       } else if (isTriggerByClick) {
         dropdownOption.onClick = e => {
           if (props.manual) return
           e.stopPropagation()
-          display()
+          toggleVisible()
         }
       } else if (isTriggerByContextmenu) {
         // mouse right click to trigger dropdown
@@ -246,8 +218,8 @@ export default {
           e.preventDefault()
 
           const point = useMouseContextMenu(e)
-          x.value = point.x
-          y.value = point.y
+          position.x = point.x
+          position.y = point.y
           display()
         }
       }

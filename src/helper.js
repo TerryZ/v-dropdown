@@ -1,4 +1,3 @@
-import { computed } from 'vue'
 import { scrollInfo } from './util'
 export { getElementRect } from './util'
 

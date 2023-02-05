@@ -340,7 +340,7 @@ function inputChange (e) {
     dropdownInput.value.display()
   } else {
     if (visible.value) {
-      dropdownInput.value.display()
+      dropdownInput.value.close()
     }
   }
 }
