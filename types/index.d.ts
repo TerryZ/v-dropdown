@@ -1,43 +1,89 @@
-import Vue from 'vue'
-import { RegionItem } from './component'
-import { RegionText } from './text'
-import { RegionCityPicker } from './city'
-import { RegionSelects } from './selects'
-import { RegionColumnsCore, RegionColumns } from './columns'
-import { RegionGroupCore, RegionGroup } from './group'
+import {
+  DefineComponent,
+  ComputedOptions,
+  MethodOptions,
+  ComponentOptionsMixin
+} from 'vue'
 
-declare class Region extends Vue {
+type EmitEvents = 'visible-change'
+
+/**
+ * Dropdown props
+ */
+declare interface Props {
   /**
-   * 全局安装
-   *
-   * - v-region-group
-   * - v-region-selects
-   * - v-region-columns
-   * - v-region-city-picker
-   * - v-region-text
-   *
-   * 五个功能模块
+   * dropdown container alignment direction (default: `left`)
    */
-  install (Vue: Vue): void
+  align: string
+  /**
+   * whether to display the border (default: true)
+   */
+  border?: boolean
+  /**
+   * toggle display / close dropdown container
+   */
+  toggle: boolean
+  /**
+   * manual show / close the dropdown
+   */
+  manual?: boolean
+  /**
+   * open / close dropdown animation
+   *
+   * {boolean}
+   * - true: use default animation
+   * - false: don't display animation
+   * {string} customized animation class-name
+   */
+  animated?: boolean|string
+  /**
+   * disabled the dropdown (default: false)
+   */
+  disabled?: boolean
+  /**
+   * the width of dropdown container
+   * min-width: 80
+   */
+  width?: number
+  /**
+   * container width (default: false)
+   * - false: inline-block
+   * - true: block
+   */
+  fullWidth?: boolean
+  /**
+   * dropdown trigger method
+   * - `click` default
+   * - `hover`
+   * - `contextmenu`
+   */
+  trigger?: 'click' | 'hover' | 'contextmenu'
 }
 
-/** 完整三级行政区划数据模型列表 */
-export const regionFull: RegionItem[]
-/** 所有省、直辖市、特别行政区模型列表 */
-export const regionProvinces: RegionItem[]
-/** 城市模型列表 */
-export const regionCities: RegionItem[]
-/** 区、县模型列表 */
-export const regionAreas: RegionItem[]
-
-export {
-  RegionText,
-  RegionCityPicker,
-  RegionSelects,
-  RegionColumnsCore,
-  RegionColumns,
-  RegionGroupCore,
-  RegionGroup
+declare interface Methods extends MethodOptions {
+  /** Display dropdown container */
+  display: () => void
+  /** Close dropdown container */
+  close: () => void
+  /** Toggle dropdown container display / close */
+  toggleVisible: () => void
+  /** Adjust dropdown container position */
+  adjust: () => void
 }
 
-export default Region
+declare const Dropdown: DefineComponent<
+  Props,
+  {},
+  {},
+  ComputedOptions,
+  Methods,
+  ComponentOptionsMixin,
+  ComponentOptionsMixin,
+  EmitEvents[],
+  EmitEvents,
+  Props
+>
+
+export { Dropdown }
+
+export default Dropdown

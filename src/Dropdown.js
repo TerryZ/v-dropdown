@@ -10,7 +10,8 @@ import {
   Transition,
   onMounted,
   onBeforeUnmount,
-  onUnmounted
+  onUnmounted,
+  defineComponent
 } from 'vue'
 import {
   TRIGGER_CLICK,
@@ -24,15 +25,14 @@ import {
   useState
 } from './helper'
 
-export default {
-  name: 'v-dropdown',
+export default defineComponent({
+  name: 'VDropdown',
   props: {
-    /** align direction */
+    /** alignment direction */
     align: { type: String, default: 'left' },
     border: { type: Boolean, default: true },
     /**
-     * click trigger and display dropdown, and
-     * click again whether to close dropdown
+     * toggle display / close dropdown container
      */
     toggle: { type: Boolean, default: true },
     /** manual show / close the dropdown */
@@ -42,16 +42,16 @@ export default {
      * open / close dropdown animation
      *
      * {boolean}
-     *   - true: use default animation
-     *   - false: don't show animation
-     * {string} customized animation
+     * - true: use default animation
+     * - false: don't display animation
+     * {string} customized animation class-name
      */
     animated: { type: [String, Boolean], default: true },
     /**
      * the width of dropdown container
      * min-width: 80
      */
-    width: Number,
+    width: { type: Number, default: undefined },
     /**
      * container width
      * - false: inline-block
@@ -145,11 +145,15 @@ export default {
       if (typeof props.width !== 'undefined') {
         styleSheet.width = props.width + 'px'
       }
-      document.body.appendChild(container.value)
-      document.body.addEventListener('mousedown', whole)
+      if (typeof document !== 'undefined') {
+        document.body.append(container.value)
+        document.body.addEventListener('mousedown', whole)
+      }
     })
     onBeforeUnmount(() => {
-      document.body.removeEventListener('mousedown', whole)
+      if (typeof document !== 'undefined') {
+        document.body.removeEventListener('mousedown', whole)
+      }
       // remove dropdown container
       container.value && container.value.remove()
     })
@@ -185,7 +189,7 @@ export default {
         containerOption.onMouseleave = close
       }
       const dropdownContainer = withDirectives(
-        h('div', containerOption, slots.default()),
+        h('div', containerOption, slots.default && slots.default()),
         [[vShow, visible.value]]
       )
       // the dropdown container
@@ -227,4 +231,4 @@ export default {
       return h('div', dropdownOption, children)
     }
   }
-}
+})
