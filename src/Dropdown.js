@@ -53,7 +53,7 @@ export default defineComponent({
      */
     width: { type: Number, default: undefined },
     /**
-     * container width
+     * trigger container display type
      * - false: inline-block
      * - true: block
      */
@@ -86,16 +86,26 @@ export default defineComponent({
     watch(visible, val => emit('visible-change', val))
 
     function display () {
+      console.log('display1')
       if (props.disabled) return
       /**
        * calculation display direction(up or down) and top axis
        */
       if ('trigger' in slots) adjust()
 
-      window.clearTimeout(timeout.value)
-      timeout.value = window.setTimeout(() => {
+      // window.clearTimeout(timeout.value)
+      // timeout.value = window.setTimeout(() => {
+      //   console.log('display2')
+      //   visible.value = true
+      // }, isTriggerByHover ? HOVER_RESPONSE_TIME : 0)
+      if (isTriggerByHover) {
+        window.clearTimeout(timeout.value)
+        timeout.value = window.setTimeout(() => {
+          visible.value = true
+        }, HOVER_RESPONSE_TIME)
+      } else {
         visible.value = true
-      }, isTriggerByHover ? HOVER_RESPONSE_TIME : 0)
+      }
     }
     function close (outside = false) {
       if (props.disabled) return
@@ -145,15 +155,11 @@ export default defineComponent({
       if (typeof props.width !== 'undefined') {
         styleSheet.width = props.width + 'px'
       }
-      if (typeof document !== 'undefined') {
-        document.body.append(container.value)
-        document.body.addEventListener('mousedown', whole)
-      }
+      document.body.appendChild(container.value)
+      document.body.addEventListener('mousedown', whole)
     })
     onBeforeUnmount(() => {
-      if (typeof document !== 'undefined') {
-        document.body.removeEventListener('mousedown', whole)
-      }
+      document.body.removeEventListener('mousedown', whole)
       // remove dropdown container
       container.value && container.value.remove()
     })
@@ -210,6 +216,7 @@ export default defineComponent({
         dropdownOption.onMouseleave = close
       } else if (isTriggerByClick) {
         dropdownOption.onClick = e => {
+          console.log('click')
           if (props.manual) return
           e.stopPropagation()
           toggleVisible()

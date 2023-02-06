@@ -46,7 +46,7 @@ declare interface Props {
    */
   width?: number
   /**
-   * container width (default: false)
+   * trigger container display type (default: false)
    * - false: inline-block
    * - true: block
    */

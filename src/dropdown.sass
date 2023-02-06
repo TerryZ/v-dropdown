@@ -8,6 +8,10 @@
   transform: perspective(1px) translateY($start) translateZ(0)
   opacity: 0
 
+@mixin transition($duration: 250ms)
+  -webkit-transition: all $duration cubic-bezier( 0.79, 0.33, 0.14, 0.53 )
+  transition: all $duration cubic-bezier( 0.79, 0.33, 0.14, 0.53 )
+
 // 0 12px 32px rgba(0, 0, 0, .1), 0 2px 6px rgba(0, 0, 0, .08)
 $duration: 250ms
 $down: animate-down
@@ -47,8 +51,8 @@ $up: animate-up
 .#{$up}-leave-to
   @include animation(6px)
 .#{$down}-enter-active,
+.#{$up}-enter-active
+  @include transition(300ms)
 .#{$down}-leave-active,
-.#{$up}-enter-active,
 .#{$up}-leave-active
-  -webkit-transition: all $duration ease-out
-  transition: all $duration ease-out
+  @include transition(200ms)
