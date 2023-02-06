@@ -48,7 +48,7 @@ export default {
      */
     animated: { type: [String, Boolean], default: true },
     /**
-     * the width of drop down menu
+     * the width of dropdown container
      * min-width: 80
      */
     width: Number,
@@ -124,15 +124,15 @@ export default {
       styleSheet.left = `${left}px`
     }
     /**
-     * the dropdown container outside click handle
+     * handle click event outside the dropdown container
      * @param {MouseEvent} e - event object
      */
     function whole (e) {
       if (!visible.value) return
 
-      // is trigger element click
+      // is the trigger element clicking
       const inTrigger = e.composedPath().some(val => val === root.value)
-      // do not toggle show/close when 'toggle' option is set to false
+      // do not toggle show/close when `toggle` prop is set to false
       if (inTrigger && !props.toggle && !isTriggerByContextmenu) return
       // close the dropdown when clicking outside of the dropdown container
       // reopen the dropdown when right-click in trigger(trigger = `contextmenu`)
@@ -176,7 +176,7 @@ export default {
         class: getContainerClasses(props),
         style: styleSheet,
         ref: container,
-        // do not close dropdown container layer when
+        // do not close dropdown container when
         // do some operations in that
         onMousedown: e => e.stopPropagation()
       }
@@ -188,7 +188,7 @@ export default {
         h('div', containerOption, slots.default()),
         [[vShow, visible.value]]
       )
-      // the dropdown layer container
+      // the dropdown container
       children.push(
         h(Transition, { name: getAnimate(props, dropUp) }, () => [dropdownContainer])
       )

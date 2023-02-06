@@ -1,12 +1,12 @@
 # v-dropdown &middot; [![npm version](https://img.shields.io/npm/v/v-dropdown.svg)](https://www.npmjs.com/package/v-dropdown) [![npm downloads](https://img.shields.io/npm/dy/v-dropdown.svg)](https://www.npmjs.com/package/v-dropdown) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://mit-license.org/) [![language](https://img.shields.io/badge/language-Vue2-brightgreen.svg)](https://www.npmjs.com/package/v-dropdown)
 
-A dropdown container layer for Vue2
+A dropdown container for Vue3
 
 ## Examples
 
 Live Examples on [CodePen](https://codepen.io/terry05/pen/BggbrK)
 
-## Projects using `v-dropdown`
+## Repositories using `v-dropdown`
 
 - [v-selectpage](https://github.com/TerryZ/v-selectpage)
 - [v-selectmenu](https://github.com/TerryZ/v-selectmenu)
@@ -18,55 +18,35 @@ Live Examples on [CodePen](https://codepen.io/terry05/pen/BggbrK)
 [![https://nodei.co/npm/v-dropdown.png?downloads=true&downloadRank=true&stars=true](https://nodei.co/npm/v-dropdown.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/v-dropdown)
 
 ```sh
-npm i -S v-dropdown
-```
-
-Include and install plugin in your component/plugin/page
-
-```vue
-<script>
-import Dropdown from 'v-dropdown'
-export default {
-  components: {
-    'v-dropdown': Dropdown
-  }
-}
-</script>
+npm i v-dropdown
 ```
 
 ## Usage
 
 ```vue
 <template>
-  <v-dropdown @show="showChange">
-    <!-- named slot -->
-    <template #caller>
-      <!-- dropdown container trigger -->
-      <button type="button" class="btn">Open</button>
+  <v-dropdown @visible-change="visibleChange">
+    <template #trigger>
+      <!-- dropdown trigger -->
+      <button
+        type="button"
+        class="btn"
+      >
+        Open
+      </button>
     </template>
 
     <div>
-      some contents you want
+      some contents
     </div>
   </v-dropdown>
 </template>
 
-<script>
+<script setup>
 import Dropdown from 'v-dropdown'
-export default {
-  components: {
-    'v-dropdown': Dropdown
-  },
-  data () {
-    return {
-      show: false
-    }
-  },
-  methods: {
-    showChange (val) {
-      this.show = val
-    }
-  }
+
+visibleChange (val) {
+  console.log(val)
 }
 </script>
 ```
