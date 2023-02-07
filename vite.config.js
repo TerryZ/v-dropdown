@@ -16,9 +16,9 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.js'),
-      name: 'VRegion',
+      name: 'VDropdown',
       formats: ['es', 'umd'],
-      fileName: 'v-region'
+      fileName: 'v-dropdown'
     },
     rollupOptions: {
       external: ['vue'],
@@ -31,6 +31,7 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    reporters: 'verbose',
     coverage: {
       reporter: ['text', 'json', 'html']
     }

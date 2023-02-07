@@ -86,26 +86,19 @@ export default defineComponent({
     watch(visible, val => emit('visible-change', val))
 
     function display () {
-      console.log('display1')
       if (props.disabled) return
       /**
        * calculation display direction(up or down) and top axis
        */
       if ('trigger' in slots) adjust()
 
-      // window.clearTimeout(timeout.value)
-      // timeout.value = window.setTimeout(() => {
-      //   console.log('display2')
-      //   visible.value = true
-      // }, isTriggerByHover ? HOVER_RESPONSE_TIME : 0)
       if (isTriggerByHover) {
         window.clearTimeout(timeout.value)
-        timeout.value = window.setTimeout(() => {
-          visible.value = true
-        }, HOVER_RESPONSE_TIME)
+        timeout.value = window.setTimeout(() => { visible.value = true }, HOVER_RESPONSE_TIME)
       } else {
         visible.value = true
       }
+      console.log('display')
     }
     function close (outside = false) {
       if (props.disabled) return
@@ -114,10 +107,12 @@ export default defineComponent({
        */
       if (!props.toggle && !outside) return
 
-      window.clearTimeout(timeout.value)
-      timeout.value = window.setTimeout(() => {
+      if (isTriggerByHover) {
+        window.clearTimeout(timeout.value)
+        timeout.value = window.setTimeout(() => { visible.value = false }, HOVER_RESPONSE_TIME)
+      } else {
         visible.value = false
-      }, isTriggerByHover ? HOVER_RESPONSE_TIME : 0)
+      }
     }
     function toggleVisible () {
       visible.value ? close() : display()
@@ -216,7 +211,6 @@ export default defineComponent({
         dropdownOption.onMouseleave = close
       } else if (isTriggerByClick) {
         dropdownOption.onClick = e => {
-          console.log('click')
           if (props.manual) return
           e.stopPropagation()
           toggleVisible()
