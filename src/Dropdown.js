@@ -98,7 +98,6 @@ export default defineComponent({
       } else {
         visible.value = true
       }
-      console.log('display')
     }
     function close (outside = false) {
       if (props.disabled) return
@@ -150,7 +149,7 @@ export default defineComponent({
       if (typeof props.width !== 'undefined') {
         styleSheet.width = props.width + 'px'
       }
-      document.body.appendChild(container.value)
+      document.body.append(container.value)
       document.body.addEventListener('mousedown', whole)
     })
     onBeforeUnmount(() => {
@@ -164,7 +163,9 @@ export default defineComponent({
       display,
       close,
       toggleVisible,
-      adjust
+      adjust,
+      container,
+      visible
     })
 
     return () => {

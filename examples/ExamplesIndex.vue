@@ -70,8 +70,12 @@
     <h5 class="mt-5 mb-3">
       Disabled loop switch dropdown
     </h5>
-    <div>
-      <dropdown :toggle="false">
+    <div class="d-flex">
+      <dropdown
+        :toggle="false"
+        class="me-3"
+        ref="toggleOff"
+      >
         <template #trigger>
           <input
             type="text"
@@ -84,6 +88,21 @@
           <div>0123456789</div>
         </div>
       </dropdown>
+
+      <button
+        type="button"
+        class="btn btn-light me-3"
+        @click="toggleOffDisplay"
+      >
+        open
+      </button>
+      <button
+        type="button"
+        class="btn btn-light"
+        @click="toggleOffClose"
+      >
+        close
+      </button>
     </div>
 
     <h5 class="mt-5 mb-3">
@@ -326,6 +345,7 @@ const visible = ref(false)
 const disabled = ref(false)
 
 const dropdownInput = ref(null)
+const toggleOff = ref(null)
 
 const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -343,5 +363,11 @@ function inputChange (e) {
       dropdownInput.value.close()
     }
   }
+}
+function toggleOffDisplay () {
+  toggleOff.value.display()
+}
+function toggleOffClose () {
+  toggleOff.value.close()
 }
 </script>
