@@ -29,9 +29,9 @@ npm i v-dropdown
 
 ```vue
 <template>
-  <Dropdown @visible-change="visibleChange">
+  <Dropdown @visible-change="change">
+    <!-- dropdown trigger -->
     <template #trigger>
-      <!-- dropdown trigger -->
       <button
         type="button"
         class="btn"
@@ -40,16 +40,14 @@ npm i v-dropdown
       </button>
     </template>
 
-    <div>
-      some contents
-    </div>
+    <div>some contents</div>
   </Dropdown>
 </template>
 
 <script setup>
 import Dropdown from 'v-dropdown'
 
-visibleChange (val) {
+function change (val) {
   console.log(val)
 }
 </script>
