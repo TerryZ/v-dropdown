@@ -8,6 +8,7 @@ import {
   withDirectives,
   vShow,
   Transition,
+  Teleport,
   onMounted,
   onBeforeUnmount,
   onUnmounted,
@@ -149,7 +150,7 @@ export default defineComponent({
       if (typeof props.width !== 'undefined') {
         styleSheet.width = props.width + 'px'
       }
-      document.body.append(container.value)
+      // document.body.append(container.value)
       document.body.addEventListener('mousedown', whole)
     })
     onBeforeUnmount(() => {
@@ -196,7 +197,9 @@ export default defineComponent({
       )
       // the dropdown container
       children.push(
-        h(Transition, { name: getAnimate(props, dropUp) }, () => [dropdownContainer])
+        h(Teleport, { to: 'body' }, [
+          h(Transition, { name: getAnimate(props, dropUp) }, () => [dropdownContainer])
+        ])
       )
 
       const dropdownOption = {
