@@ -8,7 +8,7 @@ If you are using vue `2.x` version, please use [v-dropdown 2.x](https://github.c
 
 Documentation and examples please visit below sites
 
-- [Github Pages](https://terryz.github.io/vue3/dropdown/)
+- [github-pages](https://terryz.github.io/docs-vue3/dropdown/)
 
 ## Repositories using `v-dropdown`
 
@@ -22,7 +22,12 @@ Documentation and examples please visit below sites
 [![https://nodei.co/npm/v-dropdown.png?downloads=true&downloadRank=true&stars=true](https://nodei.co/npm/v-dropdown.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/v-dropdown)
 
 ```sh
+# npm
 npm i v-dropdown
+# yarn
+yarn add v-dropdown
+# pnpm
+pnpm add v-dropdown
 ```
 
 ## Usage
