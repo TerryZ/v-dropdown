@@ -105,8 +105,17 @@ export function useMouseContextMenu (e) {
 }
 
 export function getContainerClasses (props) {
-  return {
-    'v-dropdown-container': true,
-    'v-dropdown-no-border': !props.border
-  }
+  return [
+    'v-dropdown-container',
+    !props.border || 'v-dropdown-no-border',
+    props.customContainerClass && props.customContainerClass
+  ]
+}
+
+export function getTriggerClasses (props) {
+  return [
+    'v-dropdown-trigger',
+    props.fullWidth && 'v-dropdown-trigger--full-width',
+    props.customTriggerClass && props.customTriggerClass
+  ]
 }

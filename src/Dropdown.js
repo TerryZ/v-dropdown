@@ -20,6 +20,7 @@ import {
   adjustLeft,
   adjustTop,
   getContainerClasses,
+  getTriggerClasses,
   getElementRect,
   getAnimate,
   useMouseContextMenu,
@@ -65,7 +66,11 @@ export default defineComponent({
      * - `hover`
      * - `contextmenu`
      */
-    trigger: { type: String, default: TRIGGER_CLICK }
+    trigger: { type: String, default: TRIGGER_CLICK },
+    /** add custom class to trigger */
+    customTriggerClass: { type: String, default: '' },
+    /** add custom class to container */
+    customContainerClass: { type: String, default: '' }
   },
   emits: ['visible-change'],
   setup (props, { slots, emit, expose }) {
@@ -203,10 +208,7 @@ export default defineComponent({
       )
 
       const dropdownOption = {
-        class: {
-          'v-dropdown-trigger': true,
-          'v-dropdown-trigger--full-width': props.fullWidth
-        },
+        class: getTriggerClasses(props),
         ref: root
       }
 
