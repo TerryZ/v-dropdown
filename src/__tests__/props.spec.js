@@ -9,7 +9,9 @@ describe('v-dropdown props', () => {
   describe('base props', () => {
     const wrapper = mount(Dropdown, {
       props: {
-        width: 500
+        width: 500,
+        customTriggerClass: 'custom-trigger',
+        customContainerClass: 'custom-container'
       },
       slots: {
         default: h('div', 'contents'),
@@ -17,6 +19,12 @@ describe('v-dropdown props', () => {
       }
     })
 
+    it('`customTriggerClass` set `custom-trigger` value, the dropdown container should have `custom-trigger` class', () => {
+      expect(wrapper.classes('custom-trigger')).toBeTruthy()
+    })
+    it('`customContainerClass` set `custom-container` value, the trigger container should have `custom-container` class', () => {
+      expect(wrapper.vm.container.classList.contains('custom-container')).toBeTruthy()
+    })
     it('`fullWidth` prop set to true, the trigger container should have `v-dropdown-trigger--full-width` class', async () => {
       await wrapper.setProps({ fullWidth: true })
       expect(wrapper.classes()).toContain('v-dropdown-trigger--full-width')
