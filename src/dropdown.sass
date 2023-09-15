@@ -1,32 +1,17 @@
-@mixin shadow($blur, $transparent: 0.2, $y: 3px)
-  -webkit-box-shadow: 0 $y $blur rgba(0,0,0,$transparent)
-  -moz-box-shadow: 0 $y $blur rgba(0,0,0,$transparent)
-  box-shadow: 0 $y $blur rgba(0,0,0,$transparent)
+@import "./animate.sass"
 
-@mixin animation($start: -6px)
-  // transform: perspective(1px) translateY($start) translateZ(0) scale(1.0, 1.0)
-  transform: perspective(1px) translateY($start) translateZ(0)
-  opacity: 0
-
-@mixin transition($duration: 250ms)
-  -webkit-transition: all $duration ease-out
-  transition: all $duration ease-out
-
-// 0 12px 32px rgba(0, 0, 0, .1), 0 2px 6px rgba(0, 0, 0, .08)
 $duration: 250ms
 $down: animate-down
 $up: animate-up
 
 .v-dropdown-trigger
-  display: inline-block
+  display: inline-flex
   &.v-dropdown-trigger--full-width
-    display: block
+    display: flex
 .v-dropdown-container
   -webkit-font-smoothing: subpixel-antialiased
-  -webkit-backface-visibility: hidden
-  -moz-backface-visibility: hidden
   backface-visibility: hidden
-  display: inline-block
+  display: inline-flex
   margin: 0
   padding: 0
   position: absolute
@@ -39,20 +24,8 @@ $up: animate-up
   overflow: hidden
   z-index: 3000
   will-change: opacity, transform, top, left
-  @include shadow(25px, 0.2, 15px)
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2)
   &.v-dropdown-no-border
     border: 0
-    @include shadow(20px)
-
-.#{$down}-enter-from,
-.#{$down}-leave-to
-  @include animation()
-.#{$up}-enter-from,
-.#{$up}-leave-to
-  @include animation(6px)
-.#{$down}-enter-active,
-.#{$up}-enter-active
-  @include transition(300ms)
-.#{$down}-leave-active,
-.#{$up}-leave-active
-  @include transition(200ms)
+    border-radius: .5rem
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4)

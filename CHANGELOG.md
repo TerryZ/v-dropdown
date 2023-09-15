@@ -2,6 +2,19 @@
 
 Please refer to [CHANGELOG-CN](CHANGELOG-CN.md) for Chinese changelog
 
+## [3.0.0-beta.2](https://github.com/TerryZ/v-dropdown/compare/v3.0.0-beta.1...v3.0.0-beta.2) (2023-09-15)
+
+### Features
+
+- Add `customTriggerClass` prop, used to add custom class to trigger container
+- Add `customContainerClass` prop, used to add custom class to dropdown container
+- Update `.d.ts` document
+
+### Bug Fixes
+
+- Position drift when first opening a dropdown container in **FireFox**
+- Component code assist not working
+
 ## [3.0.0-beta.1](https://github.com/TerryZ/v-dropdown/compare/v2.1.1...v3.0.0-beta.1) (2023-02-08)
 
 ### Features

@@ -1,0 +1,40 @@
+// $down: animate-down
+// $up: animate-up
+// $timing-function: ease
+
+// .#{$down}-enter-from,
+// .#{$down}-leave-to
+//   transform: translateY(-6px) translateZ(0)
+//   opacity: 0
+// .#{$down}-enter-active
+//   transition: transform 200ms $timing-function, opacity 200ms $timing-function
+// .#{$down}-leave-active
+//   transition: transform 150ms $timing-function, opacity 150ms $timing-function
+
+@mixin transition-scale ($name, $origin)
+  .#{$name}-enter-from,
+  .#{$name}-leave-to
+    transform: scale(0.95)
+    opacity: 0
+  .#{$name}-enter-active
+    transform-origin: $origin
+    transition-property: opacity, transform
+    transition-duration: 0.15s
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
+  .#{$name}-leave-active
+    transform-origin: $origin
+    transition-property: opacity, transform
+    transition-duration: 0.075s
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
+
+@include transition-scale('animate-down', top left)
+@include transition-scale('animate-up', bottom left)
+
+// .#{$up}-enter-from,
+// .#{$up}-leave-to
+//   transform: translateY(6px) translateZ(0)
+//   opacity: 0
+// .#{$up}-enter-active
+//   transition: transform 200ms $timing-function, opacity 200ms $timing-function
+// .#{$up}-leave-active
+//   transition: transform 150ms $timing-function, opacity 150ms $timing-function

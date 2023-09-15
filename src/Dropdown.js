@@ -30,18 +30,18 @@ import {
 export default defineComponent({
   name: 'VDropdown',
   props: {
-    /** alignment direction */
+    /** Container show up alignment direction */
     align: { type: String, default: 'left' },
     border: { type: Boolean, default: true },
     /**
-     * toggle display / close dropdown container
+     * Toggle display / close dropdown container
      */
     toggle: { type: Boolean, default: true },
-    /** manual show / close the dropdown */
+    /** Manual control the display and hiding of dropdown */
     manual: { type: Boolean, default: false },
     disabled: { type: Boolean, default: false },
     /**
-     * open / close dropdown animation
+     * Open / close dropdown animation
      *
      * {boolean}
      * - true: use default animation
@@ -50,26 +50,26 @@ export default defineComponent({
      */
     animated: { type: [String, Boolean], default: true },
     /**
-     * the width of dropdown container
+     * The width of dropdown container
      * min-width: 80
      */
     width: { type: Number, default: undefined },
     /**
-     * trigger container display type
+     * Trigger container display type
      * - false: inline-block
      * - true: block
      */
     fullWidth: { type: Boolean, default: false },
     /**
-     * dropdown trigger method
+     * Dropdown trigger method
      * - `click` default
      * - `hover`
      * - `contextmenu`
      */
     trigger: { type: String, default: TRIGGER_CLICK },
-    /** add custom class to trigger */
+    /** Add custom class to trigger */
     customTriggerClass: { type: String, default: '' },
-    /** add custom class to container */
+    /** Add custom class to container */
     customContainerClass: { type: String, default: '' }
   },
   emits: ['visible-change'],

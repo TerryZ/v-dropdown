@@ -1,88 +1,107 @@
 import {
-  DefineComponent,
-  ComputedOptions,
-  MethodOptions,
-  ComponentOptionsMixin
+  AllowedComponentProps,
+  ComponentCustomProps,
+  VNodeProps,
+  VNode
 } from 'vue'
 
-type EmitEvents = 'visible-change'
+export declare interface TriggerSlotData {
+  visible: boolean
+  disabled: boolean
+}
 
 /**
  * Dropdown props
  */
 declare interface Props {
   /**
-   * dropdown container alignment direction (default: `left`)
+   * Container show up alignment direction
+   * @default `left`
    */
   align: string
   /**
-   * whether to display the border (default: true)
+   * Whether to display the border
+   * @default true
    */
   border?: boolean
   /**
-   * toggle display / close dropdown container
+   * Toggle display / close dropdown container
+   * @default true
    */
   toggle: boolean
   /**
-   * manual show / close the dropdown
+   * Manual control the display and hiding of dropdown
+   * @default false
    */
   manual?: boolean
   /**
-   * open / close dropdown animation
+   * Open / close dropdown animation
    *
    * {boolean}
    * - true: use default animation
    * - false: don't display animation
    * {string} customized animation class-name
+   * @default true
    */
   animated?: boolean|string
   /**
-   * disabled the dropdown (default: false)
+   * Disabled the dropdown
+   * @default false
    */
   disabled?: boolean
   /**
-   * the width of dropdown container
+   * The width of dropdown container
    * min-width: 80
    */
   width?: number
   /**
-   * trigger container display type (default: false)
+   * Trigger container display type
    * - false: inline-block
    * - true: block
+   * @default false
    */
   fullWidth?: boolean
   /**
-   * dropdown trigger method
-   * - `click` default
+   * Dropdown trigger method
+   * - `click`
    * - `hover`
    * - `contextmenu`
+   * @default `click`
    */
   trigger?: 'click' | 'hover' | 'contextmenu'
+  /** Add custom class to trigger */
+  customTriggerClass?: string
+  /** Add custom class to container */
+  customContainerClass?: string
 }
 
-declare interface Methods extends MethodOptions {
-  /** Display dropdown container */
-  display: () => void
-  /** Close dropdown container */
-  close: () => void
-  /** Toggle dropdown container display / close */
-  toggleVisible: () => void
-  /** Adjust dropdown container position */
-  adjust: () => void
+// declare interface Methods extends MethodOptions {
+//   /** Display dropdown container */
+//   display: () => void
+//   /** Close dropdown container */
+//   close: () => void
+//   /** Toggle dropdown container display / close */
+//   toggleVisible: () => void
+//   /** Adjust dropdown container position */
+//   adjust: () => void
+// }
+
+/** Dropdown container visible change event */
+type EmitVisibleChange = (event: 'visible-change', value: boolean) => void
+
+declare interface Dropdown {
+  new (): {
+    $props: AllowedComponentProps & ComponentCustomProps & VNodeProps & Props
+    $emit: EmitVisibleChange
+    $slots: {
+      default?: () => VNode[]
+      trigger?: (triggerSlotData: TriggerSlotData) => VNode[]
+    }
+  }
 }
 
-declare const Dropdown: DefineComponent<
-  Props,
-  {},
-  {},
-  ComputedOptions,
-  Methods,
-  ComponentOptionsMixin,
-  ComponentOptionsMixin,
-  EmitEvents[],
-  EmitEvents,
-  Props
->
+/** The dropdown container */
+declare const Dropdown: Dropdown
 
 export { Dropdown }
 

@@ -2,6 +2,19 @@
 
 英文 changelog 内容请访问 [CHANGELOG](CHANGELOG.md)
 
+## [3.0.0-beta.2](https://github.com/TerryZ/v-dropdown/compare/v3.0.0-beta.1...v3.0.0-beta.2) (2023-09-15)
+
+### 新特性
+
+- 新增 `customTriggerClass` prop，用于自定义触发对象样式
+- 新增 `customContainerClass` prop，用于自定义下拉容器样式
+- 更新 `.d.ts` 文档内容
+
+### 问题修复
+
+- 在 **FireFox** 下初次打开下拉容器出现位置漂移现象
+- 插件辅助提示失效
+
 ## [3.0.0-beta.1](https://github.com/TerryZ/v-dropdown/compare/v2.1.1...v3.0.0-beta.1) (2023-02-08)
 
 ### 新特性
