@@ -18,7 +18,7 @@ declare interface Props {
    * Container show up alignment direction
    * @default `left`
    */
-  align: string
+  align?: 'left'|'center'|'right'
   /**
    * Whether to display the border
    * @default true
@@ -28,7 +28,7 @@ declare interface Props {
    * Toggle display / close dropdown container
    * @default true
    */
-  toggle: boolean
+  toggle?: boolean
   /**
    * Manual control the display and hiding of dropdown
    * @default false
