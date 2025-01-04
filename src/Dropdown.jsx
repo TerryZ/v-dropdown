@@ -1,4 +1,4 @@
-import './dropdown.sass'
+import './styles/dropdown.sass'
 
 import {
   ref,
@@ -7,6 +7,7 @@ import {
   h,
   withDirectives,
   vShow,
+  provide,
   Transition,
   Teleport,
   onMounted,
@@ -15,8 +16,6 @@ import {
   defineComponent
 } from 'vue'
 import {
-  TRIGGER_CLICK,
-  HOVER_RESPONSE_TIME,
   adjustLeft,
   adjustTop,
   getContainerClasses,
@@ -26,6 +25,7 @@ import {
   useMouseContextMenu,
   useState
 } from './helper'
+import { TRIGGER_CLICK, HOVER_RESPONSE_TIME, injectDropdown } from './constants'
 
 export default defineComponent({
   name: 'VDropdown',
@@ -50,11 +50,6 @@ export default defineComponent({
      */
     animated: { type: [String, Boolean], default: true },
     /**
-     * The width of dropdown container
-     * min-width: 80
-     */
-    width: { type: Number, default: undefined },
-    /**
      * Trigger container display type
      * - false: inline-block
      * - true: block
@@ -75,7 +70,7 @@ export default defineComponent({
   emits: ['visible-change'],
   setup (props, { slots, emit, expose }) {
     const visible = ref(false)
-    const styleSheet = reactive({ top: '', left: '', width: '' })
+    const styleSheet = reactive({ top: '', left: '' })
     const position = reactive({ x: null, y: null })
     const dropUp = ref(false)
     const timeout = ref(null)
@@ -152,18 +147,23 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      if (typeof props.width !== 'undefined') {
-        styleSheet.width = props.width + 'px'
-      }
+      // if (typeof props.width !== 'undefined') {
+      //   styleSheet.width = props.width + 'px'
+      // }
       // document.body.append(container.value)
       document.body.addEventListener('mousedown', whole)
     })
     onBeforeUnmount(() => {
       document.body.removeEventListener('mousedown', whole)
       // remove dropdown container
-      container.value && container.value.remove()
+      container?.value?.remove?.()
     })
-    onUnmounted(() => { root.value && root.value.remove() })
+    onUnmounted(() => { root?.value?.remove?.() })
+
+    provide(injectDropdown, {
+      visible,
+      adjust
+    })
 
     expose({
       display,
@@ -197,13 +197,31 @@ export default defineComponent({
         containerOption.onMouseleave = close
       }
       const dropdownContainer = withDirectives(
-        h('div', containerOption, slots.default && slots.default()),
+        h('div', containerOption, slots?.default?.()),
         [[vShow, visible.value]]
       )
       // the dropdown container
       children.push(
         h(Teleport, { to: 'body' }, [
-          h(Transition, { name: getAnimate(props, dropUp) }, () => [dropdownContainer])
+          h(
+            Transition,
+            {
+              name: getAnimate(props, dropUp),
+              onEnter: el => {
+                console.log('enter')
+              },
+              onAfterEnter: el => {
+                console.log('after enter')
+              },
+              onLeave: el => {
+                console.log('leave')
+              },
+              onAfterLeave: el => {
+                console.log('after leave')
+              }
+            },
+            () => [dropdownContainer]
+          )
         ])
       )
 

@@ -1,11 +1,11 @@
+import { inject } from 'vue'
 import { scrollInfo } from './util'
-export { getElementRect } from './util'
+import {
+  TRIGGER_CLICK, TRIGGER_CONTEXTMENU, TRIGGER_HOVER, GAP,
+  injectDropdown
+} from './constants'
 
-export const TRIGGER_CLICK = 'click'
-export const TRIGGER_HOVER = 'hover'
-export const TRIGGER_CONTEXTMENU = 'contextmenu'
-export const HOVER_RESPONSE_TIME = 150
-export const GAP = 5
+export { getElementRect } from './util'
 
 export function getAnimate (props, dropUp) {
   if (typeof props.animated === 'string') {
@@ -118,4 +118,7 @@ export function getTriggerClasses (props) {
     props.fullWidth && 'v-dropdown-trigger--full-width',
     props.customTriggerClass && props.customTriggerClass
   ]
+}
+export function useDropdown () {
+  return inject(injectDropdown, {})
 }

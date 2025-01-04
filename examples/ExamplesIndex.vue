@@ -365,7 +365,11 @@ function toggleOffClose () {
             dropdown trigger
           </button>
         </template>
-        <div class="p-5">
+
+        <div
+          class="p-5"
+          style="width: 350px;"
+        >
           <div>0123456789</div>
           <div>0123456789</div>
           <div>0123456789</div>
