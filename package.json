@@ -43,28 +43,28 @@
     "container"
   ],
   "peerDependencies": {
-    "vue": "^3.2.0"
+    "vue": "^3.3.0"
   },
   "dependencies": {
-    "vue": "^3.3.4"
+    "vue": "^3.5.13"
   },
   "devDependencies": {
-    "@rushstack/eslint-patch": "^1.4.0",
-    "@vitejs/plugin-vue": "^4.3.4",
-    "@vitejs/plugin-vue-jsx": "^3.0.2",
-    "@vitest/coverage-v8": "^0.34.4",
+    "@rushstack/eslint-patch": "^1.10.4",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vitejs/plugin-vue-jsx": "^4.1.1",
+    "@vitest/coverage-v8": "^2.1.8",
     "@vue/eslint-config-standard": "^8.0.1",
-    "@vue/test-utils": "^2.4.1",
-    "autoprefixer": "^10.4.15",
-    "bootstrap": "^5.3.2",
+    "@vue/test-utils": "^2.4.6",
+    "autoprefixer": "^10.4.20",
+    "bootstrap": "^5.3.3",
     "eslint": "^8.49.0",
-    "eslint-plugin-vue": "^9.17.0",
-    "jsdom": "^22.1.0",
-    "postcss": "^8.4.29",
-    "sass": "^1.67.0",
-    "typescript": "^5.2.2",
-    "vite": "^4.4.9",
-    "vite-plugin-css-injected-by-js": "^3.3.0",
-    "vitest": "^0.34.4"
+    "eslint-plugin-vue": "^9.32.0",
+    "jsdom": "^25.0.1",
+    "postcss": "^8.4.49",
+    "sass": "^1.83.1",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.7",
+    "vite-plugin-css-injected-by-js": "^3.5.2",
+    "vitest": "^2.1.8"
   }
 }
