@@ -7,6 +7,7 @@ const disabled = ref(false)
 
 const dropdownInput = ref(null)
 const toggleOff = ref(null)
+const width = ref(350)
 
 const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -30,6 +31,9 @@ function toggleOffDisplay () {
 }
 function toggleOffClose () {
   toggleOff.value.close()
+}
+function changeSize () {
+  width.value = 500
 }
 </script>
 
@@ -356,7 +360,7 @@ function toggleOffClose () {
       Specify width
     </h5>
     <div>
-      <Dropdown :width="350">
+      <Dropdown>
         <template #trigger>
           <button
             type="button"
@@ -373,6 +377,40 @@ function toggleOffClose () {
           <div>0123456789</div>
           <div>0123456789</div>
           <div>0123456789</div>
+        </div>
+      </Dropdown>
+    </div>
+
+    <h5 class="mt-5 mb-3">
+      Container size change
+    </h5>
+    <div>
+      <Dropdown>
+        <template #trigger>
+          <button
+            type="button"
+            class="btn btn-secondary"
+          >
+            dropdown trigger
+          </button>
+        </template>
+
+        <div>
+          <div
+            class="p-5"
+            :style="{ width: width + 'px' }"
+          >
+            <div>0123456789</div>
+            <div>0123456789</div>
+            <div>0123456789</div>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              @click="changeSize"
+            >
+              Change container size
+            </button>
+          </div>
         </div>
       </Dropdown>
     </div>

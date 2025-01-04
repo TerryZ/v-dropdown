@@ -25,7 +25,7 @@ import {
   useMouseContextMenu,
   useState
 } from './helper'
-import { TRIGGER_CLICK, HOVER_RESPONSE_TIME, injectDropdown } from './constants'
+import { TRIGGER_CLICK, HOVER_RESPONSE_TIME, injectDropdown, ROUNDED_MEDIUM } from './constants'
 
 export default defineComponent({
   name: 'VDropdown',
@@ -62,6 +62,7 @@ export default defineComponent({
      * - `contextmenu`
      */
     trigger: { type: String, default: TRIGGER_CLICK },
+    containerRounded: { type: String, default: ROUNDED_MEDIUM },
     /** Add custom class to trigger */
     customTriggerClass: { type: String, default: '' },
     /** Add custom class to container */
@@ -145,6 +146,9 @@ export default defineComponent({
         close(true)
       }
     }
+    const resizeObserver = new ResizeObserver((entries) => {
+      console.log(entries[0])
+    })
 
     onMounted(() => {
       // if (typeof props.width !== 'undefined') {
@@ -152,8 +156,10 @@ export default defineComponent({
       // }
       // document.body.append(container.value)
       document.body.addEventListener('mousedown', whole)
+      resizeObserver.observe(container.value)
     })
     onBeforeUnmount(() => {
+      resizeObserver.unobserve(container.value)
       document.body.removeEventListener('mousedown', whole)
       // remove dropdown container
       container?.value?.remove?.()
@@ -207,6 +213,9 @@ export default defineComponent({
             Transition,
             {
               name: getAnimate(props, dropUp),
+              onBeforeEnter: el => {
+                console.log('before enter')
+              },
               onEnter: el => {
                 console.log('enter')
               },
