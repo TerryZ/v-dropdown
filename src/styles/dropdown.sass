@@ -24,8 +24,19 @@ $up: animate-up
   overflow: hidden
   z-index: 3000
   will-change: opacity, transform, top, left
-  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2)
+  box-shadow: 0 15px 25px rgb(0, 0, 0, 0.2)
   &.v-dropdown-no-border
     border: 0
     border-radius: .5rem
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4)
+    box-shadow: 0 10px 30px rgb(0, 0, 0, 0.4)
+
+.dd-rounded--small
+  border-radius: .25rem !important
+.dd-rounded--medium
+  border-radius: .5rem !important
+.dd-rounded--large
+  border-radius: .75rem !important
+.dd-rounded--pill
+  border-radius: 50rem !important
+.dd-rounded--circle
+  border-radius: 50% !important
