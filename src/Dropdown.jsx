@@ -23,9 +23,15 @@ import {
   getElementRect,
   getAnimate,
   useMouseContextMenu,
-  useState
+  useState,
+  useDebounce
 } from './helper'
-import { TRIGGER_CLICK, HOVER_RESPONSE_TIME, injectDropdown, ROUNDED_MEDIUM } from './constants'
+import {
+  TRIGGER_CLICK,
+  HOVER_RESPONSE_TIME,
+  injectDropdown,
+  ROUNDED_MEDIUM
+} from './constants'
 
 export default defineComponent({
   name: 'VDropdown',
@@ -74,10 +80,11 @@ export default defineComponent({
     const styleSheet = reactive({ top: '', left: '' })
     const position = reactive({ x: null, y: null })
     const dropUp = ref(false)
-    const timeout = ref(null)
 
     const root = ref(null)
     const container = ref(null)
+
+    const hoverDebounce = useDebounce(HOVER_RESPONSE_TIME)
 
     const {
       isTriggerByClick,
@@ -95,8 +102,7 @@ export default defineComponent({
       if ('trigger' in slots) adjust()
 
       if (isTriggerByHover) {
-        window.clearTimeout(timeout.value)
-        timeout.value = window.setTimeout(() => { visible.value = true }, HOVER_RESPONSE_TIME)
+        hoverDebounce(() => { visible.value = true })
       } else {
         visible.value = true
       }
@@ -109,8 +115,7 @@ export default defineComponent({
       if (!props.toggle && !outside) return
 
       if (isTriggerByHover) {
-        window.clearTimeout(timeout.value)
-        timeout.value = window.setTimeout(() => { visible.value = false }, HOVER_RESPONSE_TIME)
+        hoverDebounce(() => { visible.value = false })
       } else {
         visible.value = false
       }
@@ -146,9 +151,77 @@ export default defineComponent({
         close(true)
       }
     }
+    const handleTriggerClick = e => {
+      if (!isTriggerByClick || props.manual) return
+      e.stopPropagation()
+      toggleVisible()
+    }
+    const handleTriggerMouseEnter = () => isTriggerByHover && display()
+    const handleTriggerMouseLeave = () => isTriggerByHover && close()
+    const handleTriggerContextMenu = e => {
+      if (!isTriggerByContextmenu || props.manual) return
+      e.stopPropagation()
+      e.preventDefault()
+
+      const point = useMouseContextMenu(e)
+      position.x = point.x
+      position.y = point.y
+      display()
+    }
     const resizeObserver = new ResizeObserver((entries) => {
       console.log(entries[0])
     })
+
+    function Trigger () {
+      if (!slots.trigger) return null
+      return slots.trigger({
+        visible,
+        disabled: props.disabled
+      })
+    }
+    function Content () {
+      const containerOption = {
+        class: getContainerClasses(props),
+        style: styleSheet,
+        ref: container,
+        // do not close dropdown container when
+        // do some operations in that
+        onMousedown: e => e.stopPropagation()
+      }
+      if (isTriggerByHover) {
+        containerOption.onMouseenter = display
+        containerOption.onMouseleave = close
+      }
+      const dropdownContainer = withDirectives(
+        h('div', containerOption, slots?.default?.()),
+        [[vShow, visible.value]]
+      )
+      // the dropdown container
+      return h(Teleport, { to: 'body' }, [
+        h(
+          Transition,
+          {
+            name: getAnimate(props, dropUp),
+            onBeforeEnter: el => {
+              console.log('before enter')
+            },
+            onEnter: el => {
+              console.log('enter')
+            },
+            onAfterEnter: el => {
+              console.log('after enter')
+            },
+            onLeave: el => {
+              console.log('leave')
+            },
+            onAfterLeave: el => {
+              console.log('after leave')
+            }
+          },
+          () => [dropdownContainer]
+        )
+      ])
+    }
 
     onMounted(() => {
       // if (typeof props.width !== 'undefined') {
@@ -183,12 +256,12 @@ export default defineComponent({
     return () => {
       const children = []
       // the dropdown trigger
-      if ('trigger' in slots) {
-        children.push(slots.trigger({
-          visible,
-          disabled: props.disabled
-        }))
-      }
+      // if ('trigger' in slots) {
+      //   children.push(slots.trigger({
+      //     visible,
+      //     disabled: props.disabled
+      //   }))
+      // }
 
       const containerOption = {
         class: getContainerClasses(props),
@@ -234,35 +307,48 @@ export default defineComponent({
         ])
       )
 
-      const dropdownOption = {
-        class: getTriggerClasses(props),
-        ref: root
-      }
+      // const dropdownOption = {
+      //   class: getTriggerClasses(props),
+      //   ref: root
+      // }
 
-      if (isTriggerByHover) {
-        dropdownOption.onMouseenter = display
-        dropdownOption.onMouseleave = close
-      } else if (isTriggerByClick) {
-        dropdownOption.onClick = e => {
-          if (props.manual) return
-          e.stopPropagation()
-          toggleVisible()
-        }
-      } else if (isTriggerByContextmenu) {
-        // mouse right click to trigger dropdown
-        dropdownOption.onContextmenu = e => {
-          if (props.manual) return
-          e.stopPropagation()
-          e.preventDefault()
+      // if (isTriggerByHover) {
+      //   dropdownOption.onMouseenter = display
+      //   dropdownOption.onMouseleave = close
+      // } else if (isTriggerByClick) {
+      //   dropdownOption.onClick = e => {
+      //     if (props.manual) return
+      //     e.stopPropagation()
+      //     toggleVisible()
+      //   }
+      // } else if (isTriggerByContextmenu) {
+      //   // mouse right click to trigger dropdown
+      //   dropdownOption.onContextmenu = e => {
+      //     if (props.manual) return
+      //     e.stopPropagation()
+      //     e.preventDefault()
 
-          const point = useMouseContextMenu(e)
-          position.x = point.x
-          position.y = point.y
-          display()
-        }
-      }
+      //     const point = useMouseContextMenu(e)
+      //     position.x = point.x
+      //     position.y = point.y
+      //     display()
+      //   }
+      // }
 
-      return h('div', dropdownOption, children)
+      // return h('div', dropdownOption, children)
+      return (
+        <div
+          class={getTriggerClasses(props)}
+          onMouseenter={handleTriggerMouseEnter}
+          onMouseleave={handleTriggerMouseLeave}
+          onContextmenu={handleTriggerContextMenu}
+          onClick={handleTriggerClick}
+          ref={root}
+        >
+          <Trigger />
+          {children}
+        </div>
+      )
     }
   }
 })

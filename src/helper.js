@@ -1,8 +1,13 @@
 import { inject } from 'vue'
 import { scrollInfo } from './util'
 import {
-  TRIGGER_CLICK, TRIGGER_CONTEXTMENU, TRIGGER_HOVER, GAP,
-  injectDropdown
+  TRIGGER_CLICK,
+  TRIGGER_CONTEXTMENU,
+  TRIGGER_HOVER,
+  GAP,
+  ROUNDED_PILL,
+  injectDropdown,
+  roundedList
 } from './constants'
 
 export { getElementRect } from './util'
@@ -119,6 +124,20 @@ export function getTriggerClasses (props) {
     props.customTriggerClass && props.customTriggerClass
   ]
 }
+export function getRoundedClass (value) {
+  const level = !value || !roundedList.includes(value)
+    ? ROUNDED_PILL
+    : roundedList.find(val => val === value)
+  return `dd-rounded--${level}`
+}
 export function useDropdown () {
   return inject(injectDropdown, {})
+}
+export function useDebounce (time = 300) {
+  let timer
+
+  return callback => {
+    clearTimeout(timer)
+    timer = setTimeout(callback, time)
+  }
 }

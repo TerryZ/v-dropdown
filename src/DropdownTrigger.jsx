@@ -2,8 +2,8 @@ import './styles/trigger.sass'
 
 import { computed } from 'vue'
 
-import { ROUNDED_MEDIUM } from './constants'
-import { useDropdown } from './helper'
+import { ROUNDED_MEDIUM, ROUNDED_CIRCLE } from './constants'
+import { useDropdown, getRoundedClass } from './helper'
 
 export default {
   name: 'DropdownTrigger',
@@ -17,7 +17,8 @@ export default {
       {
         'dd-default-trigger': true,
         'dd-opened': dropdown?.visible?.value
-      }
+      },
+      getRoundedClass(props.rounded)
     ]))
     const containerClasses = computed(() => ({
       'dd-trigger-container': true,
@@ -27,9 +28,12 @@ export default {
     const ButtonText = () => (
       slots.default ? slots.default() : 'Open'
     )
-    const ButtonIcon = () => (
-      slots.append ? slots.append() : <span class='dd-caret-down' />
-    )
+    const ButtonIcon = () => {
+      if (props.rounded === ROUNDED_CIRCLE) return null
+      return (
+        slots.append ? slots.append() : <span class='dd-caret-down' />
+      )
+    }
     const TriggerButton = () => (
       <button
         type='button'
