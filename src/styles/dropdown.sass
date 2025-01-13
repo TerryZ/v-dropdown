@@ -4,11 +4,11 @@ $duration: 250ms
 $down: animate-down
 $up: animate-up
 
-.v-dropdown-trigger
+.dd-trigger
   display: inline-flex
-  &.v-dropdown-trigger--full-width
+  &.dd-trigger--full-width
     display: flex
-.v-dropdown-container
+.dd-container
   -webkit-font-smoothing: subpixel-antialiased
   backface-visibility: hidden
   display: inline-flex
@@ -17,18 +17,19 @@ $up: animate-up
   position: absolute
   top: 0
   left: 0
-  border: 1px solid #D6D7D7
   box-sizing: border-box
   background-color: white
-  border-radius: .3rem
   overflow: hidden
+  // border: 1px solid #D6D7D7
+  border: 1px solid #d0d0d0
   // z-index: 3000
   will-change: opacity, transform, top, left
-  box-shadow: 0 15px 25px rgb(0, 0, 0, 0.2)
-  &.v-dropdown-no-border
+  // box-shadow: 0 15px 25px rgb(0, 0, 0, 0.2)
+  // box-shadow: 0 7px 15px rgb(0, 0, 0, 0.25)
+  box-shadow: 0 9px 24px rgb(0, 0, 0, .18), 0 3px 6px rgb(0, 0, 0, .08)
+  // box-shadow: 0px 3px 6px rgb(15, 15, 15, 0.1), 0px 9px 24px rgb(15, 15, 15, 0.2)
+  &.dd-no-border
     border: 0
-    border-radius: .5rem
-    box-shadow: 0 10px 30px rgb(0, 0, 0, 0.4)
 
 .dd-rounded--small
   border-radius: .25rem !important
@@ -40,3 +41,9 @@ $up: animate-up
   border-radius: 50rem !important
 .dd-rounded--circle
   border-radius: 50% !important
+.dd-container-rounded--small
+  border-radius: 6px !important
+.dd-container-rounded--medium
+  border-radius: 12px !important
+.dd-container-rounded--large
+  border-radius: 18px !important

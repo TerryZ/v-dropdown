@@ -21,5 +21,6 @@ export const roundedList = [
   ROUNDED_PILL,
   ROUNDED_CIRCLE
 ]
+export const containerRoundedList = [ROUNDED_SMALL, ROUNDED_MEDIUM, ROUNDED_LARGE]
 
 export const injectDropdown = Symbol('dropdown')

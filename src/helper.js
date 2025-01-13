@@ -5,9 +5,11 @@ import {
   TRIGGER_CONTEXTMENU,
   TRIGGER_HOVER,
   GAP,
+  ROUNDED_SMALL,
   ROUNDED_PILL,
   injectDropdown,
-  roundedList
+  roundedList,
+  containerRoundedList
 } from './constants'
 
 export { getElementRect } from './util'
@@ -111,16 +113,17 @@ export function useMouseContextMenu (e) {
 
 export function getContainerClasses (props) {
   return [
-    'v-dropdown-container',
-    props.border || 'v-dropdown-no-border',
-    props.customContainerClass && props.customContainerClass
+    'dd-container',
+    props.border || 'dd-no-border',
+    props.customContainerClass && props.customContainerClass,
+    getContainerRoundedClass(props.containerRounded)
   ]
 }
 
 export function getTriggerClasses (props) {
   return [
-    'v-dropdown-trigger',
-    props.fullWidth && 'v-dropdown-trigger--full-width',
+    'dd-trigger',
+    props.fullWidth && 'dd-trigger--full-width',
     props.customTriggerClass && props.customTriggerClass
   ]
 }
@@ -129,6 +132,12 @@ export function getRoundedClass (value) {
     ? ROUNDED_PILL
     : roundedList.find(val => val === value)
   return `dd-rounded--${level}`
+}
+export function getContainerRoundedClass (value) {
+  const level = !value || !containerRoundedList.includes(value)
+    ? ROUNDED_SMALL
+    : containerRoundedList.find(val => val === value)
+  return `dd-container-rounded--${level}`
 }
 export function useDropdown () {
   return inject(injectDropdown, {})

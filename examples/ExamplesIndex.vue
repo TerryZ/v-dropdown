@@ -9,6 +9,8 @@ const dropdownInput = ref(null)
 const toggleOff = ref(null)
 const width = ref(350)
 const height = ref(200)
+const containerRounded = ref('medium')
+const triggerRounded = ref('medium')
 
 const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -51,10 +53,52 @@ function changeSize () {
       Default
     </h5>
     <div class="row">
-      <div class="col-md-6">
-        <Dropdown>
+      <div class="col-md-6 d-flex flex-column">
+        <div class="mb-3 d-flex gap-3">
+          <div class="d-flex align-items-center">
+            Trigger rounded:
+            <select
+              class="form-select w-auto ms-3"
+              v-model="triggerRounded"
+            >
+              <option value="small">
+                small
+              </option>
+              <option value="medium">
+                medium
+              </option>
+              <option value="large">
+                large
+              </option>
+              <option value="pill">
+                pill
+              </option>
+              <option value="circle">
+                circle
+              </option>
+            </select>
+          </div>
+          <div class="d-flex align-items-center">
+            Container rounded:
+            <select
+              class="form-select w-auto ms-3"
+              v-model="containerRounded"
+            >
+              <option value="small">
+                small
+              </option>
+              <option value="medium">
+                medium
+              </option>
+              <option value="large">
+                large
+              </option>
+            </select>
+          </div>
+        </div>
+        <Dropdown :container-rounded="containerRounded">
           <template #trigger>
-            <DropdownTrigger />
+            <DropdownTrigger :rounded="triggerRounded" />
           </template>
           <div class="p-3">
             <div>0123456789012345678901234567890123456789</div>

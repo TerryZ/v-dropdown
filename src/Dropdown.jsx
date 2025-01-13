@@ -29,7 +29,7 @@ import {
   TRIGGER_CLICK,
   HOVER_RESPONSE_TIME,
   injectDropdown,
-  ROUNDED_MEDIUM
+  ROUNDED_SMALL
 } from './constants'
 
 export default defineComponent({
@@ -67,7 +67,7 @@ export default defineComponent({
      * - `contextmenu`
      */
     trigger: { type: String, default: TRIGGER_CLICK },
-    containerRounded: { type: String, default: ROUNDED_MEDIUM },
+    containerRounded: { type: String, default: ROUNDED_SMALL },
     containerZIndex: { type: Number, default: 3000 },
     /** Add custom class to trigger */
     customTriggerClass: { type: String, default: '' },
@@ -173,12 +173,16 @@ export default defineComponent({
       display()
     }
 
+    const slotData = {
+      visible,
+      disabled: toRef(props, 'disabled', false),
+      close,
+      adjust
+    }
+
     function Trigger () {
       if (!slots.trigger) return null
-      return slots.trigger({
-        visible,
-        disabled: props.disabled
-      })
+      return slots.trigger(slotData)
     }
     function Content () {
       return (
@@ -199,7 +203,7 @@ export default defineComponent({
                 onMousedown={e => e.stopPropagation()}
                 onMouseenter={() => isTriggerByHover && display()}
                 onMouseleave={() => isTriggerByHover && close()}
-              >{slots?.default?.()}</div>
+              >{slots?.default?.(slotData)}</div>
             )}
           </Transition>
         </Teleport>
@@ -207,10 +211,6 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      // if (typeof props.width !== 'undefined') {
-      //   styleSheet.width = props.width + 'px'
-      // }
-      // document.body.append(container.value)
       document.body.addEventListener('mousedown', whole)
       containerSizeObserve()
     })
@@ -220,7 +220,10 @@ export default defineComponent({
       // remove dropdown container
       container?.value?.remove?.()
     })
-    onUnmounted(() => { root?.value?.remove?.() })
+    onUnmounted(() => {
+      container?.value?.remove?.()
+      root?.value?.remove?.()
+    })
 
     provide(injectDropdown, {
       visible,
