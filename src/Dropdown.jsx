@@ -5,6 +5,7 @@ import {
   reactive,
   watch,
   provide,
+  toRef,
   Transition,
   Teleport,
   onMounted,
@@ -67,6 +68,7 @@ export default defineComponent({
      */
     trigger: { type: String, default: TRIGGER_CLICK },
     containerRounded: { type: String, default: ROUNDED_MEDIUM },
+    containerZIndex: { type: Number, default: 3000 },
     /** Add custom class to trigger */
     customTriggerClass: { type: String, default: '' },
     /** Add custom class to container */
@@ -75,7 +77,7 @@ export default defineComponent({
   emits: ['visible-change', 'open', 'close', 'opened', 'closed'],
   setup (props, { slots, emit, expose }) {
     const visible = ref(false)
-    const styleSheet = reactive({ top: '', left: '' })
+    const styleSheet = reactive({ top: '', left: '', 'z-index': props.containerZIndex })
     const position = reactive({ x: null, y: null })
     const dropUp = ref(false)
 
@@ -222,7 +224,8 @@ export default defineComponent({
 
     provide(injectDropdown, {
       visible,
-      adjust
+      adjust,
+      disabled: toRef(props, 'disabled')
     })
 
     expose({
