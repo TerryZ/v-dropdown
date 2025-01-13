@@ -21,7 +21,8 @@ import {
   getAnimate,
   useMouseContextMenu,
   useState,
-  useDebounce
+  useDebounce,
+  useContainerSizeChangeHandle
 } from './helper'
 import {
   TRIGGER_CLICK,
@@ -82,6 +83,10 @@ export default defineComponent({
     const container = ref(null)
 
     const hoverDebounce = useDebounce(HOVER_RESPONSE_TIME)
+    const {
+      containerSizeObserve,
+      containerSizeUnobserve
+    } = useContainerSizeChangeHandle(container, adjust)
 
     const {
       isTriggerByClick,
@@ -165,9 +170,6 @@ export default defineComponent({
       position.y = point.y
       display()
     }
-    const resizeObserver = new ResizeObserver((entries) => {
-      console.log(entries[0])
-    })
 
     function Trigger () {
       if (!slots.trigger) return null
@@ -208,10 +210,10 @@ export default defineComponent({
       // }
       // document.body.append(container.value)
       document.body.addEventListener('mousedown', whole)
-      resizeObserver.observe(container.value)
+      containerSizeObserve()
     })
     onBeforeUnmount(() => {
-      resizeObserver.unobserve(container.value)
+      containerSizeUnobserve()
       document.body.removeEventListener('mousedown', whole)
       // remove dropdown container
       container?.value?.remove?.()

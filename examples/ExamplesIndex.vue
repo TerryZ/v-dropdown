@@ -8,6 +8,7 @@ const disabled = ref(false)
 const dropdownInput = ref(null)
 const toggleOff = ref(null)
 const width = ref(350)
+const height = ref(200)
 
 const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -34,6 +35,7 @@ function toggleOffClose () {
 }
 function changeSize () {
   width.value = 500
+  height.value = 300
 }
 </script>
 
@@ -193,12 +195,7 @@ function changeSize () {
     <div>
       <Dropdown :disabled="disabled">
         <template #trigger>
-          <button
-            type="button"
-            class="btn btn-secondary"
-          >
-            dropdown trigger
-          </button>
+          <DropdownTrigger />
         </template>
         <div class="p-5">
           <div>0123456789</div>
@@ -243,12 +240,7 @@ function changeSize () {
         <div>Align left</div>
         <Dropdown custom-trigger-class="border border-4 rounded-3">
           <template #trigger>
-            <button
-              type="button"
-              class="btn btn-secondary"
-            >
-              dropdown trigger
-            </button>
+            <DropdownTrigger />
           </template>
           <div class="p-5">
             <div>0123456789</div>
@@ -264,12 +256,7 @@ function changeSize () {
           custom-container-class="bg-primary border-0"
         >
           <template #trigger>
-            <button
-              type="button"
-              class="btn btn-secondary"
-            >
-              dropdown trigger
-            </button>
+            <DropdownTrigger />
           </template>
           <div class="p-5">
             <div>0123456789</div>
@@ -282,12 +269,7 @@ function changeSize () {
         <div>Align right</div>
         <Dropdown align="right">
           <template #trigger>
-            <button
-              type="button"
-              class="btn btn-secondary"
-            >
-              dropdown trigger
-            </button>
+            <DropdownTrigger />
           </template>
           <div class="p-5">
             <div>0123456789</div>
@@ -307,12 +289,7 @@ function changeSize () {
         :cover="true"
       >
         <template #trigger>
-          <button
-            type="button"
-            class="btn btn-secondary"
-          >
-            dropdown trigger
-          </button>
+          <DropdownTrigger />
         </template>
         <div class="p-5">
           <div>0123456789012345678901234567890123456789</div>
@@ -363,12 +340,7 @@ function changeSize () {
     <div>
       <Dropdown>
         <template #trigger>
-          <button
-            type="button"
-            class="btn btn-secondary"
-          >
-            dropdown trigger
-          </button>
+          <DropdownTrigger />
         </template>
 
         <div
@@ -388,18 +360,13 @@ function changeSize () {
     <div>
       <Dropdown>
         <template #trigger>
-          <button
-            type="button"
-            class="btn btn-secondary"
-          >
-            dropdown trigger
-          </button>
+          <DropdownTrigger />
         </template>
 
         <div>
           <div
             class="p-5"
-            :style="{ width: width + 'px' }"
+            :style="{ width: width + 'px', height: height + 'px' }"
           >
             <div>0123456789</div>
             <div>0123456789</div>

@@ -141,3 +141,27 @@ export function useDebounce (time = 300) {
     timer = setTimeout(callback, time)
   }
 }
+export function useContainerSizeChangeHandle (container, job) {
+  let width = 0
+  let height = 0
+  const resizeObserver = new ResizeObserver((entries) => {
+    const rect = entries[0].contentRect
+    // console.log(rect)
+    if (!rect.width && !rect.height) return
+    if (width === 0 && height === 0) {
+      width = rect.width
+      height = rect.height
+      return
+    }
+    // execute job when container size change
+    if (width !== rect.width || height !== rect.height) {
+      width = rect.width
+      height = rect.height
+      job?.()
+    }
+  })
+  return {
+    containerSizeObserve: () => resizeObserver.observe(container.value),
+    containerSizeUnobserve: () => resizeObserver.unobserve(container.value)
+  }
+}
