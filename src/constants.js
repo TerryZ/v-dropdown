@@ -24,3 +24,4 @@ export const roundedList = [
 export const containerRoundedList = [ROUNDED_SMALL, ROUNDED_MEDIUM, ROUNDED_LARGE]
 
 export const injectDropdown = Symbol('dropdown')
+export const injectInternal = Symbol('internal')

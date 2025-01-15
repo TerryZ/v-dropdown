@@ -29,8 +29,11 @@ import {
   TRIGGER_CLICK,
   HOVER_RESPONSE_TIME,
   injectDropdown,
+  injectInternal,
   ROUNDED_SMALL
 } from './constants'
+
+import DropdownContent from './DropdownContent'
 
 export default defineComponent({
   name: 'VDropdown',
@@ -211,6 +214,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
+      console.log(container.value)
       document.body.addEventListener('mousedown', whole)
       containerSizeObserve()
     })
@@ -229,6 +233,9 @@ export default defineComponent({
       visible,
       adjust,
       disabled: toRef(props, 'disabled')
+    })
+    provide(injectInternal, {
+      slotData
     })
 
     expose({
@@ -250,7 +257,7 @@ export default defineComponent({
         ref={root}
       >
         <Trigger />
-        <Content />
+        <DropdownContent ref={container} />
       </div>
     )
   }
