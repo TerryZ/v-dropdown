@@ -1,4 +1,4 @@
-import { inject } from 'vue'
+import { ref, computed, inject } from 'vue'
 import { scrollInfo } from './util'
 import {
   TRIGGER_CLICK,
@@ -22,79 +22,93 @@ export function getAnimate (props, dropUp) {
   return dropUp.value ? 'animate-up' : 'animate-down'
 }
 
-export function useState (props) {
+export function useTriggerState (trigger) {
   return {
-    isTriggerByClick: props.trigger === TRIGGER_CLICK,
-    isTriggerByHover: props.trigger === TRIGGER_HOVER,
-    isTriggerByContextmenu: props.trigger === TRIGGER_CONTEXTMENU
+    isTriggerByClick: trigger === TRIGGER_CLICK,
+    isTriggerByHover: trigger === TRIGGER_HOVER,
+    isTriggerByContextmenu: trigger === TRIGGER_CONTEXTMENU
   }
 }
 
-/**
- * Calculation display direction and top axis
- * @param {object} props
- * @param {number} x
- * @param {DOMRect} rootRect - root element bounding client rect
- * @param {DOMRect} containerRect - container element bounding client rect
- * @return {{ dropUp: boolean, top: number }}
- */
-export function adjustTop (props, y, rootRect, containerRect) {
-  const { isTriggerByContextmenu } = useState(props)
-  const scrollTop = window.pageYOffset
-  const viewHeight = document.documentElement.clientHeight
-  const srcTop = isTriggerByContextmenu ? y : rootRect.top + scrollTop
-  let t = isTriggerByContextmenu ? y : rootRect.top + rootRect.height + GAP + scrollTop
-  let overDown = false
-  let overUp = false
-  let up = false
-  // dropdown container over viewport
-  if ((t + containerRect.height) > (scrollTop + viewHeight)) {
-    overDown = true
+export function useDropdownContainer (trigger, align) {
+  const verticalDirection = ref('down')
+  const animationName = computed(() => {
+    return `animate-${verticalDirection.value}`
+  })
+
+  /**
+   * Calculation display direction and top axis
+   * @param {object} props
+   * @param {number} x
+   * @param {DOMRect} rootRect - root element bounding client rect
+   * @param {DOMRect} containerRect - container element bounding client rect
+   * @return {{ dropUp: boolean, top: number }}
+   */
+  function getTop (y, rootRect, containerRect) {
+    const { isTriggerByContextmenu } = useTriggerState(trigger)
+    const scrollTop = window.scrollY
+    const viewHeight = document.documentElement.clientHeight
+    const srcTop = isTriggerByContextmenu ? y : rootRect.top + scrollTop
+    let t = isTriggerByContextmenu ? y : rootRect.top + rootRect.height + GAP + scrollTop
+    let overDown = false
+    let overUp = false
+    verticalDirection.value = 'down'
+    // dropdown container over viewport
+    if ((t + containerRect.height) > (scrollTop + viewHeight)) {
+      overDown = true
+    }
+    if ((srcTop - GAP - containerRect.height) < scrollTop) {
+      overUp = true
+    }
+
+    if (!overUp && overDown) {
+      console.log(containerRect.height)
+      t = srcTop - GAP - containerRect.height
+      verticalDirection.value = 'up'
+    }
+
+    return t
   }
-  if ((srcTop - GAP - containerRect.height) < scrollTop) {
-    overUp = true
+  /**
+   * Calculation left axis
+   * @param {object} props
+   * @param {number} x
+   * @param {DOMRect} rootRect - root element bounding client rect
+   * @param {DOMRect} containerRect - container element bounding client rect
+   * @returns {number}
+   */
+  function getLeft (x, rootRect, containerRect) {
+    const { isTriggerByContextmenu } = useTriggerState(trigger)
+    const scrollLeft = window.scrollX
+    const viewWidth = document.documentElement.clientWidth
+    const width = isTriggerByContextmenu ? 0 : rootRect.width
+    // align left's left
+    const left = isTriggerByContextmenu ? x : rootRect.left + scrollLeft
+    // align center's left
+    const center = (left + (width / 2)) - (containerRect.width / 2)
+    // align right's left
+    const right = (left + width) - containerRect.width
+
+    switch (align) {
+      case 'left':
+        return (left + containerRect.width) > (scrollLeft + viewWidth) ? right : left
+      case 'center':
+        if ((center + containerRect.width) > (scrollLeft + viewWidth)) {
+          return right
+        } else if (right < scrollLeft) {
+          return left
+        } else {
+          return center
+        }
+      case 'right':
+        return (right < scrollLeft) ? left : right
+    }
   }
 
-  if (!overUp && overDown) {
-    t = srcTop - GAP - containerRect.height
-    up = true
-  }
-
-  return { dropUp: up, top: t }
-}
-/**
- * Calculation left axis
- * @param {object} props
- * @param {number} x
- * @param {DOMRect} rootRect - root element bounding client rect
- * @param {DOMRect} containerRect - container element bounding client rect
- * @returns {number}
- */
-export function adjustLeft (props, x, rootRect, containerRect) {
-  const { isTriggerByContextmenu } = useState(props)
-  const scrollLeft = window.pageXOffset
-  const viewWid = document.documentElement.clientWidth
-  const wid = isTriggerByContextmenu ? 0 : rootRect.width
-  // align left's left
-  const left = isTriggerByContextmenu ? x : rootRect.left + scrollLeft
-  // align center's left
-  const center = (left + (wid / 2)) - (containerRect.width / 2)
-  // align right's left
-  const right = (left + wid) - containerRect.width
-
-  switch (props.align) {
-    case 'left':
-      return (left + containerRect.width) > (scrollLeft + viewWid) ? right : left
-    case 'center':
-      if ((center + containerRect.width) > (scrollLeft + viewWid)) {
-        return right
-      } else if (right < scrollLeft) {
-        return left
-      } else {
-        return center
-      }
-    case 'right':
-      return (right < scrollLeft) ? left : right
+  return {
+    animationName,
+    getTop,
+    getLeft
   }
 }
 
@@ -115,7 +129,6 @@ export function getContainerClasses (props) {
   return [
     'dd-container',
     props.border || 'dd-no-border',
-    props.customContainerClass && props.customContainerClass,
     getContainerRoundedClass(props.containerRounded)
   ]
 }
@@ -151,23 +164,10 @@ export function useDebounce (time = 300) {
   }
 }
 export function useContainerSizeChangeHandle (container, job) {
-  let width = 0
-  let height = 0
   const resizeObserver = new ResizeObserver((entries) => {
     const rect = entries[0].contentRect
-    // console.log(rect)
     if (!rect.width && !rect.height) return
-    if (width === 0 && height === 0) {
-      width = rect.width
-      height = rect.height
-      return
-    }
-    // execute job when container size change
-    if (width !== rect.width || height !== rect.height) {
-      width = rect.width
-      height = rect.height
-      job?.()
-    }
+    job?.()
   })
   return {
     containerSizeObserve: () => resizeObserver.observe(container.value),

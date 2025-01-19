@@ -6,24 +6,18 @@ import {
   watch,
   provide,
   toRef,
-  Transition,
-  Teleport,
+  toRefs,
   onMounted,
   onBeforeUnmount,
   onUnmounted,
   defineComponent
 } from 'vue'
 import {
-  adjustLeft,
-  adjustTop,
-  getContainerClasses,
   getTriggerClasses,
   getElementRect,
-  getAnimate,
   useMouseContextMenu,
-  useState,
-  useDebounce,
-  useContainerSizeChangeHandle
+  useTriggerState,
+  useDebounce
 } from './helper'
 import {
   TRIGGER_CLICK,
@@ -33,14 +27,11 @@ import {
   ROUNDED_SMALL
 } from './constants'
 
-import DropdownContent from './DropdownContent'
-
 export default defineComponent({
   name: 'VDropdown',
   props: {
     /** Container show up alignment direction */
     align: { type: String, default: 'left' },
-    border: { type: Boolean, default: true },
     /**
      * Toggle display / close dropdown container
      */
@@ -75,38 +66,29 @@ export default defineComponent({
     /** Add custom class to trigger */
     customTriggerClass: { type: String, default: '' },
     /** Add custom class to container */
-    customContainerClass: { type: String, default: '' }
+    customContainerClass: { type: String, default: '' },
+    gap: { type: [String, Number], default: '5px' }
   },
   emits: ['visible-change', 'open', 'close', 'opened', 'closed'],
   setup (props, { slots, emit, expose }) {
     const visible = ref(false)
-    const styleSheet = reactive({ top: '', left: '', 'z-index': props.containerZIndex })
     const position = reactive({ x: null, y: null })
-    const dropUp = ref(false)
 
     const root = ref(null)
     const container = ref(null)
 
     const hoverDebounce = useDebounce(HOVER_RESPONSE_TIME)
-    const {
-      containerSizeObserve,
-      containerSizeUnobserve
-    } = useContainerSizeChangeHandle(container, adjust)
 
     const {
       isTriggerByClick,
       isTriggerByHover,
       isTriggerByContextmenu
-    } = useState(props)
+    } = useTriggerState(props.trigger)
 
     watch(visible, val => emit('visible-change', val))
 
     function display () {
       if (props.disabled) return
-      /**
-       * calculation display direction(up or down) and top axis
-       */
-      if ('trigger' in slots) adjust()
 
       if (isTriggerByHover) {
         hoverDebounce(() => { visible.value = true })
@@ -129,17 +111,6 @@ export default defineComponent({
     }
     function toggleVisible () {
       visible.value ? close() : display()
-    }
-    // adjust dropdown display position
-    function adjust () {
-      const rootRect = getElementRect(root.value)
-      const containerRect = getElementRect(container.value)
-      const result = adjustTop(props, position.y, rootRect, containerRect)
-      const left = adjustLeft(props, position.x, rootRect, containerRect)
-
-      dropUp.value = result.dropUp
-      styleSheet.top = `${result.top}px`
-      styleSheet.left = `${left}px`
     }
     /**
      * handle click event outside the dropdown container
@@ -179,85 +150,57 @@ export default defineComponent({
     const slotData = {
       visible,
       disabled: toRef(props, 'disabled', false),
-      close,
-      adjust
+      close
     }
 
     function Trigger () {
       if (!slots.trigger) return null
       return slots.trigger(slotData)
     }
-    function Content () {
-      return (
-        <Teleport to='body'>
-          <Transition
-            name={getAnimate(props, dropUp)}
-            onEnter={() => emit('open')}
-            onAfterEnter={() => emit('opened')}
-            onLeave={() => emit('close')}
-            onAfterLeave={() => emit('closed')}
-          >
-            {() => (
-              <div
-                class={getContainerClasses(props)}
-                style={styleSheet}
-                ref={container}
-                v-show={visible.value}
-                onMousedown={e => e.stopPropagation()}
-                onMouseenter={() => isTriggerByHover && display()}
-                onMouseleave={() => isTriggerByHover && close()}
-              >{slots?.default?.(slotData)}</div>
-            )}
-          </Transition>
-        </Teleport>
-      )
-    }
 
     onMounted(() => {
-      console.log(container.value)
       document.body.addEventListener('mousedown', whole)
-      containerSizeObserve()
     })
     onBeforeUnmount(() => {
-      containerSizeUnobserve()
       document.body.removeEventListener('mousedown', whole)
-      // remove dropdown container
-      container?.value?.remove?.()
     })
     onUnmounted(() => {
-      container?.value?.remove?.()
       root?.value?.remove?.()
     })
 
     provide(injectDropdown, {
       visible,
-      adjust,
       disabled: toRef(props, 'disabled')
     })
     provide(injectInternal, {
-      slotData
+      slotData,
+      position,
+      display,
+      close,
+      getRootRect: () => getElementRect(root.value),
+      dropdownProps: toRefs(props),
+      dropdownEmit: emit
     })
 
     expose({
       display,
       close,
       toggleVisible,
-      adjust,
       container,
       visible
     })
 
     return () => (
       <div
+        ref={root}
         class={getTriggerClasses(props)}
         onMouseenter={handleTriggerMouseEnter}
         onMouseleave={handleTriggerMouseLeave}
         onContextmenu={handleTriggerContextMenu}
         onClick={handleTriggerClick}
-        ref={root}
       >
         <Trigger />
-        <DropdownContent ref={container} />
+        {slots.default?.(slotData)}
       </div>
     )
   }
