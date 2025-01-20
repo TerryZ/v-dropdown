@@ -1,4 +1,13 @@
-import { ref, computed, inject, Transition, Teleport, onMounted, onBeforeUnmount } from 'vue'
+import {
+  ref,
+  computed,
+  inject,
+  Transition,
+  Teleport,
+  onMounted,
+  onBeforeUnmount,
+  defineComponent
+} from 'vue'
 import { injectInternal, ROUNDED_SMALL } from './constants'
 import { getElementRect } from './util'
 import {
@@ -9,7 +18,7 @@ import {
   getContainerRoundedClass
 } from './helper'
 
-export default {
+export default defineComponent({
   name: 'DropdownContent',
   inheritAttrs: false,
   props: {
@@ -34,6 +43,7 @@ export default {
       display,
       close,
       getRootRect,
+      setupAdjust,
       dropdownProps,
       dropdownEmit
     } = inject(injectInternal)
@@ -52,17 +62,17 @@ export default {
     function adjust () {
       const rect = getRootRect()
       const containerRect = getElementRect(container.value)
-      console.log(container.value.offsetHeight)
-      const top = getTop(position.y, rect, containerRect)
-      const left = getLeft(position.x, rect, containerRect)
+      const top = getTop(position.value.y, rect, containerRect)
+      const left = getLeft(position.value.x, rect, containerRect)
 
       styles.value.top = `${top}px`
       styles.value.left = `${left}px`
+      console.log('adjusted')
     }
 
+    setupAdjust(adjust)
     onMounted(() => {
       containerSizeObserve()
-      // console.log(container.value)
     })
     onBeforeUnmount(() => {
       containerSizeUnobserve()
@@ -94,4 +104,4 @@ export default {
       </Teleport>
     )
   }
-}
+})

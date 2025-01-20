@@ -62,7 +62,6 @@ export function useDropdownContainer (trigger, align) {
     }
 
     if (!overUp && overDown) {
-      console.log(containerRect.height)
       t = srcTop - GAP - containerRect.height
       verticalDirection.value = 'up'
     }
@@ -164,10 +163,26 @@ export function useDebounce (time = 300) {
   }
 }
 export function useContainerSizeChangeHandle (container, job) {
+  let width = 0
+  let height = 0
+  const setSize = rect => {
+    width = rect.width
+    height = rect.height
+  }
   const resizeObserver = new ResizeObserver((entries) => {
     const rect = entries[0].contentRect
+    // console.log(rect)
+    // container invisible
     if (!rect.width && !rect.height) return
-    job?.()
+    // storage container size when first time open
+    if (width === 0 && height === 0) {
+      return setSize(rect)
+    }
+    // container size changed
+    if (width !== rect.width || height !== rect.height) {
+      setSize(rect)
+      job?.()
+    }
   })
   return {
     containerSizeObserve: () => resizeObserver.observe(container.value),

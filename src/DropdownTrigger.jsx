@@ -1,11 +1,11 @@
 import './styles/trigger.sass'
 
-import { computed } from 'vue'
+import { computed, defineComponent } from 'vue'
 
 import { ROUNDED_MEDIUM, ROUNDED_CIRCLE } from './constants'
 import { useDropdown, getRoundedClass } from './helper'
 
-export default {
+export default defineComponent({
   name: 'DropdownTrigger',
   props: {
     rounded: { type: String, default: ROUNDED_MEDIUM }
@@ -50,4 +50,4 @@ export default {
       </div>
     )
   }
-}
+})

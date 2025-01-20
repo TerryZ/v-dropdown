@@ -2,7 +2,6 @@ import './styles/dropdown.sass'
 
 import {
   ref,
-  reactive,
   watch,
   provide,
   toRef,
@@ -72,7 +71,8 @@ export default defineComponent({
   emits: ['visible-change', 'open', 'close', 'opened', 'closed'],
   setup (props, { slots, emit, expose }) {
     const visible = ref(false)
-    const position = reactive({ x: null, y: null })
+    const position = ref({ x: null, y: null })
+    const adjustContainerPosition = ref()
 
     const root = ref(null)
     const container = ref(null)
@@ -89,6 +89,8 @@ export default defineComponent({
 
     function display () {
       if (props.disabled) return
+
+      adjustContainerPosition.value?.()
 
       if (isTriggerByHover) {
         hoverDebounce(() => { visible.value = true })
@@ -142,9 +144,13 @@ export default defineComponent({
       e.preventDefault()
 
       const point = useMouseContextMenu(e)
-      position.x = point.x
-      position.y = point.y
+      position.value.x = point.x
+      position.value.y = point.y
       display()
+    }
+    const setupAdjustContainerPosition = fn => {
+      if (typeof fn !== 'function') return
+      adjustContainerPosition.value = fn
     }
 
     const slotData = {
@@ -178,6 +184,7 @@ export default defineComponent({
       display,
       close,
       getRootRect: () => getElementRect(root.value),
+      setupAdjust: setupAdjustContainerPosition,
       dropdownProps: toRefs(props),
       dropdownEmit: emit
     })

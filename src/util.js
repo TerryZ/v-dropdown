@@ -24,6 +24,23 @@ function isHidden (el) {
   return window.getComputedStyle(el).display === 'none'
 }
 
+function getElementSizes (el) {
+  if (!el) {
+    return {
+      width: 0,
+      height: 0,
+      top: 0,
+      left: 0
+    }
+  }
+  const rect = el.getBoundingClientRect()
+  return {
+    width: el.offsetWidth,
+    height: el.offsetHeight,
+    top: rect.top,
+    left: rect.left
+  }
+}
 export function getElementRect (el) {
   if (isHidden(el)) {
     /**
@@ -33,7 +50,7 @@ export function getElementRect (el) {
      */
     el.style.visibility = 'hidden'
     el.style.display = 'inline-block'
-    const rect = el.getBoundingClientRect()
+    const rect = getElementSizes(el)
     /**
      * restore dropdown style after getting position data
      */
@@ -41,5 +58,5 @@ export function getElementRect (el) {
     el.style.display = 'none'
     return rect
   }
-  return el.getBoundingClientRect()
+  return getElementSizes(el)
 }
