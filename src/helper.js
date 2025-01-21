@@ -4,7 +4,6 @@ import {
   TRIGGER_CLICK,
   TRIGGER_CONTEXTMENU,
   TRIGGER_HOVER,
-  GAP,
   ROUNDED_SMALL,
   ROUNDED_PILL,
   injectDropdown,
@@ -30,7 +29,7 @@ export function useTriggerState (trigger) {
   }
 }
 
-export function useDropdownContainer (trigger, align) {
+export function useDropdownContainer (trigger, align, gap) {
   const verticalDirection = ref('down')
   const animationName = computed(() => {
     return `animate-${verticalDirection.value}`
@@ -49,7 +48,9 @@ export function useDropdownContainer (trigger, align) {
     const scrollTop = window.scrollY
     const viewHeight = document.documentElement.clientHeight
     const srcTop = isTriggerByContextmenu ? y : rootRect.top + scrollTop
-    let t = isTriggerByContextmenu ? y : rootRect.top + rootRect.height + GAP + scrollTop
+    let t = isTriggerByContextmenu
+      ? y
+      : rootRect.top + rootRect.height + gap.value + scrollTop
     let overDown = false
     let overUp = false
     verticalDirection.value = 'down'
@@ -57,12 +58,12 @@ export function useDropdownContainer (trigger, align) {
     if ((t + containerRect.height) > (scrollTop + viewHeight)) {
       overDown = true
     }
-    if ((srcTop - GAP - containerRect.height) < scrollTop) {
+    if ((srcTop - gap.value - containerRect.height) < scrollTop) {
       overUp = true
     }
 
     if (!overUp && overDown) {
-      t = srcTop - GAP - containerRect.height
+      t = srcTop - gap.value - containerRect.height
       verticalDirection.value = 'up'
     }
 
@@ -88,7 +89,7 @@ export function useDropdownContainer (trigger, align) {
     // align right's left
     const right = (left + width) - containerRect.width
 
-    switch (align) {
+    switch (align.value) {
       case 'left':
         return (left + containerRect.width) > (scrollLeft + viewWidth) ? right : left
       case 'center':

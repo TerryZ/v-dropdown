@@ -47,13 +47,14 @@ export default defineComponent({
       dropdownProps,
       dropdownEmit
     } = inject(injectInternal)
-    const { isTriggerByHover } = useTriggerState(dropdownProps.trigger.value)
+    const { trigger, align, gap } = dropdownProps
+    const { isTriggerByHover } = useTriggerState(trigger.value)
 
     const {
       animationName,
       getLeft,
       getTop
-    } = useDropdownContainer(dropdownProps.trigger.value, dropdownProps.align.value)
+    } = useDropdownContainer(trigger.value, align, gap)
     const {
       containerSizeObserve,
       containerSizeUnobserve
@@ -67,7 +68,6 @@ export default defineComponent({
 
       styles.value.top = `${top}px`
       styles.value.left = `${left}px`
-      console.log('adjusted')
     }
 
     setupAdjust(adjust)

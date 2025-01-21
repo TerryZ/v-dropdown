@@ -22,8 +22,7 @@ import {
   TRIGGER_CLICK,
   HOVER_RESPONSE_TIME,
   injectDropdown,
-  injectInternal,
-  ROUNDED_SMALL
+  injectInternal
 } from './constants'
 
 export default defineComponent({
@@ -60,13 +59,9 @@ export default defineComponent({
      * - `contextmenu`
      */
     trigger: { type: String, default: TRIGGER_CLICK },
-    containerRounded: { type: String, default: ROUNDED_SMALL },
     containerZIndex: { type: Number, default: 3000 },
-    /** Add custom class to trigger */
-    customTriggerClass: { type: String, default: '' },
-    /** Add custom class to container */
-    customContainerClass: { type: String, default: '' },
-    gap: { type: [String, Number], default: '5px' }
+    /** The distance(px) between the trigger and the container */
+    gap: { type: Number, default: 5 }
   },
   emits: ['visible-change', 'open', 'close', 'opened', 'closed'],
   setup (props, { slots, emit, expose }) {

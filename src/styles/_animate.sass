@@ -18,14 +18,16 @@
     opacity: 0
   .#{$name}-enter-active
     transform-origin: $origin
-    transition-property: opacity, transform
-    transition-duration: 0.15s
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
+    transition:
+      property: opacity, transform
+      duration: 0.15s
+      timing-function: cubic-bezier(0.4, 0, 0.2, 1)
   .#{$name}-leave-active
     transform-origin: $origin
-    transition-property: opacity, transform
-    transition-duration: 0.075s
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
+    transition:
+      property: opacity, transform
+      duration: 0.075s
+      timing-function: cubic-bezier(0.4, 0, 0.2, 1)
 
 @include transition-scale('animate-down', top left)
 @include transition-scale('animate-up', bottom left)

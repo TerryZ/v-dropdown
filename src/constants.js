@@ -4,8 +4,6 @@ export const TRIGGER_CONTEXTMENU = 'contextmenu'
 
 export const HOVER_RESPONSE_TIME = 150
 
-export const GAP = 5
-
 export const Z_INDEX = 3000
 
 export const ROUNDED_SMALL = 'small'

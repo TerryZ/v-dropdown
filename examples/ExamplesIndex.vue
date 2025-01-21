@@ -11,6 +11,8 @@ const width = ref(350)
 const height = ref(200)
 const containerRounded = ref('medium')
 const triggerRounded = ref('medium')
+const gap = ref(5)
+const align = ref('left')
 
 const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -36,8 +38,13 @@ function toggleOffClose () {
   toggleOff.value.close()
 }
 function changeSize () {
-  width.value = 500
-  height.value = 300
+  if (width.value === 350) {
+    width.value = 500
+    height.value = 300
+  } else {
+    width.value = 350
+    height.value = 200
+  }
 }
 </script>
 
@@ -96,11 +103,11 @@ function changeSize () {
             </select>
           </div>
         </div>
-        <Dropdown :container-rounded="containerRounded">
+        <Dropdown class="abc">
           <template #trigger>
             <DropdownTrigger :rounded="triggerRounded" />
           </template>
-          <DropdownContent>
+          <DropdownContent :rounded="containerRounded">
             <div class="p-3">
               <div>0123456789012345678901234567890123456789</div>
               <div>0123456789012345678901234567890123456789</div>
@@ -201,32 +208,52 @@ function changeSize () {
     </div>
 
     <h5 class="mt-5 mb-3">
-      No border
+      No border and gap
     </h5>
-    <div>
-      <Dropdown>
-        <template #trigger="{ visible: dropVisible, disabled: dropDisabled }">
-          <DropdownTrigger rounded="pill">
-            visible: {{ dropVisible }}, disabled: {{ dropDisabled }}
-          </DropdownTrigger>
-        </template>
-        <DropdownContent :border="false">
-          <div class="p-5">
-            <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
-          </div>
-        </DropdownContent>
-      </Dropdown>
+    <div class="d-flex gap-3">
+      <div>
+        <Dropdown :gap="gap">
+          <template #trigger="{ visible: dropVisible, disabled: dropDisabled }">
+            <DropdownTrigger rounded="pill">
+              visible: {{ dropVisible }}, disabled: {{ dropDisabled }}
+            </DropdownTrigger>
+          </template>
+          <DropdownContent :border="false">
+            <div class="p-5">
+              <div>0123456789012345678901234567890123456789</div>
+              <div>0123456789012345678901234567890123456789</div>
+              <div>0123456789012345678901234567890123456789</div>
+              <div>0123456789012345678901234567890123456789</div>
+              <div>0123456789012345678901234567890123456789</div>
+              <div>0123456789012345678901234567890123456789</div>
+              <div>0123456789012345678901234567890123456789</div>
+              <div>0123456789012345678901234567890123456789</div>
+              <div>0123456789012345678901234567890123456789</div>
+              <div>0123456789012345678901234567890123456789</div>
+              <div>0123456789012345678901234567890123456789</div>
+              <div>0123456789012345678901234567890123456789</div>
+            </div>
+          </DropdownContent>
+        </Dropdown>
+      </div>
+
+      <div class="d-flex align-items-center">
+        Gap:
+        <select
+          class="form-select w-auto ms-3"
+          v-model="gap"
+        >
+          <option :value="5">
+            5px
+          </option>
+          <option :value="10">
+            10px
+          </option>
+          <option :value="20">
+            20px
+          </option>
+        </select>
+      </div>
     </div>
 
     <h5 class="mt-5 mb-3">
@@ -291,45 +318,28 @@ function changeSize () {
     <h5 class="mt-5 mb-3">
       Direction
     </h5>
-    <div class="row">
-      <div class="col-md-4">
-        <div>Align left</div>
-        <Dropdown custom-trigger-class="border border-4 rounded-3">
-          <template #trigger>
-            <DropdownTrigger />
-          </template>
-          <DropdownContent>
-            <div class="p-5">
-              <div>0123456789</div>
-              <div>0123456789</div>
-              <div>0123456789</div>
-            </div>
-          </DropdownContent>
-        </Dropdown>
-      </div>
-      <div class="col-md-4">
-        <div>Align center</div>
-        <Dropdown
-          align="center"
-          custom-container-class="bg-primary border-0"
+    <div class="d-flex gap-3">
+      <div class="d-flex align-items-center">
+        Align direction:
+        <select
+          class="form-select w-auto ms-3"
+          v-model="align"
         >
-          <template #trigger>
-            <DropdownTrigger />
-          </template>
-          <DropdownContent>
-            <div class="p-5">
-              <div>0123456789</div>
-              <div>0123456789</div>
-              <div>0123456789</div>
-            </div>
-          </DropdownContent>
-        </Dropdown>
+          <option value="left">
+            Left
+          </option>
+          <option value="center">
+            Center
+          </option>
+          <option value="right">
+            Right
+          </option>
+        </select>
       </div>
-      <div class="col-md-4">
-        <div>Align right</div>
-        <Dropdown align="right">
+      <div>
+        <Dropdown :align="align">
           <template #trigger>
-            <DropdownTrigger />
+            <DropdownTrigger class="border border-4 rounded-3" />
           </template>
           <DropdownContent>
             <div class="p-5">
@@ -408,11 +418,8 @@ function changeSize () {
         <template #trigger>
           <DropdownTrigger />
         </template>
-        <DropdownContent>
-          <div
-            class="p-5"
-            style="width: 350px;"
-          >
+        <DropdownContent style="width: 350px;">
+          <div class="p-5">
             <div>0123456789</div>
             <div>0123456789</div>
             <div>0123456789</div>

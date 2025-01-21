@@ -1,14 +1,12 @@
 @use 'animate'
 
-$duration: 250ms
-$down: animate-down
-$up: animate-up
-
 .dd-trigger
   display: inline-flex
   box-sizing: border-box
+  width: fit-content
   &.dd-trigger--full-width
     display: flex
+    width: auto
 .dd-container
   -webkit-font-smoothing: subpixel-antialiased
   backface-visibility: hidden
@@ -32,19 +30,22 @@ $up: animate-up
   &.dd-no-border
     border: 0
 
-.dd-rounded--small
-  border-radius: .25rem !important
-.dd-rounded--medium
-  border-radius: .5rem !important
-.dd-rounded--large
-  border-radius: .75rem !important
-.dd-rounded--pill
-  border-radius: 50rem !important
-.dd-rounded--circle
-  border-radius: 50% !important
-.dd-container-rounded--small
-  border-radius: 6px !important
-.dd-container-rounded--medium
-  border-radius: 12px !important
-.dd-container-rounded--large
-  border-radius: 18px !important
+.dd-rounded
+  &--small
+    border-radius: .25rem !important
+  &--medium
+    border-radius: .5rem !important
+  &--large
+    border-radius: .75rem !important
+  &--pill
+    border-radius: 50rem !important
+  &--circle
+    border-radius: 50% !important
+
+.dd-container-rounded
+  &--small
+    border-radius: 6px !important
+  &--medium
+    border-radius: 12px !important
+  &--large
+    border-radius: 18px !important
