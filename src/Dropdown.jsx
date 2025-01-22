@@ -59,7 +59,6 @@ export default defineComponent({
      * - `contextmenu`
      */
     trigger: { type: String, default: TRIGGER_CLICK },
-    containerZIndex: { type: Number, default: 3000 },
     /** The distance(px) between the trigger and the container */
     gap: { type: Number, default: 5 }
   },
@@ -106,9 +105,7 @@ export default defineComponent({
         visible.value = false
       }
     }
-    function toggleVisible () {
-      visible.value ? close() : display()
-    }
+    const toggleVisible = () => visible.value ? close() : display()
     /**
      * handle click event outside the dropdown container
      * @param {MouseEvent} e - event object

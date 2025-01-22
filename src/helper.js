@@ -37,25 +37,23 @@ export function useDropdownContainer (trigger, align, gap) {
 
   /**
    * Calculation display direction and top axis
-   * @param {object} props
    * @param {number} x
    * @param {DOMRect} rootRect - root element bounding client rect
    * @param {DOMRect} containerRect - container element bounding client rect
-   * @return {{ dropUp: boolean, top: number }}
+   * @return {number}
    */
   function getTop (y, rootRect, containerRect) {
     const { isTriggerByContextmenu } = useTriggerState(trigger)
     const scrollTop = window.scrollY
     const viewHeight = document.documentElement.clientHeight
     const srcTop = isTriggerByContextmenu ? y : rootRect.top + scrollTop
-    let t = isTriggerByContextmenu
+    const top = isTriggerByContextmenu
       ? y
       : rootRect.top + rootRect.height + gap.value + scrollTop
     let overDown = false
     let overUp = false
-    verticalDirection.value = 'down'
     // dropdown container over viewport
-    if ((t + containerRect.height) > (scrollTop + viewHeight)) {
+    if ((top + containerRect.height) > (scrollTop + viewHeight)) {
       overDown = true
     }
     if ((srcTop - gap.value - containerRect.height) < scrollTop) {
@@ -63,15 +61,15 @@ export function useDropdownContainer (trigger, align, gap) {
     }
 
     if (!overUp && overDown) {
-      t = srcTop - gap.value - containerRect.height
       verticalDirection.value = 'up'
+      return srcTop - gap.value - containerRect.height
     }
 
-    return t
+    verticalDirection.value = 'down'
+    return top
   }
   /**
    * Calculation left axis
-   * @param {object} props
    * @param {number} x
    * @param {DOMRect} rootRect - root element bounding client rect
    * @param {DOMRect} containerRect - container element bounding client rect
@@ -82,11 +80,11 @@ export function useDropdownContainer (trigger, align, gap) {
     const scrollLeft = window.scrollX
     const viewWidth = document.documentElement.clientWidth
     const width = isTriggerByContextmenu ? 0 : rootRect.width
-    // align left's left
+    // left axis of align left
     const left = isTriggerByContextmenu ? x : rootRect.left + scrollLeft
-    // align center's left
+    // left axis of align center
     const center = (left + (width / 2)) - (containerRect.width / 2)
-    // align right's left
+    // left axis of align right
     const right = (left + width) - containerRect.width
 
     switch (align.value) {

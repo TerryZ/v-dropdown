@@ -25,11 +25,12 @@ export default defineComponent({
     border: { type: Boolean, default: true },
     animated: { type: Boolean, default: true },
     animationName: { type: String, default: '' },
-    rounded: { type: String, default: ROUNDED_SMALL }
+    rounded: { type: String, default: ROUNDED_SMALL },
+    zIndex: { type: Number, default: 3000 }
   },
   setup (props, { slots, attrs }) {
     const container = ref(null)
-    const styles = ref({})
+    const styles = ref({ 'z-index': props.zIndex })
     const classes = computed(() => [
       'dd-container',
       props.border || 'dd-no-border',
