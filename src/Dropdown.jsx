@@ -28,6 +28,7 @@ import {
 export default defineComponent({
   name: 'VDropdown',
   props: {
+    disabled: { type: Boolean, default: false },
     /** Container show up alignment direction */
     align: { type: String, default: 'left' },
     /**
@@ -36,16 +37,6 @@ export default defineComponent({
     toggle: { type: Boolean, default: true },
     /** Manual control the display and hiding of dropdown */
     manual: { type: Boolean, default: false },
-    disabled: { type: Boolean, default: false },
-    /**
-     * Open / close dropdown animation
-     *
-     * {boolean}
-     * - true: use default animation
-     * - false: don't display animation
-     * {string} customized animation class-name
-     */
-    animated: { type: [String, Boolean], default: true },
     /**
      * Trigger container display type
      * - false: inline-block

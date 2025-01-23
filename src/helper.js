@@ -29,9 +29,12 @@ export function useTriggerState (trigger) {
   }
 }
 
-export function useDropdownContainer (trigger, align, gap) {
+export function useDropdownContainer (options) {
+  const { trigger, align, gap, animated, animationName } = options
   const verticalDirection = ref('down')
-  const animationName = computed(() => {
+  const transitionName = computed(() => {
+    if (!animated) return ''
+    if (animationName) return animationName
     return `animate-${verticalDirection.value}`
   })
 
@@ -43,7 +46,7 @@ export function useDropdownContainer (trigger, align, gap) {
    * @return {number}
    */
   function getTop (y, rootRect, containerRect) {
-    const { isTriggerByContextmenu } = useTriggerState(trigger)
+    const { isTriggerByContextmenu } = useTriggerState(trigger.value)
     const scrollTop = window.scrollY
     const viewHeight = document.documentElement.clientHeight
     const srcTop = isTriggerByContextmenu ? y : rootRect.top + scrollTop
@@ -76,7 +79,7 @@ export function useDropdownContainer (trigger, align, gap) {
    * @returns {number}
    */
   function getLeft (x, rootRect, containerRect) {
-    const { isTriggerByContextmenu } = useTriggerState(trigger)
+    const { isTriggerByContextmenu } = useTriggerState(trigger.value)
     const scrollLeft = window.scrollX
     const viewWidth = document.documentElement.clientWidth
     const width = isTriggerByContextmenu ? 0 : rootRect.width
@@ -104,7 +107,7 @@ export function useDropdownContainer (trigger, align, gap) {
   }
 
   return {
-    animationName,
+    transitionName,
     getTop,
     getLeft
   }

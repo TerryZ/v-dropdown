@@ -173,7 +173,6 @@ function changeSize () {
     <Dropdown
       trigger="contextmenu"
       :toggle="false"
-      :full-width="true"
     >
       <template #trigger>
         <div

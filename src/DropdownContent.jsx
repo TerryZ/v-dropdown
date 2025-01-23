@@ -52,10 +52,16 @@ export default defineComponent({
     const { isTriggerByHover } = useTriggerState(trigger.value)
 
     const {
-      animationName,
+      transitionName,
       getLeft,
       getTop
-    } = useDropdownContainer(trigger.value, align, gap)
+    } = useDropdownContainer({
+      trigger,
+      align,
+      gap,
+      animated: props.animated,
+      animationName: props.animationName
+    })
     const {
       containerSizeObserve,
       containerSizeUnobserve
@@ -83,7 +89,7 @@ export default defineComponent({
     return () => (
       <Teleport to='body'>
         <Transition
-          name={animationName.value}
+          name={transitionName.value}
           onEnter={() => dropdownEmit('open')}
           onAfterEnter={() => dropdownEmit('opened')}
           onLeave={() => dropdownEmit('close')}
