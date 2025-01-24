@@ -13,6 +13,7 @@ const containerRounded = ref('medium')
 const triggerRounded = ref('medium')
 const gap = ref(5)
 const align = ref('left')
+const render = ref(true)
 
 const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -168,11 +169,13 @@ function changeSize () {
     </Dropdown>
 
     <h5 class="mt-5 mb-3">
-      Trigger by context menu
+      Trigger by context menu(Block display)
     </h5>
     <Dropdown
       trigger="contextmenu"
       :toggle="false"
+      block
+      class=""
     >
       <template #trigger>
         <div
@@ -366,7 +369,7 @@ function changeSize () {
       <div>
         <Dropdown :align="align">
           <template #trigger>
-            <DropdownTrigger class="border border-4 rounded-3" />
+            <DropdownTrigger class="border rounded-4 bg-primary-subtle p-2" />
           </template>
           <DropdownContent>
             <div class="p-5">
@@ -430,12 +433,15 @@ function changeSize () {
     <h5 class="mt-5 mb-3">
       Container size change
     </h5>
-    <div>
-      <Dropdown>
+    <div class="d-flex gap-3">
+      <Dropdown
+        class="trigger-size-change"
+        v-if="render"
+      >
         <template #trigger>
           <DropdownTrigger />
         </template>
-        <DropdownContent>
+        <DropdownContent class="container-size-change">
           <div
             class="p-5"
             :style="{ width: width + 'px', height: height + 'px' }"
@@ -453,6 +459,21 @@ function changeSize () {
           </div>
         </DropdownContent>
       </Dropdown>
+
+      <button
+        type="button"
+        class="btn btn-light"
+        @click="render = true"
+      >
+        Render
+      </button>
+      <button
+        type="button"
+        class="btn btn-dark"
+        @click="render = false"
+      >
+        Remove
+      </button>
     </div>
   </div>
 </template>

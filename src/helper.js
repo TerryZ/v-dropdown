@@ -137,8 +137,7 @@ export function getContainerClasses (props) {
 export function getTriggerClasses (props) {
   return [
     'dd-trigger',
-    props.fullWidth && 'dd-trigger--full-width',
-    props.customTriggerClass && props.customTriggerClass
+    props.block && 'dd-trigger--block'
   ]
 }
 export function getRoundedClass (value) {

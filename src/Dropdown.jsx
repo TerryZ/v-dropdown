@@ -8,7 +8,6 @@ import {
   toRefs,
   onMounted,
   onBeforeUnmount,
-  onUnmounted,
   defineComponent
 } from 'vue'
 import {
@@ -39,10 +38,10 @@ export default defineComponent({
     manual: { type: Boolean, default: false },
     /**
      * Trigger container display type
-     * - false: inline-block
+     * - false: inline
      * - true: block
      */
-    fullWidth: { type: Boolean, default: false },
+    block: { type: Boolean, default: false },
     /**
      * Dropdown trigger method
      * - `click` default
@@ -55,12 +54,10 @@ export default defineComponent({
   },
   emits: ['visible-change', 'open', 'close', 'opened', 'closed'],
   setup (props, { slots, emit, expose }) {
+    const root = ref(null)
     const visible = ref(false)
     const position = ref({ x: null, y: null })
     const adjustContainerPosition = ref()
-
-    const root = ref(null)
-    const container = ref(null)
 
     const hoverDebounce = useDebounce(HOVER_RESPONSE_TIME)
 
@@ -153,16 +150,9 @@ export default defineComponent({
     onBeforeUnmount(() => {
       document.body.removeEventListener('mousedown', whole)
     })
-    onUnmounted(() => {
-      root?.value?.remove?.()
-    })
 
-    provide(injectDropdown, {
-      visible,
-      disabled: toRef(props, 'disabled')
-    })
+    provide(injectDropdown, slotData)
     provide(injectInternal, {
-      slotData,
       position,
       display,
       close,
@@ -176,7 +166,6 @@ export default defineComponent({
       display,
       close,
       toggleVisible,
-      container,
       visible
     })
 

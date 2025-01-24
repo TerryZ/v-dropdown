@@ -39,7 +39,6 @@ export default defineComponent({
 
     const { visible } = useDropdown()
     const {
-      slotData,
       position,
       display,
       close,
@@ -78,13 +77,8 @@ export default defineComponent({
     }
 
     setupAdjust(adjust)
-    onMounted(() => {
-      containerSizeObserve()
-    })
-    onBeforeUnmount(() => {
-      containerSizeUnobserve()
-      // container?.value?.remove?.()
-    })
+    onMounted(containerSizeObserve)
+    onBeforeUnmount(containerSizeUnobserve)
 
     return () => (
       <Teleport to='body'>
@@ -105,7 +99,7 @@ export default defineComponent({
               onMouseenter={() => isTriggerByHover && display()}
               onMouseleave={() => isTriggerByHover && close()}
               {...attrs}
-            >{slots?.default?.(slotData)}</div>
+            >{slots?.default?.()}</div>
           )}
         </Transition>
       </Teleport>
