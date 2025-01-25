@@ -30,14 +30,12 @@ export default defineComponent({
     disabled: { type: Boolean, default: false },
     /** Container show up alignment direction */
     align: { type: String, default: 'left' },
-    /**
-     * Toggle display / close dropdown container
-     */
+    /** Toggle display / close dropdown container */
     toggle: { type: Boolean, default: true },
     /** Manual control the display and hiding of dropdown */
     manual: { type: Boolean, default: false },
     /**
-     * Trigger container display type
+     * Trigger container display mode
      * - false: inline
      * - true: block
      */

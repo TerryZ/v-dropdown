@@ -90,19 +90,17 @@ export function useDropdownContainer (options) {
     // left axis of align right
     const right = (left + width) - containerRect.width
 
+    const isLeftOutOfViewOnRight = (left + containerRect.width) > (scrollLeft + viewWidth)
+    const isCenterOutOfViewOnRight = (center + containerRect.width) > (scrollLeft + viewWidth)
+    const isRightOutOfViewOnLeft = right < scrollLeft
+
     switch (align.value) {
-      case 'left':
-        return (left + containerRect.width) > (scrollLeft + viewWidth) ? right : left
+      case 'left': return isLeftOutOfViewOnRight ? right : left
       case 'center':
-        if ((center + containerRect.width) > (scrollLeft + viewWidth)) {
-          return right
-        } else if (right < scrollLeft) {
-          return left
-        } else {
-          return center
-        }
-      case 'right':
-        return (right < scrollLeft) ? left : right
+        return isCenterOutOfViewOnRight
+          ? right
+          : isRightOutOfViewOnLeft ? left : center
+      case 'right': return isRightOutOfViewOnLeft ? left : right
     }
   }
 

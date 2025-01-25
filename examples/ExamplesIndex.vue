@@ -47,10 +47,22 @@ function changeSize () {
     height.value = 200
   }
 }
+const onOpen = () => {
+  console.log('open')
+}
+const onClose = () => {
+  console.log('close')
+}
+const onOpened = () => {
+  console.log('opened')
+}
+const onClosed = () => {
+  console.log('closed')
+}
 </script>
 
 <template>
-  <div class="p-5">
+  <div class="p-2">
     <section>
       <h1>v-dropdown examples</h1>
     </section>
@@ -150,30 +162,59 @@ function changeSize () {
           </svg>
         </DropdownTrigger>
       </template>
-      <DropdownContent>
-        <div class="p-3">
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-        </div>
-      </DropdownContent>
+      <template #default="{ close }">
+        <DropdownContent>
+          <div class="p-3">
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="close"
+              >
+                Close dropdown
+              </button>
+            </div>
+          </div>
+        </DropdownContent>
+      </template>
     </Dropdown>
 
     <h5 class="mt-5 mb-3">
       Trigger by context menu(Block display)
     </h5>
+    <div class="d-flex align-items-center mb-3">
+      Align direction:
+      <select
+        class="form-select w-auto ms-3"
+        v-model="align"
+      >
+        <option value="left">
+          Left
+        </option>
+        <option value="center">
+          Center
+        </option>
+        <option value="right">
+          Right
+        </option>
+      </select>
+    </div>
     <Dropdown
       trigger="contextmenu"
       :toggle="false"
+      :align="align"
       block
       class=""
     >
@@ -346,41 +387,20 @@ function changeSize () {
     </div>
 
     <h5 class="mt-5 mb-3">
-      Direction
+      Trigger custom class
     </h5>
-    <div class="d-flex gap-3">
-      <div class="d-flex align-items-center">
-        Align direction:
-        <select
-          class="form-select w-auto ms-3"
-          v-model="align"
-        >
-          <option value="left">
-            Left
-          </option>
-          <option value="center">
-            Center
-          </option>
-          <option value="right">
-            Right
-          </option>
-        </select>
-      </div>
-      <div>
-        <Dropdown :align="align">
-          <template #trigger>
-            <DropdownTrigger class="border rounded-4 bg-primary-subtle p-2" />
-          </template>
-          <DropdownContent>
-            <div class="p-5">
-              <div>0123456789</div>
-              <div>0123456789</div>
-              <div>0123456789</div>
-            </div>
-          </DropdownContent>
-        </Dropdown>
-      </div>
-    </div>
+    <Dropdown>
+      <template #trigger>
+        <DropdownTrigger class="border rounded-4 bg-primary-subtle p-2" />
+      </template>
+      <DropdownContent>
+        <div class="p-5">
+          <div>0123456789</div>
+          <div>0123456789</div>
+          <div>0123456789</div>
+        </div>
+      </DropdownContent>
+    </Dropdown>
 
     <h5 class="mt-5 mb-3">
       Cover mode ?
@@ -413,10 +433,15 @@ function changeSize () {
     </div>
 
     <h5 class="mt-5 mb-3">
-      Specify width
+      Specify width with events
     </h5>
     <div>
-      <Dropdown>
+      <Dropdown
+        @open="onOpen"
+        @close="onClose"
+        @opened="onOpened"
+        @closed="onClosed"
+      >
         <template #trigger>
           <DropdownTrigger />
         </template>
@@ -441,7 +466,7 @@ function changeSize () {
         <template #trigger>
           <DropdownTrigger />
         </template>
-        <DropdownContent class="container-size-change">
+        <DropdownContent class="container-size-change bg-primary-subtle">
           <div
             class="p-5"
             :style="{ width: width + 'px', height: height + 'px' }"
