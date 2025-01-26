@@ -34,3 +34,5 @@ declare interface DropdownContent {
 }
 
 declare const DropdownContent: DropdownContent
+
+export { DropdownContent }
