@@ -132,8 +132,8 @@ export default defineComponent({
     }
 
     const slotData = {
-      visible,
       disabled: toRef(props, 'disabled', false),
+      visible,
       close
     }
 

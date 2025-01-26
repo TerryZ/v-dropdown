@@ -11,8 +11,14 @@ module.exports = {
     '@vue/eslint-config-standard'
   ],
   parserOptions: {
-    ecmaVersion: 'latest'
+    ecmaVersion: 'latest',
+    ecmaFeatures: {
+      jsx: true
+    }
   },
+  ignorePatterns: [
+    'types/'
+  ],
   settings: {
     ...createAliasSetting({
       '@': `${path.resolve(__dirname, './src')}`

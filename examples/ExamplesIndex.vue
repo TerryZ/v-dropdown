@@ -20,7 +20,7 @@ const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 function visibleChange (val) {
   visible.value = val
 }
-function hoverVisibleChange (val) {
+function handleVisibleChange (val) {
   console.log(val)
 }
 function inputChange (e) {
@@ -143,7 +143,6 @@ const onClosed = () => {
     </h5>
     <Dropdown
       trigger="hover"
-      @visible-change="hoverVisibleChange"
     >
       <template #trigger>
         <DropdownTrigger rounded="circle">
@@ -441,6 +440,7 @@ const onClosed = () => {
         @close="onClose"
         @opened="onOpened"
         @closed="onClosed"
+        @visible-change="handleVisibleChange"
       >
         <template #trigger>
           <DropdownTrigger />
