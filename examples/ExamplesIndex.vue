@@ -2,6 +2,8 @@
 import { ref } from 'vue'
 import { Dropdown, DropdownContent, DropdownTrigger } from '@/'
 
+import CustomContent from './CustomContent.vue'
+
 const visible = ref(false)
 const disabled = ref(false)
 
@@ -446,11 +448,7 @@ const onClosed = () => {
           <DropdownTrigger />
         </template>
         <DropdownContent style="width: 350px;">
-          <div class="p-5">
-            <div>0123456789</div>
-            <div>0123456789</div>
-            <div>0123456789</div>
-          </div>
+          <CustomContent />
         </DropdownContent>
       </Dropdown>
     </div>
