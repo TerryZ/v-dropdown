@@ -68,17 +68,6 @@ declare interface TriggerProps extends ComponentProps {
   rounded?: 'small' | 'medium' | 'large' | 'pill' | 'circle'
 }
 
-// declare interface Methods extends MethodOptions {
-//   /** Display dropdown container */
-//   display: () => void
-//   /** Close dropdown container */
-//   close: () => void
-//   /** Toggle dropdown container display / close */
-//   toggleVisible: () => void
-//   /** Adjust dropdown container position */
-//   adjust: () => void
-// }
-
 /** Dropdown container visible change event */
 type EmitVisibleChange = (event: 'visible-change', value: boolean) => void
 type EmitOpen = (event: 'open') => void
@@ -101,6 +90,7 @@ declare interface DropdownTrigger {
     $props: TriggerProps
     $slots: {
       default?: () => VNode[]
+      append?: () => VNode[]
     }
   }
 }

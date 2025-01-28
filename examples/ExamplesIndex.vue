@@ -280,7 +280,7 @@ const onClosed = () => {
     </div>
 
     <h5 class="mt-5 mb-3">
-      No border and gap
+      Borderless and gap
     </h5>
     <div class="d-flex gap-3">
       <div>

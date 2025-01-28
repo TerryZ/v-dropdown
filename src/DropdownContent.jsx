@@ -43,7 +43,7 @@ export default defineComponent({
       display,
       close,
       getRootRect,
-      setupAdjust,
+      registerAdjustContent,
       dropdownProps,
       dropdownEmit
     } = inject(injectInternal)
@@ -76,7 +76,7 @@ export default defineComponent({
       styles.value.left = `${left}px`
     }
 
-    setupAdjust(adjust)
+    registerAdjustContent(adjust)
     onMounted(containerSizeObserve)
     onBeforeUnmount(containerSizeUnobserve)
 

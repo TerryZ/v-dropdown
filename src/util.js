@@ -33,6 +33,7 @@ function getElementSizes (el) {
       left: 0
     }
   }
+  // 通过 getComputedStyle(el).width 获得的值更精准，精确到小数点后三位
   const rect = el.getBoundingClientRect()
   return {
     width: el.offsetWidth,

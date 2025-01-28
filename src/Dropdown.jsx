@@ -55,7 +55,7 @@ export default defineComponent({
     const root = ref(null)
     const visible = ref(false)
     const position = ref({ x: null, y: null })
-    const adjustContainerPosition = ref()
+    const adjustContentPosition = ref()
 
     const hoverDebounce = useDebounce(HOVER_RESPONSE_TIME)
 
@@ -70,7 +70,7 @@ export default defineComponent({
     function display () {
       if (props.disabled) return
 
-      adjustContainerPosition.value?.()
+      adjustContentPosition.value?.()
 
       if (isTriggerByHover) {
         hoverDebounce(() => { visible.value = true })
@@ -126,9 +126,9 @@ export default defineComponent({
       position.value.y = point.y
       display()
     }
-    const setupAdjustContainerPosition = fn => {
+    const registerAdjustContent = fn => {
       if (typeof fn !== 'function') return
-      adjustContainerPosition.value = fn
+      adjustContentPosition.value = fn
     }
 
     const slotData = {
@@ -154,8 +154,8 @@ export default defineComponent({
       position,
       display,
       close,
+      registerAdjustContent,
       getRootRect: () => getElementRect(root.value),
-      setupAdjust: setupAdjustContainerPosition,
       dropdownProps: toRefs(props),
       dropdownEmit: emit
     })
