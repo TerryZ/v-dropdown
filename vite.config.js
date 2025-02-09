@@ -36,7 +36,8 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       include: ['src/**']
-    }
+    },
+    setupFiles: ['src/__tests__/setup.js']
   },
   plugins: [
     vue(),
