@@ -46,18 +46,18 @@ export default defineComponent({
       registerAdjustContent,
       dropdownProps,
       dropdownEmit
-    } = inject(injectInternal)
-    const { trigger, align, gap } = dropdownProps
-    const { isTriggerByHover } = useTriggerState(trigger.value)
+    } = inject(injectInternal, {})
+    // const { trigger, align, gap } = dropdownProps
+    const { isTriggerByHover } = useTriggerState(dropdownProps?.trigger?.value)
 
     const {
       transitionName,
       getLeft,
       getTop
     } = useDropdownContainer({
-      trigger,
-      align,
-      gap,
+      trigger: dropdownProps?.trigger,
+      align: dropdownProps?.align,
+      gap: dropdownProps?.gap,
       animated: props.animated,
       animationName: props.animationName
     })
@@ -76,7 +76,7 @@ export default defineComponent({
       styles.value.left = `${left}px`
     }
 
-    registerAdjustContent(adjust)
+    registerAdjustContent && registerAdjustContent(adjust)
     onMounted(containerSizeObserve)
     onBeforeUnmount(containerSizeUnobserve)
 
@@ -102,7 +102,7 @@ export default defineComponent({
               ref={container}
               style={styles.value}
               class={classes.value}
-              v-show={visible.value}
+              v-show={visible && visible.value}
               onMousedown={e => e.stopPropagation()}
               onMouseenter={() => isTriggerByHover && display()}
               onMouseleave={() => isTriggerByHover && close()}
