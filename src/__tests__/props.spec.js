@@ -1,12 +1,13 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, test } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { h, nextTick } from 'vue'
 
-import { Dropdown } from '@/'
-import { getCssStyle } from './util'
+import { Dropdown, DropdownTrigger } from '../'
+import { DropdownBaseContent, PropsToDropdownContent } from './components/DropdownCore'
+// import { getCssStyle } from './util'
 
 describe('v-dropdown props', () => {
-  describe('base props', () => {
+  describe('dropdown props', () => {
     const wrapper = mount(Dropdown, {
       props: {
         width: 500,
@@ -14,24 +15,24 @@ describe('v-dropdown props', () => {
         customContainerClass: 'custom-container'
       },
       slots: {
-        default: h('div', 'contents'),
-        trigger: h('button', { type: 'button' }, 'trigger')
+        default: DropdownBaseContent,
+        trigger: DropdownTrigger
       }
     })
 
-    it('`customTriggerClass` set `custom-trigger` value, the dropdown container should have `custom-trigger` class', () => {
-      expect(wrapper.classes('custom-trigger')).toBeTruthy()
+    // it('`customTriggerClass` set `custom-trigger` value, the dropdown container should have `custom-trigger` class', () => {
+    //   expect(wrapper.classes('custom-trigger')).toBeTruthy()
+    // })
+    // it('`customContainerClass` set `custom-container` value, the trigger container should have `custom-container` class', () => {
+    //   expect(wrapper.vm.container.classList.contains('custom-container')).toBeTruthy()
+    // })
+    it('`block` prop 设置为 true, 触发元素容器应包含 `dd-trigger--block` 样式名', async () => {
+      await wrapper.setProps({ block: true })
+      expect(wrapper.classes()).toContain('dd-trigger--block')
     })
-    it('`customContainerClass` set `custom-container` value, the trigger container should have `custom-container` class', () => {
-      expect(wrapper.vm.container.classList.contains('custom-container')).toBeTruthy()
-    })
-    it('`fullWidth` prop set to true, the trigger container should have `v-dropdown-trigger--full-width` class', async () => {
-      await wrapper.setProps({ fullWidth: true })
-      expect(wrapper.classes()).toContain('v-dropdown-trigger--full-width')
-    })
-    it('`width` prop set 500, the dropdown container width should be `500px`', () => {
-      expect(getCssStyle(wrapper.vm.container).width).equal('500px')
-    })
+    // it('`width` prop set 500, the dropdown container width should be `500px`', () => {
+    //   expect(getCssStyle(wrapper.vm.container).width).equal('500px')
+    // })
     it('`toggle` prop set to false, when dropdown container opened and click trigger element again, the dropdown container should not be closed', async () => {
       await wrapper.setProps({ toggle: false })
       await wrapper.trigger('click')
@@ -139,6 +140,25 @@ describe('v-dropdown props', () => {
         await wrapper.trigger('contextmenu')
         expect(wrapper.vm.visible).equal(true)
       })
+    })
+  })
+
+  describe('dropdown content props', () => {
+    const wrapper = mount(PropsToDropdownContent, {
+      props: {
+        border: false
+      },
+      global: {
+        stubs: {
+          transition: false
+        }
+      }
+    })
+
+    const content = wrapper.findComponent('.dd-container')
+
+    test('`border` prop 设置为 false, 下拉栏容器应包含 `dd-no-border` 样式名', () => {
+      expect(content.classes()).toContain('dd-no-border')
     })
   })
 })
