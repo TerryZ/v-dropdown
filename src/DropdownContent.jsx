@@ -84,9 +84,17 @@ export default defineComponent({
       <Teleport to='body'>
         <Transition
           name={transitionName.value}
-          onEnter={() => dropdownEmit('open')}
-          onAfterEnter={() => dropdownEmit('opened')}
-          onLeave={() => dropdownEmit('close')}
+          onEnter={(el, done) => {
+            dropdownEmit('open')
+            done()
+          }}
+          onAfterEnter={() => {
+            dropdownEmit('opened')
+          }}
+          onLeave={(el, done) => {
+            dropdownEmit('close')
+            done()
+          }}
           onAfterLeave={() => dropdownEmit('closed')}
         >
           {() => (
