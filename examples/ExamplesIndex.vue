@@ -16,6 +16,7 @@ const triggerRounded = ref('medium')
 const gap = ref(5)
 const align = ref('left')
 const render = ref(true)
+const zIndex = ref()
 
 const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -372,12 +373,26 @@ const onClosed = () => {
         for="customSwitch1"
       >Disabled to open dropdown</label>
     </div>
+    <div class="d-flex align-items-center mb-3">
+      z-index:
+      <select
+        class="form-select w-auto ms-3"
+        v-model="zIndex"
+      >
+        <option :value="undefined">
+          unset
+        </option>
+        <option :value="1000">
+          1000
+        </option>
+      </select>
+    </div>
     <div>
       <Dropdown :disabled="disabled">
         <template #trigger>
           <DropdownTrigger />
         </template>
-        <DropdownContent>
+        <DropdownContent :z-index="zIndex">
           <div class="p-5">
             <div>0123456789</div>
             <div>0123456789</div>

@@ -30,7 +30,7 @@ export default defineComponent({
   },
   setup (props, { slots, attrs }) {
     const container = ref(null)
-    const styles = ref({ 'z-index': props.zIndex })
+    const styles = ref({})
     const classes = computed(() => [
       'dd-container',
       props.border || 'dd-no-border',
@@ -47,7 +47,6 @@ export default defineComponent({
       dropdownProps,
       dropdownEmit
     } = inject(injectInternal, {})
-    // const { trigger, align, gap } = dropdownProps
     const { isTriggerByHover } = useTriggerState(dropdownProps?.trigger?.value)
 
     const {
@@ -72,6 +71,7 @@ export default defineComponent({
       const top = getTop(position.value.y, rect, containerRect)
       const left = getLeft(position.value.x, rect, containerRect)
 
+      styles.value['z-index'] = props.zIndex
       styles.value.top = `${top}px`
       styles.value.left = `${left}px`
     }

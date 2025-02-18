@@ -18,6 +18,10 @@ export function DropdownBaseContent (props) {
     </DropdownContent>
   )
 }
+export function DropdownBaseTrigger (props) {
+  console.log(props)
+  return <DropdownTrigger {...props} />
+}
 export function PropsToDropdownContent (props) {
   const slots = {
     default: () => <DropdownBaseContent {...props} />,
@@ -25,10 +29,13 @@ export function PropsToDropdownContent (props) {
   }
   return <Dropdown v-slots={slots} />
 }
+// 暂不可用，参数无法传递入 trigger，也无法触发 trigger 的重新渲染
 export function PropsToDropdownTrigger (props) {
-  const slots = {
-    default: () => <DropdownBaseContent />,
-    trigger: () => <DropdownTrigger {...props} />
-  }
-  return <Dropdown v-slots={slots} />
+  console.log(props)
+  return (
+    <Dropdown>{{
+      default: () => <DropdownBaseContent />,
+      trigger: () => <DropdownBaseTrigger {...props} />
+    }}</Dropdown>
+  )
 }

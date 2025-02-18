@@ -5,7 +5,7 @@ import {
   TRIGGER_CONTEXTMENU,
   TRIGGER_HOVER,
   ROUNDED_SMALL,
-  ROUNDED_PILL,
+  ROUNDED_MEDIUM,
   injectDropdown,
   roundedList,
   containerRoundedList
@@ -140,7 +140,7 @@ export function getTriggerClasses (props) {
 }
 export function getRoundedClass (value) {
   const level = !value || !roundedList.includes(value)
-    ? ROUNDED_PILL
+    ? ROUNDED_MEDIUM
     : roundedList.find(val => val === value)
   return `dd-rounded--${level}`
 }
