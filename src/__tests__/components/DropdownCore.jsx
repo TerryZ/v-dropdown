@@ -19,7 +19,6 @@ export function DropdownBaseContent (props) {
   )
 }
 export function DropdownBaseTrigger (props) {
-  console.log(props)
   return <DropdownTrigger {...props} />
 }
 export function PropsToDropdownContent (props) {
@@ -27,11 +26,10 @@ export function PropsToDropdownContent (props) {
     default: () => <DropdownBaseContent {...props} />,
     trigger: () => <DropdownTrigger />
   }
-  return <Dropdown v-slots={slots} />
+  return <Dropdown align="center" v-slots={slots} />
 }
 // 暂不可用，参数无法传递入 trigger，也无法触发 trigger 的重新渲染
 export function PropsToDropdownTrigger (props) {
-  console.log(props)
   return (
     <Dropdown>{{
       default: () => <DropdownBaseContent />,

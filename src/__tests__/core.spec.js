@@ -1,8 +1,10 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, test } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { h, nextTick } from 'vue'
+import { h } from 'vue'
 
 import { Dropdown } from '@/'
+// import { } from '../../src/helper'
+import { getElementRect } from '../../src/util'
 
 describe('v-dropdown core', () => {
   const wrapper = mount(Dropdown, {
@@ -32,4 +34,16 @@ describe('v-dropdown core', () => {
   //   // visible 状态为 false 时，下拉栏必须为关闭状态
   //   expect(wrapper.vm.container.getAttribute('style')).include('display: none')
   // })
+})
+
+describe('utils', () => {
+  test('getElementRect 提供的 dom 元素为空时，应均响应 0 值', () => {
+    const rect = getElementRect(null)
+    expect(rect).toEqual({
+      left: 0,
+      top: 0,
+      width: 0,
+      height: 0
+    })
+  })
 })
