@@ -25,14 +25,6 @@ function isHidden (el) {
 }
 
 function getElementSizes (el) {
-  if (!el) {
-    return {
-      width: 0,
-      height: 0,
-      top: 0,
-      left: 0
-    }
-  }
   // 通过 getComputedStyle(el).width 获得的值更精准，精确到小数点后三位
   const rect = el.getBoundingClientRect()
   return {
@@ -43,6 +35,14 @@ function getElementSizes (el) {
   }
 }
 export function getElementRect (el) {
+  if (!el) {
+    return {
+      width: 0,
+      height: 0,
+      top: 0,
+      left: 0
+    }
+  }
   if (isHidden(el)) {
     /**
      * change the way to hide dropdown container from

@@ -13,14 +13,6 @@ import {
 
 export { getElementRect } from './util'
 
-export function getAnimate (props, dropUp) {
-  if (typeof props.animated === 'string') {
-    return props.animated
-  }
-  if (!props.animated) return ''
-  return dropUp.value ? 'animate-up' : 'animate-down'
-}
-
 export function useTriggerState (trigger) {
   return {
     isTriggerByClick: trigger === TRIGGER_CLICK,
@@ -122,14 +114,6 @@ export function useMouseContextMenu (e) {
     x: e.pageX || (e.clientX + scrollPoint.x),
     y: e.pageY || (e.clientY + scrollPoint.y)
   }
-}
-
-export function getContainerClasses (props) {
-  return [
-    'dd-container',
-    props.border || 'dd-no-border',
-    getContainerRoundedClass(props.containerRounded)
-  ]
 }
 
 export function getTriggerClasses (props) {
