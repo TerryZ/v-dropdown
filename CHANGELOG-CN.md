@@ -2,6 +2,24 @@
 
 英文 changelog 内容请访问 [CHANGELOG](CHANGELOG.md)
 
+## [3.1.0](https://github.com/TerryZ/v-dropdown/compare/v3.0.0...v3.1.0) (2025-02-20)
+
+### 新特性
+
+- 新增 `DropdownContent` 组件，作为下拉内容的容器，提供更好的结构化和样式控制
+- 新增 `DropdownTrigger` 组件，作为可选的内置的触发器组件
+- `fullWidth` prop 更名为 `block`
+- `animated` prop 从 `Dropdown` 组件中移除，改为 `DropdownContent` 组件的 prop
+- 移除 `width` 与 `customContainerClass` prop，可在 `DropdownContent` 组件直接通过 style 或 class 进行样式定制
+- 移除 `customTriggerClass` prop，可在 `DropdownTrigger` 组件直接通过 style 或 class 进行样式定制
+- `Dropdown` 新增 `gap` prop，用于设置触发器与下拉内容之间的间距
+- `Dropdown` 新增 `open`、`opened`、`close` 与 `closed` 事件，用于响应下拉栏的打开与关闭状态
+- `Dropdown` 的 API 中移除 `adjust` 函数
+- 下拉内容尺寸发生变化时，自动调整下拉位置
+- 下拉栏与触发器提供 `rounded` prop 设置圆角弧度
+- 下拉栏提供 `z-index` prop 设置 z-index 层级
+- 提供 `useDropdown` 工具函数，用于获得 dropdown 组件的各种状态与方法
+
 ## [3.0.0](https://github.com/TerryZ/v-dropdown/compare/v3.0.0-beta.2...v3.0.0) (2023-09-16)
 
 ### 问题修复
