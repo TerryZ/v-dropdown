@@ -30,6 +30,7 @@ describe('dropdown content props', () => {
 
     expect(content.element.style.zIndex).toBe('1000')
   })
+  // TODO: ResizeObserver 功能目前无法测试，关注后续是否有解决方案
   // test('修改下拉栏宽度，应响应重定位', async () => {
   //   console.log(content.html())
   //   content.element.style.width = '500px'

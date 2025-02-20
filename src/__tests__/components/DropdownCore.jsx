@@ -1,5 +1,7 @@
 import { Dropdown, DropdownContent, DropdownTrigger } from '../../'
 
+import CustomContent from '../../../examples/CustomContent.vue'
+
 export function DropdownBaseContent (props) {
   return (
     <DropdownContent {...props}>
@@ -36,4 +38,24 @@ export function PropsToDropdownTrigger (props) {
       trigger: () => <DropdownBaseTrigger {...props} />
     }}</Dropdown>
   )
+}
+export function DropdownWithSlotData (props) {
+  const slots = {
+    default: () => (
+      <DropdownContent>
+        <CustomContent />
+      </DropdownContent>
+    ),
+    trigger: data => (
+      <DropdownTrigger>
+        <div class="trigger-data-visible">
+          visible: { String(data.visible.value) }
+        </div>
+        <div class="trigger-data-disabled">
+          disabled: { String(data.disabled.value) }
+        </div>
+      </DropdownTrigger>
+    )
+  }
+  return <Dropdown {...props} v-slots={slots} />
 }

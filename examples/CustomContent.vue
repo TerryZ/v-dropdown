@@ -3,14 +3,14 @@
     <div>0123456789</div>
     <div>0123456789</div>
     <div>0123456789</div>
-    <div>
+    <div class="content-data-visible">
       visible: {{ visible }}
     </div>
-    <div>
+    <div class="content-data-disabled">
       disabled: {{ disabled }}
     </div>
     <button
-      class="btn btn-secondary"
+      class="btn btn-secondary content-data-close"
       @click="close"
     >
       Close
