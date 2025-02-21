@@ -6,6 +6,7 @@ import CustomContent from './CustomContent.vue'
 
 const visible = ref(false)
 const disabled = ref(false)
+const disabledSlot = ref(false)
 
 const dropdownInput = ref(null)
 const toggleOff = ref(null)
@@ -482,6 +483,7 @@ const onClosed = () => {
     </h5>
     <div>
       <Dropdown
+        :disabled="disabledSlot"
         @open="onOpen"
         @close="onClose"
         @opened="onOpened"
@@ -492,7 +494,17 @@ const onClosed = () => {
           <DropdownTrigger />
         </template>
         <DropdownContent style="width: 350px;">
-          <CustomContent />
+          <div class="d-flex flex-column">
+            <CustomContent />
+            <div class="p-3">
+              <button
+                class="btn btn-dark"
+                @click="disabledSlot = !disabledSlot"
+              >
+                change disabled
+              </button>
+            </div>
+          </div>
         </DropdownContent>
       </Dropdown>
     </div>

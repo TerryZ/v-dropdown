@@ -2,9 +2,9 @@ import './styles/dropdown.sass'
 
 import {
   ref,
+  computed,
   watch,
   provide,
-  toRef,
   toRefs,
   onMounted,
   onBeforeUnmount,
@@ -132,8 +132,8 @@ export default defineComponent({
     }
 
     const slotData = {
-      disabled: toRef(props, 'disabled', false),
-      visible,
+      disabled: computed(() => props.disabled),
+      visible: computed(() => visible.value),
       close
     }
 
