@@ -37,20 +37,17 @@ pnpm add v-dropdown
   <Dropdown @visible-change="change">
     <!-- dropdown trigger -->
     <template #trigger>
-      <button
-        type="button"
-        class="btn"
-      >
-        click me
-      </button>
+      <DropdownTrigger />
     </template>
 
-    <div>some contents</div>
+    <DropdownContent>
+      <div>some contents</div>
+    </DropdownContent>
   </Dropdown>
 </template>
 
 <script setup>
-import Dropdown from 'v-dropdown'
+import { Dropdown, DropdownContent, DropdownTrigger } from 'v-dropdown'
 
 function change (val) {
   console.log(val)
