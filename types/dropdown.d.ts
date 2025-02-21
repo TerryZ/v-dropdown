@@ -3,7 +3,7 @@ import {
   ComponentCustomProps,
   VNodeProps,
   VNode,
-  Ref
+  ComputedRef
 } from 'vue'
 
 export declare interface ComponentProps extends
@@ -12,8 +12,8 @@ export declare interface ComponentProps extends
   VNodeProps {}
 
 export declare interface DropdownUtilities {
-  readonly visible: Ref<boolean>
-  readonly disabled: Ref<boolean>
+  visible: ComputedRef<boolean>
+  disabled: ComputedRef<boolean>
   /**
    * Close the dropdown menu when it is open
    */
