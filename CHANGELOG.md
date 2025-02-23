@@ -2,6 +2,12 @@
 
 Please refer to [CHANGELOG-CN](CHANGELOG-CN.md) for Chinese changelog
 
+## [3.1.1](https://github.com/TerryZ/v-dropdown/compare/v3.1.1...v3.1.2) (2025-02-24)
+
+### Features
+
+- Optimize `ResizeObserver` compatibility and SSR compilation problem handling
+
 ## [3.1.1](https://github.com/TerryZ/v-dropdown/compare/v3.1.0...v3.1.1) (2025-02-23)
 
 ### Features

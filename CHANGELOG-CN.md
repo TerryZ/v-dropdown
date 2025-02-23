@@ -2,6 +2,12 @@
 
 英文 changelog 内容请访问 [CHANGELOG](CHANGELOG.md)
 
+## [3.1.1](https://github.com/TerryZ/v-dropdown/compare/v3.1.1...v3.1.2) (2025-02-24)
+
+### 新特性
+
+- 优化 `ResizeObserver` 兼容性与 SSR 编译问题处理
+
 ## [3.1.1](https://github.com/TerryZ/v-dropdown/compare/v3.1.0...v3.1.1) (2025-02-23)
 
 ### 新特性
