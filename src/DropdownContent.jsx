@@ -31,6 +31,7 @@ export default defineComponent({
   setup (props, { slots, attrs }) {
     const container = ref(null)
     const styles = ref({})
+    const resizeUnobserve = ref()
     const classes = computed(() => [
       'dd-container',
       props.border || 'dd-no-border',
@@ -60,10 +61,6 @@ export default defineComponent({
       animated: props.animated,
       animationName: props.animationName
     })
-    const {
-      containerSizeObserve,
-      containerSizeUnobserve
-    } = useContainerSizeChangeHandle(container, adjust)
 
     function adjust () {
       const rect = getRootRect()
@@ -77,8 +74,18 @@ export default defineComponent({
     }
 
     registerAdjustContent && registerAdjustContent(adjust)
-    onMounted(containerSizeObserve)
-    onBeforeUnmount(containerSizeUnobserve)
+    onMounted(() => {
+      const {
+        containerSizeObserve,
+        containerSizeUnobserve
+      } = useContainerSizeChangeHandle(container, adjust)
+
+      resizeUnobserve.value = containerSizeUnobserve
+      containerSizeObserve()
+    })
+    onBeforeUnmount(() => {
+      resizeUnobserve.value && resizeUnobserve.value()
+    })
 
     return () => (
       <Teleport to='body'>
