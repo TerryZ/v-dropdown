@@ -2,7 +2,13 @@
 
 英文 changelog 内容请访问 [CHANGELOG](CHANGELOG.md)
 
-## [3.1.1](https://github.com/TerryZ/v-dropdown/compare/v3.1.1...v3.1.2) (2025-02-24)
+## [3.1.3](https://github.com/TerryZ/v-dropdown/compare/v3.1.2...v3.1.3) (2025-02-24)
+
+### 问题修复
+
+- 单元测试 `ResizeObserver is not defined` 修复
+
+## [3.1.2](https://github.com/TerryZ/v-dropdown/compare/v3.1.1...v3.1.2) (2025-02-24)
 
 ### 新特性
 

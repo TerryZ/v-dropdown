@@ -2,7 +2,13 @@
 
 Please refer to [CHANGELOG-CN](CHANGELOG-CN.md) for Chinese changelog
 
-## [3.1.1](https://github.com/TerryZ/v-dropdown/compare/v3.1.1...v3.1.2) (2025-02-24)
+## [3.1.3](https://github.com/TerryZ/v-dropdown/compare/v3.1.2...v3.1.3) (2025-02-24)
+
+### Bug Fixes
+
+- Unit test `ResizeObserver is not defined` fixed
+
+## [3.1.2](https://github.com/TerryZ/v-dropdown/compare/v3.1.1...v3.1.2) (2025-02-24)
 
 ### Features
 
