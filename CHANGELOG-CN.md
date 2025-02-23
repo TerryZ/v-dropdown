@@ -2,6 +2,13 @@
 
 英文 changelog 内容请访问 [CHANGELOG](CHANGELOG.md)
 
+## [3.1.1](https://github.com/TerryZ/v-dropdown/compare/v3.1.0...v3.1.1) (2025-02-23)
+
+### 新特性
+
+- 下拉栏容器添加最大宽度限制
+- `ResizeObserver` 兼容性处理
+
 ## [3.1.0](https://github.com/TerryZ/v-dropdown/compare/v3.0.0...v3.1.0) (2025-02-20)
 
 ### 新特性

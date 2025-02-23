@@ -2,6 +2,13 @@
 
 Please refer to [CHANGELOG-CN](CHANGELOG-CN.md) for Chinese changelog
 
+## [3.1.1](https://github.com/TerryZ/v-dropdown/compare/v3.1.0...v3.1.1) (2025-02-23)
+
+### Features
+
+- Added maximum width limit for drop-down bar container
+- `ResizeObserver` compatibility processing
+
 ## [3.1.0](https://github.com/TerryZ/v-dropdown/compare/v3.0.0...v3.1.0) (2025-02-20)
 
 ### Features
