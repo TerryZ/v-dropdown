@@ -153,7 +153,7 @@ export function useContainerSizeChangeHandle (container, job) {
     width = rect.width
     height = rect.height
   }
-  const ResizeObserverObject = ResizeObserver || ResizeObserverPolyfill
+  const ResizeObserverObject = window?.ResizeObserver || ResizeObserverPolyfill
   const resizeObserver = new ResizeObserverObject((entries) => {
     const rect = entries[0].contentRect
     // console.log(rect)

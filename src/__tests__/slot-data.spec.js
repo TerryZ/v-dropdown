@@ -18,12 +18,12 @@ describe('dropdown slot data', () => {
   const button = wrapper.find('.dd-default-trigger')
 
   test('默认状态下，`visible` 值应为 `false`', () => {
-    console.log(wrapper.html())
+    // console.log(wrapper.html())
     expect(button.find('.trigger-data-visible').text()).toBe('visible: false')
     expect(content.find('.content-data-visible').text()).toBe('visible: false')
   })
   test('默认状态下，`disabled` 值应为 `false`', () => {
-    console.log(content.html())
+    // console.log(content.html())
     expect(button.find('.trigger-data-disabled').text()).toBe('disabled: false')
     expect(content.find('.content-data-disabled').text()).toBe('disabled: false')
   })
