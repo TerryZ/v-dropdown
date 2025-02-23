@@ -1,4 +1,5 @@
 import { ref, computed, inject } from 'vue'
+import ResizeObserverPolyfill from 'resize-observer-polyfill'
 import { scrollInfo } from './util'
 import {
   TRIGGER_CLICK,
@@ -152,7 +153,10 @@ export function useContainerSizeChangeHandle (container, job) {
     width = rect.width
     height = rect.height
   }
-  const resizeObserver = new ResizeObserver((entries) => {
+  const ResizeObserverObject = window.ResizeObserver
+    ? window.ResizeObserver
+    : ResizeObserverPolyfill
+  const resizeObserver = new ResizeObserverObject((entries) => {
     const rect = entries[0].contentRect
     // console.log(rect)
     // container invisible
