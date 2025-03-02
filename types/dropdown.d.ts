@@ -14,10 +14,10 @@ export declare interface ComponentProps extends
 export declare interface DropdownUtilities {
   visible: ComputedRef<boolean>
   disabled: ComputedRef<boolean>
-  /**
-   * Close the dropdown menu when it is open
-   */
+  /** Close the dropdown menu when it is open */
   close: () => void
+  /** Adjust content position */
+  adjust: () => void
 }
 
 /**
