@@ -1,4 +1,4 @@
-import { ref, computed, inject } from 'vue'
+import { ref, computed, inject, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import ResizeObserverPolyfill from 'resize-observer-polyfill'
 import { scrollInfo } from './util'
 import {
@@ -146,7 +146,7 @@ export function useDebounce (time = 300) {
     timer = setTimeout(callback, time)
   }
 }
-export function useContainerSizeChangeHandle (container, job) {
+export function useContentSizeChangeHandle (content, job) {
   let width = 0
   let height = 0
   const setSize = rect => {
@@ -157,20 +157,56 @@ export function useContainerSizeChangeHandle (container, job) {
   const resizeObserver = new ResizeObserverObject((entries) => {
     const rect = entries[0].contentRect
     // console.log(rect)
-    // container invisible
+    // content invisible
     if (!rect.width && !rect.height) return
-    // storage container size when first time open
+    // storage content size when first time open
     if (width === 0 && height === 0) {
       return setSize(rect)
     }
-    // container size changed
+    // content size changed
     if (width !== rect.width || height !== rect.height) {
       setSize(rect)
       job?.()
     }
   })
+  onMounted(() => { resizeObserver.observe(content.value) })
+  onBeforeUnmount(() => { resizeObserver.unobserve(content.value) })
+}
+export function useTriggerPositionChange (trigger) {
+  let left = 0
+  let top = 0
+  let height = 0
+
+  const setPosition = rect => {
+    left = rect.left
+    top = rect.top
+    height = rect.height
+  }
+  const getTriggerRect = () => {
+    const rect = trigger.value.getBoundingClientRect()
+    const actualTop = rect.top + window.scrollY
+    const actualLeft = rect.left + window.scrollX
+    return {
+      left: actualLeft,
+      top: actualTop,
+      height: rect.height
+    }
+  }
+  const initTriggerPosition = () => {
+    if (left !== 0 || top !== 0 || height !== 0) return
+    setPosition(getTriggerRect())
+  }
+  function detectTriggerPositionChange (job) {
+    const rect = getTriggerRect()
+    if (left !== rect.left || top !== rect.top || height !== rect.height) {
+      setPosition(rect)
+      nextTick(() => job?.())
+    }
+  }
+
+  onMounted(() => initTriggerPosition())
+
   return {
-    containerSizeObserve: () => resizeObserver.observe(container.value),
-    containerSizeUnobserve: () => resizeObserver.unobserve(container.value)
+    detectTriggerPositionChange
   }
 }

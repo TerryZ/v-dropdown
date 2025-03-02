@@ -15,7 +15,8 @@ import {
   getElementRect,
   useMouseContextMenu,
   useTriggerState,
-  useDebounce
+  useDebounce,
+  useTriggerPositionChange
 } from './helper'
 import {
   TRIGGER_CLICK,
@@ -130,10 +131,12 @@ export default defineComponent({
       if (typeof fn !== 'function') return
       adjustContentPosition.value = fn
     }
+    const { detectTriggerPositionChange } = useTriggerPositionChange(root)
 
     const slotData = {
       disabled: computed(() => props.disabled),
       visible: computed(() => visible.value),
+      adjust: () => adjustContentPosition.value?.(),
       close
     }
 
@@ -155,6 +158,7 @@ export default defineComponent({
       display,
       close,
       registerAdjustContent,
+      detectTriggerPositionChange,
       getRootRect: () => getElementRect(root.value),
       dropdownProps: toRefs(props),
       dropdownEmit: emit

@@ -4,14 +4,12 @@ import {
   inject,
   Transition,
   Teleport,
-  onMounted,
-  onBeforeUnmount,
   defineComponent
 } from 'vue'
 import { injectInternal, ROUNDED_SMALL } from './constants'
 import { getElementRect } from './util'
 import {
-  useContainerSizeChangeHandle,
+  useContentSizeChangeHandle,
   useDropdownContainer,
   useDropdown,
   useTriggerState,
@@ -29,9 +27,8 @@ export default defineComponent({
     zIndex: { type: Number, default: 3000 }
   },
   setup (props, { slots, attrs }) {
-    const container = ref(null)
+    const content = ref(null)
     const styles = ref({})
-    const resizeUnobserve = ref()
     const classes = computed(() => [
       'dd-container',
       props.border || 'dd-no-border',
@@ -45,6 +42,7 @@ export default defineComponent({
       close,
       getRootRect,
       registerAdjustContent,
+      detectTriggerPositionChange,
       dropdownProps,
       dropdownEmit
     } = inject(injectInternal, {})
@@ -64,7 +62,7 @@ export default defineComponent({
 
     function adjust () {
       const rect = getRootRect()
-      const containerRect = getElementRect(container.value)
+      const containerRect = getElementRect(content.value)
       const top = getTop(position.value.y, rect, containerRect)
       const left = getLeft(position.value.x, rect, containerRect)
 
@@ -72,20 +70,14 @@ export default defineComponent({
       styles.value.top = `${top}px`
       styles.value.left = `${left}px`
     }
+    function handleClick (e) {
+      e.stopPropagation()
+      if (!visible.value) return
+      detectTriggerPositionChange(adjust)
+    }
 
     registerAdjustContent && registerAdjustContent(adjust)
-    onMounted(() => {
-      const {
-        containerSizeObserve,
-        containerSizeUnobserve
-      } = useContainerSizeChangeHandle(container, adjust)
-
-      resizeUnobserve.value = containerSizeUnobserve
-      containerSizeObserve()
-    })
-    onBeforeUnmount(() => {
-      resizeUnobserve.value && resizeUnobserve.value()
-    })
+    useContentSizeChangeHandle(content, adjust)
 
     return () => (
       <Teleport to='body'>
@@ -106,11 +98,12 @@ export default defineComponent({
         >
           {() => (
             <div
-              ref={container}
+              ref={content}
               style={styles.value}
               class={classes.value}
               v-show={visible && visible.value}
               onMousedown={e => e.stopPropagation()}
+              onClick={handleClick}
               onMouseenter={() => isTriggerByHover && display()}
               onMouseleave={() => isTriggerByHover && close()}
               {...attrs}

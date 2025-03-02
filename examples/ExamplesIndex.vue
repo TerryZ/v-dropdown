@@ -10,8 +10,8 @@ const disabledSlot = ref(false)
 
 const dropdownInput = ref(null)
 const toggleOff = ref(null)
-const width = ref(350)
-const height = ref(200)
+const width = ref(450)
+const height = ref(300)
 const containerRounded = ref('medium')
 const triggerRounded = ref('medium')
 const gap = ref(5)
@@ -20,6 +20,7 @@ const render = ref(true)
 const zIndex = ref()
 
 const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+const items = ref([])
 
 function visibleChange (val) {
   visible.value = val
@@ -43,12 +44,12 @@ function toggleOffClose () {
   toggleOff.value.close()
 }
 function changeSize () {
-  if (width.value === 350) {
-    width.value = 500
-    height.value = 300
+  if (width.value === 450) {
+    width.value = 600
+    height.value = 400
   } else {
-    width.value = 350
-    height.value = 200
+    width.value = 450
+    height.value = 300
   }
 }
 const onOpen = () => {
@@ -62,6 +63,12 @@ const onOpened = () => {
 }
 const onClosed = () => {
   console.log('closed')
+}
+function addItem () {
+  items.value.push('aaabbbccc123456789')
+}
+function removeItems () {
+  items.value = []
 }
 </script>
 
@@ -501,33 +508,72 @@ const onClosed = () => {
     <h5 class="mt-5 mb-3">
       Container size change
     </h5>
+    <div>
+      <div
+        v-for="item in items"
+        :key="item"
+        v-text="item"
+      />
+    </div>
     <div class="d-flex gap-3">
       <Dropdown
         class="trigger-size-change"
         v-if="render"
       >
         <template #trigger>
-          <DropdownTrigger />
+          <DropdownTrigger>
+            <div class="d-flex flex-column">
+              <div
+                v-for="item in items"
+                :key="item"
+                v-text="item"
+              />
+            </div>
+            <div v-if="!items.length">
+              Open
+            </div>
+          </DropdownTrigger>
         </template>
         <DropdownContent class="container-size-change bg-primary-subtle">
           <div
-            class="p-5"
+            class="p-3 d-flex flex-column gap-3"
             :style="{ width: width + 'px', height: height + 'px' }"
           >
-            <div>0123456789</div>
-            <div>0123456789</div>
-            <div>0123456789</div>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              @click="changeSize"
-            >
-              Change container size
-            </button>
+            <div class="d-flex gap-3">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="changeSize"
+              >
+                Change size
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="addItem"
+              >
+                add item
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="removeItems"
+              >
+                remove items
+              </button>
+            </div>
+
+            <div
+              v-for="item in items"
+              :key="item"
+              v-text="item"
+            />
           </div>
         </DropdownContent>
       </Dropdown>
+    </div>
 
+    <div class="d-flex gap-3 mt-3">
       <button
         type="button"
         class="btn btn-light"
