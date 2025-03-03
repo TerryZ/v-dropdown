@@ -14,7 +14,7 @@ describe('dropdown slot data', () => {
     }
   })
 
-  const content = wrapper.findComponent('.dd-container')
+  const content = wrapper.findComponent('.dd-content')
   const button = wrapper.find('.dd-default-trigger')
 
   test('默认状态下，`visible` 值应为 `false`', () => {

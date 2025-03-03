@@ -16,10 +16,10 @@ describe('dropdown content props', () => {
     }
   })
 
-  const content = wrapper.findComponent('.dd-container')
+  const content = wrapper.findComponent('.dd-content')
 
   test('默认的圆角尺寸应为 `small`', () => {
-    expect(content.classes()).toContain('dd-container-rounded--small')
+    expect(content.classes()).toContain('dd-content-rounded--small')
   })
   test('`border` prop 设置为 false, 下拉栏容器应包含 `dd-no-border` 样式名', () => {
     expect(content.classes()).toContain('dd-no-border')
@@ -41,10 +41,10 @@ describe('dropdown content props', () => {
   // })
   test('`rounded` prop 设置为 `large`, 容器的圆角尺寸应为 `large`', async () => {
     await wrapper.setProps({ rounded: 'large' })
-    expect(content.classes()).toContain('dd-container-rounded--large')
+    expect(content.classes()).toContain('dd-content-rounded--large')
   })
   test('`rounded` prop 设置为 `medium11`, 容器的圆角尺寸应恢复为 `small`', async () => {
     await wrapper.setProps({ rounded: 'medium11' })
-    expect(content.classes()).toContain('dd-container-rounded--small')
+    expect(content.classes()).toContain('dd-content-rounded--small')
   })
 })
