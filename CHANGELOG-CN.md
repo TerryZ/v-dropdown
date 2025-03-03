@@ -2,6 +2,13 @@
 
 英文 changelog 内容请访问 [CHANGELOG](CHANGELOG.md)
 
+## [3.2.0](https://github.com/TerryZ/v-dropdown/compare/v3.1.3...v3.2.0) (2025-03-03)
+
+### 新特性
+
+- 插槽数据与 `useDropdown` 工具函数增加 `adjust` 函数
+- 触发器位置与高度发生变化时，自动调整下拉栏位置
+
 ## [3.1.3](https://github.com/TerryZ/v-dropdown/compare/v3.1.2...v3.1.3) (2025-02-24)
 
 ### 问题修复
