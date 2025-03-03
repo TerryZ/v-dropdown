@@ -9,7 +9,7 @@ import {
   ROUNDED_MEDIUM,
   injectDropdown,
   roundedList,
-  containerRoundedList
+  contentRoundedList
 } from './constants'
 
 export { getElementRect } from './util'
@@ -22,7 +22,7 @@ export function useTriggerState (trigger) {
   }
 }
 
-export function useDropdownContainer (options) {
+export function useDropdownContent (options) {
   const { trigger, align, gap, animated, animationName } = options
   const verticalDirection = ref('down')
   const transitionName = computed(() => {
@@ -35,10 +35,10 @@ export function useDropdownContainer (options) {
    * Calculation display direction and top axis
    * @param {number} x
    * @param {DOMRect} rootRect - root element bounding client rect
-   * @param {DOMRect} containerRect - container element bounding client rect
+   * @param {DOMRect} contentRect - content element bounding client rect
    * @return {number}
    */
-  function getTop (y, rootRect, containerRect) {
+  function getTop (y, rootRect, contentRect) {
     const { isTriggerByContextmenu } = useTriggerState(trigger.value)
     const scrollTop = window.scrollY
     const viewHeight = document.documentElement.clientHeight
@@ -46,19 +46,13 @@ export function useDropdownContainer (options) {
     const top = isTriggerByContextmenu
       ? y
       : rootRect.top + rootRect.height + gap.value + scrollTop
-    let overDown = false
-    let overUp = false
-    // dropdown container over viewport
-    if ((top + containerRect.height) > (scrollTop + viewHeight)) {
-      overDown = true
-    }
-    if ((srcTop - gap.value - containerRect.height) < scrollTop) {
-      overUp = true
-    }
 
-    if (!overUp && overDown) {
+    const overBottom = (top + contentRect.height) > (scrollTop + viewHeight)
+    const overTop = (srcTop - gap.value - contentRect.height) < scrollTop
+
+    if (!overTop && overBottom) {
       verticalDirection.value = 'up'
-      return srcTop - gap.value - containerRect.height
+      return srcTop - gap.value - contentRect.height
     }
 
     verticalDirection.value = 'down'
@@ -68,10 +62,10 @@ export function useDropdownContainer (options) {
    * Calculation left axis
    * @param {number} x
    * @param {DOMRect} rootRect - root element bounding client rect
-   * @param {DOMRect} containerRect - container element bounding client rect
+   * @param {DOMRect} contentRect - content element bounding client rect
    * @returns {number}
    */
-  function getLeft (x, rootRect, containerRect) {
+  function getLeft (x, rootRect, contentRect) {
     const { isTriggerByContextmenu } = useTriggerState(trigger.value)
     const scrollLeft = window.scrollX
     const viewWidth = document.documentElement.clientWidth
@@ -79,20 +73,19 @@ export function useDropdownContainer (options) {
     // left axis of align left
     const left = isTriggerByContextmenu ? x : rootRect.left + scrollLeft
     // left axis of align center
-    const center = (left + (width / 2)) - (containerRect.width / 2)
+    const center = (left + (width / 2)) - (contentRect.width / 2)
     // left axis of align right
-    const right = (left + width) - containerRect.width
+    const right = (left + width) - contentRect.width
 
-    const isLeftOutOfViewOnRight = (left + containerRect.width) > (scrollLeft + viewWidth)
-    const isCenterOutOfViewOnRight = (center + containerRect.width) > (scrollLeft + viewWidth)
+    const isLeftOutOfViewOnRight = (left + contentRect.width) > (scrollLeft + viewWidth)
+    const isCenterOutOfViewOnRight = (center + contentRect.width) > (scrollLeft + viewWidth)
     const isRightOutOfViewOnLeft = right < scrollLeft
 
     switch (align.value) {
       case 'left': return isLeftOutOfViewOnRight ? right : left
-      case 'center':
-        return isCenterOutOfViewOnRight
-          ? right
-          : isRightOutOfViewOnLeft ? left : center
+      case 'center': return isCenterOutOfViewOnRight
+        ? right
+        : isRightOutOfViewOnLeft ? left : center
       case 'right': return isRightOutOfViewOnLeft ? left : right
     }
   }
@@ -129,11 +122,11 @@ export function getRoundedClass (value) {
     : roundedList.find(val => val === value)
   return `dd-rounded--${level}`
 }
-export function getContainerRoundedClass (value) {
-  const level = !value || !containerRoundedList.includes(value)
+export function getContentRoundedClass (value) {
+  const level = !value || !contentRoundedList.includes(value)
     ? ROUNDED_SMALL
-    : containerRoundedList.find(val => val === value)
-  return `dd-container-rounded--${level}`
+    : contentRoundedList.find(val => val === value)
+  return `dd-content-rounded--${level}`
 }
 export function useDropdown () {
   return inject(injectDropdown, {})
@@ -149,28 +142,30 @@ export function useDebounce (time = 300) {
 export function useContentSizeChangeHandle (content, job) {
   let width = 0
   let height = 0
+  let resizeObserver
   const setSize = rect => {
     width = rect.width
     height = rect.height
   }
-  const ResizeObserverObject = window?.ResizeObserver || ResizeObserverPolyfill
-  const resizeObserver = new ResizeObserverObject((entries) => {
+  const handleResize = entries => {
     const rect = entries[0].contentRect
     // console.log(rect)
     // content invisible
     if (!rect.width && !rect.height) return
     // storage content size when first time open
-    if (width === 0 && height === 0) {
-      return setSize(rect)
-    }
+    if (width === 0 && height === 0) return setSize(rect)
     // content size changed
     if (width !== rect.width || height !== rect.height) {
       setSize(rect)
       job?.()
     }
+  }
+  onMounted(() => {
+    const ResizeObserverObject = window?.ResizeObserver || ResizeObserverPolyfill
+    resizeObserver = new ResizeObserverObject(handleResize)
+    resizeObserver.observe(content.value)
   })
-  onMounted(() => { resizeObserver.observe(content.value) })
-  onBeforeUnmount(() => { resizeObserver.unobserve(content.value) })
+  onBeforeUnmount(() => resizeObserver.unobserve(content.value))
 }
 export function useTriggerPositionChange (trigger) {
   let left = 0

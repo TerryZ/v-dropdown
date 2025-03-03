@@ -505,10 +505,10 @@ function removeItems () {
       </Dropdown>
     </div>
 
-    <h5 class="mt-5 mb-3">
+    <h5 class="mt-5">
       Container size change
     </h5>
-    <div>
+    <div class="my-3">
       <div
         v-for="item in items"
         :key="item"

@@ -10,10 +10,10 @@ import { injectInternal, ROUNDED_SMALL } from './constants'
 import { getElementRect } from './util'
 import {
   useContentSizeChangeHandle,
-  useDropdownContainer,
+  useDropdownContent,
   useDropdown,
   useTriggerState,
-  getContainerRoundedClass
+  getContentRoundedClass
 } from './helper'
 
 export default defineComponent({
@@ -30,12 +30,11 @@ export default defineComponent({
     const content = ref(null)
     const styles = ref({})
     const classes = computed(() => [
-      'dd-container',
+      'dd-content',
       props.border || 'dd-no-border',
-      getContainerRoundedClass(props.rounded)
+      getContentRoundedClass(props.rounded)
     ])
 
-    const { visible } = useDropdown()
     const {
       position,
       display,
@@ -46,13 +45,14 @@ export default defineComponent({
       dropdownProps,
       dropdownEmit
     } = inject(injectInternal, {})
+    const { visible } = useDropdown()
     const { isTriggerByHover } = useTriggerState(dropdownProps?.trigger?.value)
 
     const {
       transitionName,
       getLeft,
       getTop
-    } = useDropdownContainer({
+    } = useDropdownContent({
       trigger: dropdownProps?.trigger,
       align: dropdownProps?.align,
       gap: dropdownProps?.gap,
@@ -62,9 +62,9 @@ export default defineComponent({
 
     function adjust () {
       const rect = getRootRect()
-      const containerRect = getElementRect(content.value)
-      const top = getTop(position.value.y, rect, containerRect)
-      const left = getLeft(position.value.x, rect, containerRect)
+      const contentRect = getElementRect(content.value)
+      const top = getTop(position.value.y, rect, contentRect)
+      const left = getLeft(position.value.x, rect, contentRect)
 
       styles.value['z-index'] = props.zIndex
       styles.value.top = `${top}px`

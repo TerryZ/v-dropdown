@@ -29,9 +29,9 @@ export default defineComponent({
   name: 'VDropdown',
   props: {
     disabled: { type: Boolean, default: false },
-    /** Container show up alignment direction */
+    /** Content show up alignment direction */
     align: { type: String, default: 'left' },
-    /** Toggle display / close dropdown container */
+    /** Toggle display / close dropdown content */
     toggle: { type: Boolean, default: true },
     /** Manual control the display and hiding of dropdown */
     manual: { type: Boolean, default: false },
@@ -48,7 +48,7 @@ export default defineComponent({
      * - `contextmenu`
      */
     trigger: { type: String, default: TRIGGER_CLICK },
-    /** The distance(px) between the trigger and the container */
+    /** The distance(px) between the trigger and the content */
     gap: { type: Number, default: 5 }
   },
   emits: ['visible-change', 'open', 'close', 'opened', 'closed'],
@@ -94,7 +94,7 @@ export default defineComponent({
     }
     const toggleVisible = () => visible.value ? close() : display()
     /**
-     * handle click event outside the dropdown container
+     * handle click event outside the dropdown content
      * @param {MouseEvent} e - event object
      */
     function whole (e) {
@@ -104,7 +104,7 @@ export default defineComponent({
       const inTrigger = e.composedPath().some(val => val === root.value)
       // do not toggle show/close when `toggle` prop is set to false
       if (inTrigger && !props.toggle && !isTriggerByContextmenu) return
-      // close the dropdown when clicking outside of the dropdown container
+      // close the dropdown when clicking outside of the dropdown content
       // reopen the dropdown when right-click in trigger(trigger = `contextmenu`)
       if (!inTrigger || (inTrigger && isTriggerByContextmenu)) {
         close(true)
@@ -127,6 +127,7 @@ export default defineComponent({
       position.value.y = point.y
       display()
     }
+    const adjust = () => adjustContentPosition.value?.()
     const registerAdjustContent = fn => {
       if (typeof fn !== 'function') return
       adjustContentPosition.value = fn
@@ -136,7 +137,7 @@ export default defineComponent({
     const slotData = {
       disabled: computed(() => props.disabled),
       visible: computed(() => visible.value),
-      adjust: () => adjustContentPosition.value?.(),
+      adjust,
       close
     }
 
@@ -168,6 +169,7 @@ export default defineComponent({
       display,
       close,
       toggleVisible,
+      adjust,
       visible
     })
 
