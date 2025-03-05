@@ -4,13 +4,22 @@ A dropdown container for Vue3
 
 If you are using vue `2.x` version, please use [v-dropdown 2.x](https://github.com/TerryZ/v-dropdown/tree/dev-vue-2) version instead
 
+## Features
+
+- Multiple drop-down bar triggering methods
+- Built-in trigger button component for quick use
+- When the position and size of the trigger and the drop-down bar content change, the drop-down bar content position is automatically adjusted to align - with the trigger
+- Provide `Dropdown` status and tool functions for each slot
+- Provide `useDropdown` tool function
+- Flexible style customization method
+
 ## Documentation and Examples
 
 Documentation and examples please visit below sites
 
 - [github-pages](https://terryz.github.io/docs-vue3/dropdown/)
 
-## Repositories using `v-dropdown`
+## My repositories using `v-dropdown`
 
 - [v-selectpage](https://github.com/TerryZ/v-selectpage)
 - [v-selectmenu](https://github.com/TerryZ/v-selectmenu)
@@ -34,8 +43,7 @@ pnpm add v-dropdown
 
 ```vue
 <template>
-  <Dropdown @visible-change="change">
-    <!-- dropdown trigger -->
+  <Dropdown>
     <template #trigger>
       <DropdownTrigger />
     </template>
@@ -48,10 +56,6 @@ pnpm add v-dropdown
 
 <script setup>
 import { Dropdown, DropdownContent, DropdownTrigger } from 'v-dropdown'
-
-function change (val) {
-  console.log(val)
-}
 </script>
 ```
 
