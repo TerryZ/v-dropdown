@@ -161,11 +161,16 @@ export function useContentSizeChangeHandle (content, job) {
     }
   }
   onMounted(() => {
+    if (!content.value) return
+
     const ResizeObserverObject = window?.ResizeObserver || ResizeObserverPolyfill
     resizeObserver = new ResizeObserverObject(handleResize)
     resizeObserver.observe(content.value)
   })
-  onBeforeUnmount(() => resizeObserver.unobserve(content.value))
+  onBeforeUnmount(() => {
+    if (!resizeObserver || !content.value) return
+    resizeObserver.unobserve(content.value)
+  })
 }
 export function useTriggerPositionChange (trigger) {
   let left = 0
@@ -179,11 +184,9 @@ export function useTriggerPositionChange (trigger) {
   }
   const getTriggerRect = () => {
     const rect = trigger.value.getBoundingClientRect()
-    const actualTop = rect.top + window.scrollY
-    const actualLeft = rect.left + window.scrollX
     return {
-      left: actualLeft,
-      top: actualTop,
+      top: rect.top + window.scrollY,
+      left: rect.left + window.scrollX,
       height: rect.height
     }
   }
