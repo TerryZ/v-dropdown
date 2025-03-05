@@ -2,6 +2,12 @@
 
 英文 changelog 内容请访问 [CHANGELOG](CHANGELOG.md)
 
+## [3.2.1](https://github.com/TerryZ/v-dropdown/compare/v3.2.0...v3.2.1) (2025-03-05)
+
+### 问题修复
+
+- 修复开发过程代码热更新后，resize observer 处理目标元素不存在问题
+
 ## [3.2.0](https://github.com/TerryZ/v-dropdown/compare/v3.1.3...v3.2.0) (2025-03-03)
 
 ### 新特性

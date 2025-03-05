@@ -2,6 +2,12 @@
 
 Please refer to [CHANGELOG-CN](CHANGELOG-CN.md) for Chinese changelog
 
+## [3.2.1](https://github.com/TerryZ/v-dropdown/compare/v3.2.0...v3.2.1) (2025-03-05)
+
+### Bug Fixes
+
+- Fixed the issue where the resize observer's target element does not exist after code hot updates during development
+
 ## [3.2.0](https://github.com/TerryZ/v-dropdown/compare/v3.1.3...v3.2.0) (2025-03-03)
 
 ### Features
