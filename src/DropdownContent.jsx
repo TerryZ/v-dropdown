@@ -4,7 +4,8 @@ import {
   inject,
   Transition,
   Teleport,
-  defineComponent
+  defineComponent,
+  onMounted
 } from 'vue'
 import { injectInternal, ROUNDED_SMALL } from './constants'
 import { getElementRect } from './util'
@@ -76,32 +77,42 @@ export default defineComponent({
       detectTriggerPositionChange(adjust)
     }
 
-    registerAdjustContent && registerAdjustContent(adjust)
+    registerAdjustContent?.(adjust)
     useContentSizeChangeHandle(content, adjust)
+
+    onMounted(() => {
+      // content.value.addEventListener('transitionstart', () => {
+      //   console.log('transition 开始')
+      // })
+      // content.value.addEventListener('transitionrun', () => {
+      //   console.log('transition 运行中')
+      // })
+      // content.value.addEventListener('transitionend', () => {
+      //   console.log('transition 结束')
+      // })
+    })
 
     return () => (
       <Teleport to='body'>
         <Transition
           name={transitionName.value}
-          onEnter={(el, done) => {
-            dropdownEmit('open')
-            done()
-          }}
-          onAfterEnter={() => {
-            dropdownEmit('opened')
-          }}
-          onLeave={(el, done) => {
-            dropdownEmit('close')
-            done()
-          }}
-          onAfterLeave={() => dropdownEmit('closed')}
+          // onEnter={(el, done) => {
+          //   dropdownEmit('open')
+          //   done()
+          // }}
+          // onAfterEnter={() => dropdownEmit('opened')}
+          // onLeave={(el, done) => {
+          //   dropdownEmit('close')
+          //   done()
+          // }}
+          // onAfterLeave={() => dropdownEmit('closed')}
         >
           {() => (
             <div
               ref={content}
               style={styles.value}
               class={classes.value}
-              v-show={visible && visible.value}
+              v-show={visible?.value}
               onMousedown={e => e.stopPropagation()}
               onClick={handleClick}
               onMouseenter={() => isTriggerByHover && display()}
