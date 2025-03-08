@@ -81,47 +81,50 @@ export default defineComponent({
     useContentSizeChangeHandle(content, adjust)
 
     onMounted(() => {
-      // content.value.addEventListener('transitionstart', () => {
-      //   console.log('transition 开始')
-      // })
-      // content.value.addEventListener('transitionrun', () => {
-      //   console.log('transition 运行中')
-      // })
-      // content.value.addEventListener('transitionend', () => {
-      //   console.log('transition 结束')
-      // })
+      content.value.addEventListener('transitionstart', e => {
+        // console.log(e)
+        console.log('--------transitionstart')
+      })
+      content.value.addEventListener('transitionend', e => {
+        // console.log(e)
+        console.log('--------transitionend')
+      })
     })
 
-    return () => (
-      <Teleport to='body'>
-        <Transition
-          name={transitionName.value}
-          // onEnter={(el, done) => {
-          //   dropdownEmit('open')
-          //   done()
-          // }}
-          // onAfterEnter={() => dropdownEmit('opened')}
-          // onLeave={(el, done) => {
-          //   dropdownEmit('close')
-          //   done()
-          // }}
-          // onAfterLeave={() => dropdownEmit('closed')}
-        >
-          {() => (
-            <div
-              ref={content}
-              style={styles.value}
-              class={classes.value}
-              v-show={visible?.value}
-              onMousedown={e => e.stopPropagation()}
-              onClick={handleClick}
-              onMouseenter={() => isTriggerByHover && display()}
-              onMouseleave={() => isTriggerByHover && close()}
-              {...attrs}
-            >{slots?.default?.()}</div>
-          )}
-        </Transition>
-      </Teleport>
-    )
+    return () => {
+      const transitionSlots = {
+        default: () => (
+          <div
+            ref={content}
+            style={styles.value}
+            class={classes.value}
+            v-show={visible?.value}
+            onMousedown={e => e.stopPropagation()}
+            onClick={handleClick}
+            onMouseenter={() => isTriggerByHover && display()}
+            onMouseleave={() => isTriggerByHover && close()}
+            {...attrs}
+          >{slots?.default?.()}</div>
+        )
+      }
+      return (
+        <Teleport to='body'>
+          <Transition
+            name={transitionName.value}
+            // onEnter={(el, done) => {
+            //   dropdownEmit('open')
+            //   if (import.meta?.env?.VITEST) done()
+            // }}
+            // onAfterEnter={() => dropdownEmit('opened')}
+            // onLeave={(el, done) => {
+            //   dropdownEmit('close')
+            //   if (import.meta?.env?.VITEST) done()
+            // }}
+            // onAfterLeave={() => dropdownEmit('closed')}
+            v-slots={transitionSlots}
+          />
+        </Teleport>
+      )
+    }
   }
 })
