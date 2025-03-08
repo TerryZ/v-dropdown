@@ -11,10 +11,6 @@ declare interface ContentProps extends ComponentProps {
    */
   animated?: boolean
   /**
-   * @default ``
-   */
-  animationName?: string
-  /**
    * @default `small`
    */
   rounded?: 'small' | 'medium' | 'large'
