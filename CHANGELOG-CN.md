@@ -2,6 +2,16 @@
 
 英文 changelog 内容请访问 [CHANGELOG](CHANGELOG.md)
 
+## [3.3.0](https://github.com/TerryZ/v-dropdown/compare/v3.2.1...v3.3.0) (2025-03-08)
+
+### 新特性
+
+- `DropdownContent` 组件移除 `animationName` prop
+
+### 问题修复
+
+- 修复打开/关闭下拉栏过渡动画失效的问题
+
 ## [3.2.1](https://github.com/TerryZ/v-dropdown/compare/v3.2.0...v3.2.1) (2025-03-05)
 
 ### 问题修复
