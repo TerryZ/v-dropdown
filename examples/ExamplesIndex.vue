@@ -26,7 +26,7 @@ function visibleChange (val) {
   visible.value = val
 }
 function handleVisibleChange (val) {
-  console.log(val)
+  console.log('visible: ', val)
 }
 function inputChange (e) {
   if (e.target.value === '3') {
@@ -80,36 +80,7 @@ function removeItems () {
 
     <hr>
 
-    <h5 class="mt-5 mb-3">
-      Trigger
-    </h5>
-    <div>
-      <DropdownTrigger />
-    </div>
-
-    <h5 class="mt-5 mb-3">
-      Content
-    </h5>
-    <div>
-      <DropdownContent>
-        <div class="p-3">
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-          <div>0123456789012345678901234567890123456789</div>
-        </div>
-      </DropdownContent>
-    </div>
-
-    <h5 class="mt-5 mb-3">
+    <h5 class="mb-3">
       Trigger by click
     </h5>
     <div class="">
@@ -573,7 +544,7 @@ function removeItems () {
       </Dropdown>
     </div>
 
-    <div class="d-flex gap-3 mt-3">
+    <div class="d-flex gap-3 my-3">
       <button
         type="button"
         class="btn btn-light"
@@ -588,6 +559,39 @@ function removeItems () {
       >
         Remove
       </button>
+    </div>
+
+    <div class="border p-3 rounded-3">
+      <div>子组件独立使用时避免出现脚本错误的情况</div>
+
+      <h5 class="my-3">
+        Trigger
+      </h5>
+      <div>
+        <DropdownTrigger />
+      </div>
+
+      <h5 class="mt-5 mb-3">
+        Content
+      </h5>
+      <div>
+        <DropdownContent>
+          <div class="p-3">
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+            <div>0123456789012345678901234567890123456789</div>
+          </div>
+        </DropdownContent>
+      </div>
     </div>
   </div>
 </template>

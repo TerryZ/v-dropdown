@@ -4,8 +4,7 @@ import {
   inject,
   Transition,
   Teleport,
-  defineComponent,
-  onMounted
+  defineComponent
 } from 'vue'
 import { injectInternal, ROUNDED_SMALL } from './constants'
 import { getElementRect } from './util'
@@ -23,7 +22,6 @@ export default defineComponent({
   props: {
     border: { type: Boolean, default: true },
     animated: { type: Boolean, default: true },
-    animationName: { type: String, default: '' },
     rounded: { type: String, default: ROUNDED_SMALL },
     zIndex: { type: Number, default: 3000 }
   },
@@ -57,8 +55,7 @@ export default defineComponent({
       trigger: dropdownProps?.trigger,
       align: dropdownProps?.align,
       gap: dropdownProps?.gap,
-      animated: props.animated,
-      animationName: props.animationName
+      animated: props.animated
     })
 
     function adjust () {
@@ -80,17 +77,6 @@ export default defineComponent({
     registerAdjustContent?.(adjust)
     useContentSizeChangeHandle(content, adjust)
 
-    onMounted(() => {
-      content.value.addEventListener('transitionstart', e => {
-        // console.log(e)
-        console.log('--------transitionstart')
-      })
-      content.value.addEventListener('transitionend', e => {
-        // console.log(e)
-        console.log('--------transitionend')
-      })
-    })
-
     return () => {
       const transitionSlots = {
         default: () => (
@@ -111,16 +97,16 @@ export default defineComponent({
         <Teleport to='body'>
           <Transition
             name={transitionName.value}
-            // onEnter={(el, done) => {
-            //   dropdownEmit('open')
-            //   if (import.meta?.env?.VITEST) done()
-            // }}
-            // onAfterEnter={() => dropdownEmit('opened')}
-            // onLeave={(el, done) => {
-            //   dropdownEmit('close')
-            //   if (import.meta?.env?.VITEST) done()
-            // }}
-            // onAfterLeave={() => dropdownEmit('closed')}
+            onEnter={(el, done) => {
+              dropdownEmit('open')
+              setTimeout(done, 150)
+            }}
+            onAfterEnter={() => dropdownEmit('opened')}
+            onLeave={(el, done) => {
+              dropdownEmit('close')
+              setTimeout(done, 75)
+            }}
+            onAfterLeave={() => dropdownEmit('closed')}
             v-slots={transitionSlots}
           />
         </Teleport>

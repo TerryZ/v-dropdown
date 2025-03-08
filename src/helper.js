@@ -23,11 +23,10 @@ export function useTriggerState (trigger) {
 }
 
 export function useDropdownContent (options) {
-  const { trigger, align, gap, animated, animationName } = options
+  const { trigger, align, gap, animated } = options
   const verticalDirection = ref('down')
   const transitionName = computed(() => {
     if (!animated) return ''
-    if (animationName) return animationName
     return `animate-${verticalDirection.value}`
   })
 

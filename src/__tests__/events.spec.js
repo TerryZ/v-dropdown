@@ -29,6 +29,7 @@ describe('v-dropdown 事件', () => {
   })
 
   it('打开 dropdown, `visible-change` 事件应响应 true 值', async () => {
+    vi.useFakeTimers()
     await wrapper.trigger('click')
     expect(wrapper.emitted()['visible-change'][0]).toEqual([true])
   })
@@ -36,6 +37,7 @@ describe('v-dropdown 事件', () => {
     expect(fnOpen).toHaveBeenCalled()
   })
   it('响应 `opened` 事件', () => {
+    vi.runAllTimers()
     expect(fnOpened).toHaveBeenCalled()
   })
   it('关闭 dropdown, `visible-change` 事件应响应 false 值', async () => {
@@ -47,6 +49,8 @@ describe('v-dropdown 事件', () => {
     expect(fnClose).toHaveBeenCalled()
   })
   it('响应 `closed` 事件', () => {
+    vi.runAllTimers()
     expect(fnClosed).toHaveBeenCalled()
+    vi.useRealTimers()
   })
 })
