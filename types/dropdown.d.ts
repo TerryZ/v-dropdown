@@ -63,6 +63,11 @@ declare interface Props {
    * @default 5
    */
   gap?: number
+  /**
+   *
+   * @default `body`
+   */
+  appendTo?: string | HTMLElement
 }
 declare interface TriggerProps extends ComponentProps {
   rounded?: 'small' | 'medium' | 'large' | 'pill' | 'circle'

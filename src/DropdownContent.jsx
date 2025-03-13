@@ -6,7 +6,7 @@ import {
   Teleport,
   defineComponent
 } from 'vue'
-import { injectInternal, ROUNDED_SMALL } from './constants'
+import { injectInternal, ROUNDED_SMALL, APPEND_TO_BODY } from './constants'
 import { getElementRect } from './util'
 import {
   useContentSizeChangeHandle,
@@ -46,7 +46,6 @@ export default defineComponent({
     } = inject(injectInternal, {})
     const { visible } = useDropdown()
     const { isTriggerByHover } = useTriggerState(dropdownProps?.trigger?.value)
-
     const {
       transitionName,
       getLeft,
@@ -57,6 +56,8 @@ export default defineComponent({
       gap: dropdownProps?.gap,
       animated: props.animated
     })
+    const appendTo = computed(() => dropdownProps?.appendTo?.value || APPEND_TO_BODY)
+    const defer = computed(() => appendTo.value !== APPEND_TO_BODY)
 
     function adjust () {
       const rect = getRootRect()
@@ -94,7 +95,7 @@ export default defineComponent({
         )
       }
       return (
-        <Teleport to='body'>
+        <Teleport to={appendTo.value} defer={defer.value}>
           <Transition
             name={transitionName.value}
             onEnter={(el, done) => {

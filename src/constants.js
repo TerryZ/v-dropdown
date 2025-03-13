@@ -6,6 +6,8 @@ export const HOVER_RESPONSE_TIME = 150
 
 export const Z_INDEX = 3000
 
+export const APPEND_TO_BODY = 'body'
+
 export const ROUNDED_SMALL = 'small'
 export const ROUNDED_MEDIUM = 'medium'
 export const ROUNDED_LARGE = 'large'

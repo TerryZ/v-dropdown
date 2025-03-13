@@ -21,6 +21,7 @@ import {
 import {
   TRIGGER_CLICK,
   HOVER_RESPONSE_TIME,
+  APPEND_TO_BODY,
   injectDropdown,
   injectInternal
 } from './constants'
@@ -49,7 +50,9 @@ export default defineComponent({
      */
     trigger: { type: String, default: TRIGGER_CLICK },
     /** The distance(px) between the trigger and the content */
-    gap: { type: Number, default: 5 }
+    gap: { type: Number, default: 5 },
+    /** Dropdown content append target */
+    appendTo: { type: [String, Object], default: APPEND_TO_BODY }
   },
   emits: ['visible-change', 'open', 'close', 'opened', 'closed'],
   setup (props, { slots, emit, expose }) {

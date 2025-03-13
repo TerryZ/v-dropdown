@@ -486,9 +486,11 @@ function removeItems () {
         v-text="item"
       />
     </div>
+    <div id="custom-container" />
     <div class="d-flex gap-3">
       <Dropdown
         class="trigger-size-change"
+        append-to="#custom-container"
         v-if="render"
       >
         <template #trigger>
