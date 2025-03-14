@@ -2,6 +2,12 @@
 
 Please refer to [CHANGELOG-CN](CHANGELOG-CN.md) for Chinese changelog
 
+## [3.4.0](https://github.com/TerryZ/v-dropdown/compare/v3.3.0...v3.4.0) (2025-03-14)
+
+### Features
+
+- `Dropdown` component add `appendTo` prop, used to specify after which element the dropdown container is inserted
+
 ## [3.3.0](https://github.com/TerryZ/v-dropdown/compare/v3.2.1...v3.3.0) (2025-03-08)
 
 ### Features
