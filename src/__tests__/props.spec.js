@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { h, nextTick } from 'vue'
 
-import { Dropdown } from '../'
+import { Dropdown, DropdownContent } from '../'
 import {
   DropdownBaseContent
 } from './components/DropdownCore'
@@ -17,7 +17,7 @@ describe('v-dropdown props', () => {
         customContainerClass: 'custom-container'
       },
       slots: {
-        default: DropdownBaseContent,
+        default: () => DropdownBaseContent,
         trigger: h('button', { type: 'button' }, 'trigger')
       }
     })
@@ -77,7 +77,7 @@ describe('v-dropdown props', () => {
     describe('trigger by click', () => {
       const wrapper = mount(Dropdown, {
         slots: {
-          default: h('div', 'contents'),
+          default: () => h('div', 'contents'),
           trigger: h('button', { type: 'button' }, 'trigger')
         }
       })
@@ -105,7 +105,7 @@ describe('v-dropdown props', () => {
           trigger: 'hover'
         },
         slots: {
-          default: h('div', 'contents'),
+          default: () => h('div', 'contents'),
           trigger: h('button', { type: 'button' }, 'trigger')
         }
       })
@@ -130,7 +130,7 @@ describe('v-dropdown props', () => {
           trigger: 'contextmenu'
         },
         slots: {
-          default: h('div', 'contents'),
+          default: () => h('div', 'contents'),
           trigger: h('button', { type: 'button' }, 'trigger')
         }
       })
@@ -142,6 +142,27 @@ describe('v-dropdown props', () => {
         await wrapper.trigger('contextmenu')
         expect(wrapper.vm.visible).equal(true)
       })
+    })
+  })
+
+  describe('dropdown content append to target element', () => {
+    const el = document.createElement('div')
+    el.id = 'container'
+    document.body.appendChild(el)
+
+    const wrapper = mount(Dropdown, {
+      props: {
+        appendTo: el
+      },
+      slots: {
+        default: h(DropdownContent, () => h('div', 'contents')),
+        trigger: h('button', { type: 'button' }, 'trigger')
+      }
+    })
+
+    it('dropdown content 应添加到自定义元素中', async () => {
+      await wrapper.trigger('click')
+      expect(el.querySelectorAll('.dd-content')).toHaveLength(1)
     })
   })
 })
