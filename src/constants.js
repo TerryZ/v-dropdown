@@ -23,5 +23,11 @@ export const roundedList = [
 ]
 export const contentRoundedList = [ROUNDED_SMALL, ROUNDED_MEDIUM, ROUNDED_LARGE]
 
-export const injectDropdown = Symbol('dropdown')
-export const injectInternal = Symbol('internal')
+export const keyDropdown = Symbol('dropdown')
+export const keyInternal = Symbol('internal')
+export const keyContainer = Symbol('container')
+
+export const DIRECTION_LEFT = 'left'
+export const DIRECTION_RIGHT = 'right'
+export const DIRECTION_UP = 'up'
+export const DIRECTION_DOWN = 'down'

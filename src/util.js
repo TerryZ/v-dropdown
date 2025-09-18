@@ -1,25 +1,3 @@
-/**
- * Get scroll information
- * @returns {{ x: number, y: number}}
- */
-export function scrollInfo () {
-  const supportPageOffset = window.pageXOffset !== undefined
-  const isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat')
-
-  return {
-    x: supportPageOffset
-      ? window.pageXOffset
-      : isCSS1Compat
-        ? document.documentElement.scrollLeft
-        : document.body.scrollLeft,
-    y: supportPageOffset
-      ? window.pageYOffset
-      : isCSS1Compat
-        ? document.documentElement.scrollTop
-        : document.body.scrollTop
-  }
-}
-
 function isHidden (el) {
   return window.getComputedStyle(el).display === 'none'
 }
@@ -50,7 +28,7 @@ export function getElementRect (el) {
      * be used for get width and height
      */
     el.style.visibility = 'hidden'
-    el.style.display = 'inline-block'
+    el.style.display = 'inline-flex'
     const rect = getElementSizes(el)
     /**
      * restore dropdown style after getting position data

@@ -126,7 +126,9 @@ function removeItems () {
           </select>
         </div>
       </div>
-      <Dropdown class="abc">
+      <Dropdown
+        class="abc"
+      >
         <template #trigger>
           <DropdownTrigger :rounded="triggerRounded" />
         </template>
@@ -445,9 +447,12 @@ function removeItems () {
       </Dropdown>
     </div>
 
-    <h5 class="mt-5 mb-3">
+    <h5 class="mt-5 mb-1">
       Specify width with events
     </h5>
+    <div class="text-body-tertiary mb-3">
+      不指定 trigger 插槽，v-dropdown 应渲染默认的内置按钮
+    </div>
     <div>
       <Dropdown
         :disabled="disabledSlot"
@@ -457,9 +462,6 @@ function removeItems () {
         @closed="onClosed"
         @visible-change="handleVisibleChange"
       >
-        <template #trigger>
-          <DropdownTrigger />
-        </template>
         <DropdownContent style="width: 350px;">
           <div class="d-flex flex-column">
             <CustomContent />
