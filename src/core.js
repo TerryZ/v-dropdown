@@ -1,6 +1,12 @@
-import { ref, watch, provide, computed } from 'vue'
+import { ref, watch, provide, computed, nextTick } from 'vue'
 
-import { useDebounce, useDropdownContentDirection, useEventListener } from './use'
+import {
+  useDebounce,
+  useThrottle,
+  useDropdownContentDirection,
+  useEventListener,
+  useResizeObserver
+} from './use'
 import { getTriggerState } from './helper'
 import {
   HOVER_RESPONSE_TIME,
@@ -25,23 +31,38 @@ export function useDropdownCore (
   const defer = props.appendTo !== APPEND_TO_BODY
 
   const hoverDebounce = useDebounce(HOVER_RESPONSE_TIME)
+  const adjustDebounce = useDebounce()
+  const adjustThrottle = useThrottle()
   const {
     isTriggerByClick,
     isTriggerByHover,
     isTriggerByContextmenu
   } = getTriggerState(props.trigger)
   const { getDirection } = useDropdownContentDirection(triggerRef, contentRef, position, props)
+  const {
+    startObserving, stopObserving
+  } = useResizeObserver(triggerRef, contentRef, adjustContentPosition)
 
   watch(visible, val => {
     emit('visible-change', val)
 
     if (val) {
       document.addEventListener('mousedown', outsideClick)
+      window.addEventListener('resize', handleResizeAdjust)
+      window.addEventListener('scroll', handleAdjust)
     } else {
+      stopObserving()
       document.removeEventListener('mousedown', outsideClick)
+      window.removeEventListener('resize', handleResizeAdjust)
+      window.removeEventListener('scroll', handleAdjust)
     }
   })
 
+  function onOpened () {
+    emit('opened')
+    nextTick(startObserving)
+    // startObserving()
+  }
   function open () {
     if (props.disabled) return
 
@@ -92,6 +113,8 @@ export function useDropdownCore (
     contentStyles.value.top = `${result.top}px`
     contentStyles.value.left = `${result.left}px`
   }
+  const handleAdjust = () => adjustThrottle(adjustContentPosition)
+  const handleResizeAdjust = () => adjustDebounce(adjustContentPosition)
   const handleContentClick = e => {
     if (!visible.value) return
     e.stopPropagation()
@@ -134,7 +157,9 @@ export function useDropdownCore (
     disabled: computed(() => props.disabled),
     visible: computed(() => visible.value),
     adjust: adjustContentPosition,
-    close
+    open,
+    close,
+    toggleVisible
   }
 
   provide(keyDropdown, slotData)
@@ -147,7 +172,8 @@ export function useDropdownCore (
     appendTo,
     defer,
     transitionName,
-    dropdownEmit: emit
+    dropdownEmit: emit,
+    onOpened
   })
 
   expose({

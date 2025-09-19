@@ -14,9 +14,19 @@ export const useDropdown = () => inject(keyDropdown, {})
 export function useDebounce (time = 300) {
   let timer
 
-  return callback => {
+  return fn => {
     clearTimeout(timer)
-    timer = setTimeout(callback, time)
+    timer = setTimeout(fn, time)
+  }
+}
+export function useThrottle (delay = 300) {
+  let timer = null
+  return fn => {
+    if (timer) return
+    timer = setTimeout(() => {
+      fn?.()
+      timer = null
+    }, delay)
   }
 }
 
@@ -92,9 +102,9 @@ export function useDropdownContentDirection (triggerRef, contentRef, position, p
     }
   }
 
-  function getDirection () {
-    const triggerRect = getElementRect(triggerRef.value)
-    const contentRect = getElementRect(contentRef.value)
+  function getDirection (triggerElRect, contentElRect) {
+    const triggerRect = triggerElRect || getElementRect(triggerRef.value)
+    const contentRect = contentElRect || getElementRect(contentRef.value)
     return {
       top: getTop(position.value.y, triggerRect, contentRect),
       left: getLeft(position.value.x, triggerRect, contentRect),
@@ -234,42 +244,43 @@ export function useDropdownPlacement (content, visible) {
   }
 }
 
-export function useResizeObserver (elementRef, callback, options = {}) {
+export function useResizeObserver (triggerRef, contentRef, handler) {
   const isObserving = ref(false)
-  const size = ref({ width: 0, height: 0 })
+  const skipFirst = ref(false)
   let observer = null
 
-  const handleResize = (entries) => {
-    const entry = entries[0]
-    if (entry) {
-      size.value = {
-        width: entry.contentRect.width,
-        height: entry.contentRect.height
-      }
+  const handleResize = () => {
+    // skip first time callback when observe elements
+    if (!skipFirst.value) {
+      skipFirst.value = true
+      return
     }
 
-    if (callback) callback(entries)
+    handler?.()
   }
 
   const startObserving = () => {
-    if (!elementRef.value || isObserving.value) return
+    if (!triggerRef.value || !contentRef.value || isObserving.value) return
 
     if (!observer) {
       observer = new ResizeObserver(handleResize)
     }
 
-    observer.observe(elementRef.value)
+    observer.observe(triggerRef.value)
+    observer.observe(contentRef.value)
     isObserving.value = true
   }
 
   const stopObserving = () => {
     if (!observer || !isObserving.value) return
 
-    if (elementRef.value) {
-      observer.unobserve(elementRef.value)
+    if (triggerRef.value && contentRef.value) {
+      observer.unobserve(triggerRef.value)
+      observer.unobserve(contentRef.value)
     }
 
     isObserving.value = false
+    skipFirst.value = false
   }
 
   const disconnect = () => {
@@ -277,28 +288,18 @@ export function useResizeObserver (elementRef, callback, options = {}) {
       observer.disconnect()
       observer = null
       isObserving.value = false
+      skipFirst.value = false
     }
   }
 
   onUnmounted(disconnect)
 
   return {
-    size: readonly(size),
     startObserving,
     stopObserving
   }
 }
 
-export function useContentPosition (triggerRef, contentRef, props) {
-  const verticalDirection = ref('down')
-  const horizontalDirection = ref('left')
-  const transitionName = ref('')
-  return {
-    transitionName: transitionName.value,
-    left: 0,
-    top: 0
-  }
-}
 /**
  *
  * @param {EventTarget | function} target

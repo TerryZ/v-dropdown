@@ -43,7 +43,7 @@ function toggleOffDisplay () {
 function toggleOffClose () {
   toggleOff.value.close()
 }
-function changeSize () {
+function changeContentSize () {
   if (width.value === 450) {
     width.value = 600
     height.value = 400
@@ -518,7 +518,7 @@ function removeItems () {
               <button
                 type="button"
                 class="btn btn-secondary"
-                @click="changeSize"
+                @click="changeContentSize"
               >
                 Change size
               </button>

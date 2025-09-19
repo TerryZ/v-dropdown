@@ -41,7 +41,7 @@ export default defineComponent({
   setup (props, context) {
     const { slots } = context
 
-    const triggerRef = ref(null)
+    const triggerRef = ref()
     const contentRef = ref()
 
     const {
