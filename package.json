@@ -1,7 +1,7 @@
 {
   "name": "v-dropdown",
   "description": "A dropdown layer container component for vue3",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "author": "TerryZ <terry5@foxmail.com>",
   "type": "module",
   "files": [
