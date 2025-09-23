@@ -2,7 +2,7 @@ function isHidden (el) {
   return window.getComputedStyle(el).display === 'none'
 }
 
-function getElementSizes (el) {
+function getRect (el) {
   // 通过 getComputedStyle(el).width 获得的值更精准，精确到小数点后三位
   const rect = el.getBoundingClientRect()
   return {
@@ -29,7 +29,7 @@ export function getElementRect (el) {
      */
     el.style.visibility = 'hidden'
     el.style.display = 'inline-flex'
-    const rect = getElementSizes(el)
+    const rect = getRect(el)
     /**
      * restore dropdown style after getting position data
      */
@@ -37,5 +37,5 @@ export function getElementRect (el) {
     el.style.display = 'none'
     return rect
   }
-  return getElementSizes(el)
+  return getRect(el)
 }

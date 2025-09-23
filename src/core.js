@@ -1,16 +1,17 @@
-import { ref, watch, provide, computed, nextTick } from 'vue'
+import { ref, watch, provide, computed, toRefs } from 'vue'
 
 import {
   useDebounce,
-  useThrottle,
   useDropdownContentDirection,
   useEventListener,
-  useResizeObserver
+  useResizeObserver,
+  useIntersectionObserver
 } from './use'
 import { getTriggerState } from './helper'
 import {
   HOVER_RESPONSE_TIME,
   APPEND_TO_BODY,
+  DIRECTION_RIGHT, DIRECTION_DOWN,
   keyContainer, keyDropdown, keyInternal
 } from './constants'
 
@@ -21,50 +22,63 @@ export function useDropdownCore (
   context
 ) {
   const { emit, expose } = context
+  const { disabled, manual, toggle } = toRefs(props)
+
   const visible = ref(false)
   const position = ref({ x: null, y: null })
-  const contentClasses = ref([])
+  const direction = ref({ vertical: DIRECTION_DOWN, horizontal: DIRECTION_RIGHT })
+  const getContentClass = ref()
   const contentStyles = ref({})
-  const transitionName = ref('')
+  const transitionName = computed(() => {
+    if (!props.animated) return ''
+    return `drop-${direction.value.vertical}-${direction.value.horizontal}`
+  })
 
   const appendTo = props.appendTo || APPEND_TO_BODY
   const defer = props.appendTo !== APPEND_TO_BODY
 
   const hoverDebounce = useDebounce(HOVER_RESPONSE_TIME)
-  const adjustDebounce = useDebounce()
-  const adjustThrottle = useThrottle()
   const {
-    isTriggerByClick,
-    isTriggerByHover,
-    isTriggerByContextmenu
+    isTriggerByClick, isTriggerByHover, isTriggerByContextmenu
   } = getTriggerState(props.trigger)
-  const { getDirection } = useDropdownContentDirection(triggerRef, contentRef, position, props)
+  const {
+    getDirection
+  } = useDropdownContentDirection(triggerRef, contentRef, position, direction, visible, props)
   const {
     startObserving, stopObserving
   } = useResizeObserver(triggerRef, contentRef, adjustContentPosition)
+  const {
+    startIntersectionObserving, stopIntersectionObserving
+  } = useIntersectionObserver(contentRef, adjustContentPosition)
 
   watch(visible, val => {
     emit('visible-change', val)
 
     if (val) {
-      document.addEventListener('mousedown', outsideClick)
-      window.addEventListener('resize', handleResizeAdjust)
-      window.addEventListener('scroll', handleAdjust)
+      document.body.addEventListener('mousedown', outsideClick)
+      startObserving()
+      startIntersectionObserving()
     } else {
       stopObserving()
-      document.removeEventListener('mousedown', outsideClick)
-      window.removeEventListener('resize', handleResizeAdjust)
-      window.removeEventListener('scroll', handleAdjust)
+      stopIntersectionObserving()
+      document.body.removeEventListener('mousedown', outsideClick)
     }
   })
 
-  function onOpened () {
+  function onDropdownOpen () {
+    emit('open')
+  }
+  function onDropdownOpened () {
     emit('opened')
-    nextTick(startObserving)
-    // startObserving()
+  }
+  function onDropdownClose () {
+    emit('close')
+  }
+  function onDropdownClosed () {
+    emit('closed')
   }
   function open () {
-    if (props.disabled) return
+    if (disabled.value) return
 
     adjustContentPosition()
 
@@ -74,12 +88,8 @@ export function useDropdownCore (
       visible.value = true
     }
   }
-  function close (outside = false) {
-    if (props.disabled) return
-    /**
-     * do not toggle show/close when 'toggle' option is set to false
-     */
-    if (!props.toggle && !outside) return
+  function close () {
+    if (disabled.value && !visible.value) return
 
     if (isTriggerByHover) {
       hoverDebounce(() => { visible.value = false })
@@ -87,48 +97,46 @@ export function useDropdownCore (
       visible.value = false
     }
   }
-  const toggleVisible = () => visible.value ? close() : open()
+  const toggleVisible = () => {
+    if (toggle.value) {
+      return visible.value ? close() : open()
+    }
+
+    if (visible.value) return
+    open()
+  }
 
   /**
-   * handle click event outside the dropdown content
+   * Handle click event outside the dropdown content
    * @param {MouseEvent} e - event object
    */
-  // TODO: 评估是否需要重构
   function outsideClick (e) {
     if (!visible.value) return
+    if (!triggerRef.value || !contentRef.value) return
 
-    // is the trigger element clicking
-    const inTrigger = e.composedPath().some(val => val === triggerRef.value)
-    // do not toggle show/close when `toggle` prop is set to false
-    if (inTrigger && !props.toggle && !isTriggerByContextmenu) return
-    // close the dropdown when clicking outside of the dropdown content
-    // reopen the dropdown when right-click in trigger(trigger = `contextmenu`)
-    if (!inTrigger || (inTrigger && isTriggerByContextmenu)) {
-      close(true)
+    const inTrigger = triggerRef.value.contains(e.target)
+    const inContent = contentRef.value.contains(e.target)
+
+    if (inTrigger) {
+      return isTriggerByContextmenu && e.button === 0 ? close() : ''
     }
+
+    if (!inContent) close()
   }
   function adjustContentPosition () {
     const result = getDirection()
-    transitionName.value = result.transitionName
     contentStyles.value.top = `${result.top}px`
     contentStyles.value.left = `${result.left}px`
   }
-  const handleAdjust = () => adjustThrottle(adjustContentPosition)
-  const handleResizeAdjust = () => adjustDebounce(adjustContentPosition)
-  const handleContentClick = e => {
-    if (!visible.value) return
-    e.stopPropagation()
-    // detectTriggerPositionChange(adjust)
-  }
   const handleTriggerClick = e => {
-    if (!isTriggerByClick || props.manual) return
+    if (!isTriggerByClick || manual.value) return
     e.stopPropagation()
     toggleVisible()
   }
   const handleHoverEnter = () => isTriggerByHover && open()
   const handleHoverLeave = () => isTriggerByHover && close()
   const handleTriggerContextMenu = e => {
-    if (!isTriggerByContextmenu || props.manual) return
+    if (!isTriggerByContextmenu || manual.value) return
     e.stopPropagation()
     e.preventDefault()
 
@@ -136,9 +144,6 @@ export function useDropdownCore (
     position.value.y = e.pageY
     open()
   }
-
-  useEventListener(() => contentRef.value, 'click', handleContentClick)
-  useEventListener(() => contentRef.value, 'mousedown', e => e.stopPropagation())
 
   if (isTriggerByClick) {
     useEventListener(() => triggerRef.value, 'click', handleTriggerClick)
@@ -154,7 +159,7 @@ export function useDropdownCore (
   }
 
   const slotData = {
-    disabled: computed(() => props.disabled),
+    disabled: computed(() => disabled.value),
     visible: computed(() => visible.value),
     adjust: adjustContentPosition,
     open,
@@ -164,16 +169,17 @@ export function useDropdownCore (
 
   provide(keyDropdown, slotData)
   provide(keyInternal, {
-    contentClasses,
-    contentStyles
-    // detectTriggerPositionChange
+    contentStyles,
+    setContentClassGetter: fn => { getContentClass.value = fn }
   })
   provide(keyContainer, {
     appendTo,
     defer,
     transitionName,
-    dropdownEmit: emit,
-    onOpened
+    onDropdownOpen,
+    onDropdownOpened,
+    onDropdownClose,
+    onDropdownClosed
   })
 
   expose({
@@ -190,7 +196,7 @@ export function useDropdownCore (
     close,
     toggleVisible,
     slotData,
-    contentClasses,
+    getContentClass,
     contentStyles
   }
 }

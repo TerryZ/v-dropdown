@@ -47,7 +47,7 @@ export default defineComponent({
     const {
       slotData,
       visible,
-      contentClasses,
+      getContentClass,
       contentStyles
     } = useDropdownCore(triggerRef, contentRef, props, context)
 
@@ -59,7 +59,7 @@ export default defineComponent({
             <div
               ref={contentRef}
               style={contentStyles.value}
-              class={contentClasses.value}
+              class={getContentClass?.value?.()}
               v-show={visible.value}
             >{slots?.default?.(slotData)}</div>
           )}

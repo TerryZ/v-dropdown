@@ -9,24 +9,25 @@ export default defineComponent({
       appendTo,
       defer,
       transitionName,
-      dropdownEmit,
-      onOpened
+      onDropdownOpen,
+      onDropdownOpened,
+      onDropdownClose,
+      onDropdownClosed
     } = inject(keyContainer, {})
 
     const handleOnEnter = (el, done) => {
-      dropdownEmit('open')
+      onDropdownOpen()
       setTimeout(done, 150)
     }
     const handleOnAfterEnter = el => {
-      // dropdownEmit('opened')
-      onOpened()
+      onDropdownOpened()
     }
     const handleOnLeave = (el, done) => {
-      dropdownEmit('close')
+      onDropdownClose()
       setTimeout(done, 75)
     }
     const handleOnAfterLeave = el => {
-      dropdownEmit('closed')
+      onDropdownClosed()
     }
 
     return () => (

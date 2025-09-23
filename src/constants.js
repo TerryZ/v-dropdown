@@ -28,6 +28,7 @@ export const keyInternal = Symbol('internal')
 export const keyContainer = Symbol('container')
 
 export const DIRECTION_LEFT = 'left'
+export const DIRECTION_CENTER = 'center'
 export const DIRECTION_RIGHT = 'right'
 export const DIRECTION_UP = 'up'
 export const DIRECTION_DOWN = 'down'

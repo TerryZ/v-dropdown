@@ -1,13 +1,9 @@
-import {
-  ref, computed, watch, inject, nextTick, readonly,
-  onMounted, onBeforeUnmount, onUnmounted
-} from 'vue'
-import ResizeObserverPolyfill from 'resize-observer-polyfill'
+import { ref, inject, onMounted, onBeforeUnmount, onUnmounted } from 'vue'
 import { getTriggerState } from './helper'
 import { getElementRect } from './util'
 import {
   keyDropdown,
-  DIRECTION_UP, DIRECTION_DOWN, DIRECTION_LEFT, DIRECTION_RIGHT
+  DIRECTION_UP, DIRECTION_DOWN, DIRECTION_LEFT, DIRECTION_CENTER, DIRECTION_RIGHT
 } from './constants'
 
 export const useDropdown = () => inject(keyDropdown, {})
@@ -30,204 +26,141 @@ export function useThrottle (delay = 300) {
   }
 }
 
-export function useDropdownContentDirection (triggerRef, contentRef, position, props) {
-  const { trigger, align, gap, animated } = props
-  const verticalDirection = ref('')
-  const horizontalDirection = ref('')
-  const transitionName = computed(() => {
-    if (!animated) return ''
-    return `drop-${verticalDirection.value}-${horizontalDirection.value}`
-  })
+export function useDropdownContentDirection (
+  triggerRef,
+  contentRef,
+  position,
+  direction,
+  visible,
+  props
+) {
+  const { trigger, gap, align } = props
+  const { isTriggerByContextmenu } = getTriggerState(trigger)
 
   /**
    * Calculation display direction and top axis
-   * @param {number} x
-   * @param {DOMRect} triggerRect - root element bounding client rect
+   * @param {number} y
+   * @param {DOMRect} triggerRect - trigger element bounding client rect
    * @param {DOMRect} contentRect - content element bounding client rect
    * @return {number}
    */
   function getTop (y, triggerRect, contentRect) {
-    verticalDirection.value = DIRECTION_DOWN
+    // Reset direction when content is not visible
+    if (!visible.value) {
+      direction.value.vertical = DIRECTION_DOWN
+    }
 
-    const { isTriggerByContextmenu } = getTriggerState(trigger)
     const scrollTop = window.scrollY
     // The height value not include scroll bar
     const viewHeight = document.documentElement.clientHeight
-    const srcTop = isTriggerByContextmenu ? y : triggerRect.top + scrollTop
-    const top = isTriggerByContextmenu
+    const startTop = isTriggerByContextmenu ? y : triggerRect.top + scrollTop
+    const downwardTop = isTriggerByContextmenu
       ? y
       : triggerRect.top + triggerRect.height + gap + scrollTop
+    const upwardTop = startTop - gap - contentRect.height
+    // Is there enough space to expand downwards
+    const overBelow = (downwardTop + contentRect.height) > (scrollTop + viewHeight)
+    // Is there enough space to expand upwards
+    const overAbove = upwardTop < scrollTop
 
-    const overBottom = (top + contentRect.height) > (scrollTop + viewHeight)
-    const overTop = (srcTop - gap - contentRect.height) < scrollTop
-
-    if (!overTop && overBottom) {
-      verticalDirection.value = DIRECTION_UP
-      return srcTop - gap - contentRect.height
+    if (direction.value.vertical === DIRECTION_UP) {
+      if (overAbove && !overBelow) {
+        direction.value.vertical = DIRECTION_DOWN
+        return downwardTop
+      }
+      return upwardTop
     }
-
-    return top
+    // Expand downwards by default
+    if (!overAbove && overBelow) {
+      direction.value.vertical = DIRECTION_UP
+      return upwardTop
+    }
+    return downwardTop
   }
   /**
    * Calculation left axis
    * @param {number} x
-   * @param {DOMRect} triggerRect - root element bounding client rect
+   * @param {DOMRect} triggerRect - trigger element bounding client rect
    * @param {DOMRect} contentRect - content element bounding client rect
    * @returns {number}
    */
   function getLeft (x, triggerRect, contentRect) {
-    horizontalDirection.value = DIRECTION_RIGHT
-    const { isTriggerByContextmenu } = getTriggerState(trigger)
+    if (!visible.value) {
+      direction.value.horizontal = DIRECTION_RIGHT
+    }
+
     const scrollLeft = window.scrollX
     // The width value not include scroll bar
     const viewWidth = document.documentElement.clientWidth
-    const width = isTriggerByContextmenu ? 0 : triggerRect.width
-    // left axis of align left
-    const left = isTriggerByContextmenu ? x : triggerRect.left + scrollLeft
-    // left axis of align center
-    const center = (left + (width / 2)) - (contentRect.width / 2)
-    // left axis of align right
-    const right = (left + width) - contentRect.width
+    const triggerWidth = isTriggerByContextmenu ? 0 : triggerRect.width
+    // Left axis of align left
+    const leftOfAlignLeft = isTriggerByContextmenu ? x : triggerRect.left + scrollLeft
+    // Left axis of align center
+    const leftOfAlignCenter = (leftOfAlignLeft + (triggerWidth / 2)) - (contentRect.width / 2)
+    // Left axis of align right
+    const leftOfAlignRight = (leftOfAlignLeft + triggerWidth) - contentRect.width
 
-    const isLeftOutOfViewOnRight = (left + contentRect.width) > (scrollLeft + viewWidth)
-    const isCenterOutOfViewOnRight = (center + contentRect.width) > (scrollLeft + viewWidth)
-    const isRightOutOfViewOnLeft = right < scrollLeft
+    const isLeftOverRight = (leftOfAlignLeft + contentRect.width) > (scrollLeft + viewWidth)
+    const isCenterOverRight = (leftOfAlignCenter + contentRect.width) > (scrollLeft + viewWidth)
+    const isRightOverLeft = leftOfAlignRight < scrollLeft
 
-    switch (align) {
-      case 'left': return isLeftOutOfViewOnRight ? right : left
-      case 'center': return isCenterOutOfViewOnRight
-        ? right
-        : isRightOutOfViewOnLeft ? left : center
-      case 'right': return isRightOutOfViewOnLeft ? left : right
+    if (align.value === DIRECTION_CENTER) {
+      direction.value.horizontal = isCenterOverRight ? DIRECTION_LEFT : DIRECTION_RIGHT
+      return isCenterOverRight
+        ? leftOfAlignRight
+        : isRightOverLeft ? leftOfAlignLeft : leftOfAlignCenter
     }
+    if (align.value === DIRECTION_RIGHT) {
+      direction.value.horizontal = isRightOverLeft ? DIRECTION_RIGHT : DIRECTION_LEFT
+      return isRightOverLeft ? leftOfAlignLeft : leftOfAlignRight
+    }
+    // Align to left by default
+    direction.value.horizontal = isLeftOverRight ? DIRECTION_LEFT : DIRECTION_RIGHT
+    return isLeftOverRight ? leftOfAlignRight : leftOfAlignLeft
   }
 
-  function getDirection (triggerElRect, contentElRect) {
-    const triggerRect = triggerElRect || getElementRect(triggerRef.value)
-    const contentRect = contentElRect || getElementRect(contentRef.value)
+  function getDirection () {
+    const triggerRect = getElementRect(triggerRef.value)
+    const contentRect = getElementRect(contentRef.value)
     return {
       top: getTop(position.value.y, triggerRect, contentRect),
-      left: getLeft(position.value.x, triggerRect, contentRect),
-      transitionName: transitionName.value
+      left: getLeft(position.value.x, triggerRect, contentRect)
     }
   }
 
   return { getDirection }
 }
 
-export function useContentSizeChangeHandle (content, job) {
-  let width = 0
-  let height = 0
-  let resizeObserver
-  const setSize = rect => {
-    width = rect.width
-    height = rect.height
-  }
-  const handleResize = entries => {
-    const rect = entries[0].contentRect
-    // console.log(rect)
-    // content invisible
-    if (!rect.width && !rect.height) return
-    // storage content size when first time open
-    if (width === 0 && height === 0) return setSize(rect)
-    // content size changed
-    if (width !== rect.width || height !== rect.height) {
-      setSize(rect)
-      job?.()
-    }
-  }
-  onMounted(() => {
-    if (!content.value) return
-
-    const ResizeObserverObject = window?.ResizeObserver || ResizeObserverPolyfill
-    resizeObserver = new ResizeObserverObject(handleResize)
-    resizeObserver.observe(content.value)
-  })
-  onBeforeUnmount(() => {
-    if (!resizeObserver || !content.value) return
-    resizeObserver.unobserve(content.value)
-  })
-}
-export function useTriggerPositionChange (trigger) {
-  let left = 0
-  let top = 0
-  let height = 0
-
-  const setPosition = rect => {
-    left = rect.left
-    top = rect.top
-    height = rect.height
-  }
-  const getTriggerRect = () => {
-    const rect = trigger.value.getBoundingClientRect()
-    return {
-      top: rect.top + window.scrollY,
-      left: rect.left + window.scrollX,
-      height: rect.height
-    }
-  }
-  const initTriggerPosition = () => {
-    if (left !== 0 || top !== 0 || height !== 0) return
-    setPosition(getTriggerRect())
-  }
-  function detectTriggerPositionChange (job) {
-    const rect = getTriggerRect()
-    if (left !== rect.left || top !== rect.top || height !== rect.height) {
-      setPosition(rect)
-      nextTick(() => job?.())
-    }
-  }
-
-  onMounted(() => initTriggerPosition())
-
-  return {
-    detectTriggerPositionChange
-  }
-}
-export function useDropdownPlacement (content, visible) {
-  const placement = ref({
-    horizontal: 'left',
-    vertical: 'top'
-  })
+export function useIntersectionObserver (contentRef, handler) {
   let observer = null
 
-  watch(visible, (val) => {
-    if (val && content.value) {
-      setupIntersectionObserver()
-    } else {
-      cleanupObserver()
+  const options = {
+    root: null,
+    rootMargin: '0px',
+    threshold: [0.5, 0.75, 1.0]
+  }
+  const EPS = 1e-7
+
+  const handleObserver = entries => {
+    const entry = entries[0]
+    if (Math.abs(entry.intersectionRatio - 1) < EPS) return
+    // console.log(entry)
+    handler?.()
+  }
+
+  function startIntersectionObserving () {
+    if (!contentRef.value) return
+
+    if (!observer) {
+      observer = new IntersectionObserver(handleObserver, options)
     }
-  })
 
-  function setupIntersectionObserver () {
-    if (!content.value) return
+    observer.observe(contentRef.value)
+  }
 
-    cleanupObserver()
-
-    const options = {
-      root: null, // viewport
-      threshold: 1.0 // 完全可见时才算稳定
-    }
-
-    observer = new IntersectionObserver((entries) => {
-      const entry = entries[0]
-      if (!entry) return
-
-      const { boundingClientRect, rootBounds } = entry
-      if (!rootBounds) return
-
-      const spaceBelow = rootBounds.bottom - boundingClientRect.bottom
-      const spaceAbove = boundingClientRect.top - rootBounds.top
-
-      // 如果下方空间不够，改成向上展开
-      if (spaceBelow < 0 && spaceAbove > spaceBelow) {
-        placement.value.vertical = 'top'
-      } else {
-        placement.value.vertical = 'bottom'
-      }
-    }, options)
-
-    observer.observe(content.value)
+  function stopIntersectionObserving () {
+    if (!observer) return
+    observer.unobserve(contentRef.value)
   }
 
   function cleanupObserver () {
@@ -237,10 +170,11 @@ export function useDropdownPlacement (content, visible) {
     }
   }
 
+  onBeforeUnmount(cleanupObserver)
+
   return {
-    observeDropdown: setupIntersectionObserver,
-    disconnectObserver: cleanupObserver,
-    placement
+    startIntersectionObserving,
+    stopIntersectionObserving
   }
 }
 
@@ -250,7 +184,7 @@ export function useResizeObserver (triggerRef, contentRef, handler) {
   let observer = null
 
   const handleResize = () => {
-    // skip first time callback when observe elements
+    // Skip first time callback when ResizeObserver observe elements
     if (!skipFirst.value) {
       skipFirst.value = true
       return
@@ -299,7 +233,6 @@ export function useResizeObserver (triggerRef, contentRef, handler) {
     stopObserving
   }
 }
-
 /**
  *
  * @param {EventTarget | function} target
@@ -312,10 +245,9 @@ export function useEventListener (target, event, handler, options) {
   let el = null
 
   const cleanup = () => {
-    if (el) {
-      el.removeEventListener(event, handler, options)
-      el = null
-    }
+    if (!el) return
+    el.removeEventListener(event, handler, options)
+    el = null
   }
 
   onMounted(() => {

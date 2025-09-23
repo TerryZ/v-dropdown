@@ -11,19 +11,19 @@ export default defineComponent({
     zIndex: { type: Number, default: Z_INDEX }
   },
   setup (props, { slots, attrs }) {
-    const { contentClasses, contentStyles } = inject(keyInternal, {})
+    const { setContentClassGetter, contentStyles } = inject(keyInternal, {})
 
-    if (contentStyles) {
-      contentStyles.value['z-index'] = props.zIndex
-    }
-    if (contentClasses) {
-      contentClasses.value = [
-        'dd-content',
-        props.border || 'dd-no-border',
-        getContentRoundedClass(props.rounded)
-      ]
-    }
+    setContentClassGetter?.(() => {
+      const classes = ['dd-content', getContentRoundedClass(props.rounded)]
+      if (!props.border) classes.push('dd-no-border')
+      return classes
+    })
 
-    return () => <div class='dd-content-body'>{slots?.default?.()}</div>
+    return () => {
+      if (contentStyles) {
+        contentStyles.value['z-index'] = props.zIndex
+      }
+      return <div class='dd-content-body'>{slots?.default?.()}</div>
+    }
   }
 })
