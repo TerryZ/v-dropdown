@@ -14,10 +14,14 @@ export declare interface ComponentProps extends
 export declare interface DropdownUtilities {
   visible: ComputedRef<boolean>
   disabled: ComputedRef<boolean>
-  /** Close the dropdown menu when it is open */
-  close: () => void
   /** Adjust content position */
   adjust: () => void
+  /** Open dropdown */
+  open: () => void
+  /** Close dropdown */
+  close: () => void
+  /** Toggle dropdown open and close */
+  toggleVisible: () => void
 }
 
 /**
@@ -34,6 +38,10 @@ declare interface Props {
    * @default true
    */
   toggle?: boolean
+  /**
+   * @default true
+   */
+  animated?: boolean
   /**
    * Manual control the display and hiding of dropdown
    * @default false

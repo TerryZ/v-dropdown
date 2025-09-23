@@ -7,10 +7,6 @@ declare interface ContentProps extends ComponentProps {
    */
   border?: boolean
   /**
-   * @default true
-   */
-  animated?: boolean
-  /**
    * @default `small`
    */
   rounded?: 'small' | 'medium' | 'large'
