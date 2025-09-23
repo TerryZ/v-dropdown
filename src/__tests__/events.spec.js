@@ -1,9 +1,9 @@
 import { describe, test, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { h, nextTick } from 'vue'
+import { h } from 'vue'
 
 import { Dropdown } from '@/'
-import { DropdownBaseContent, PropsToDropdownContent } from './components/DropdownCore'
+import { DropdownBaseContent } from './components/DropdownCore'
 
 describe('v-dropdown 事件', () => {
   const fnOpen = vi.fn()
