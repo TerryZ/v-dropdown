@@ -10,7 +10,7 @@ If you are using vue `2.x` version, please use [v-dropdown 2.x](https://github.c
 - Built-in trigger button component for quick use
 - When the position and size of the trigger and the drop-down bar content change, the drop-down bar content position is automatically adjusted to align - with the trigger
 - Provide `Dropdown` status and tool functions for each slot
-- Provide `useDropdown` tool function
+- Provide `useDropdown` utility functions
 - Flexible style customization method
 
 ## Documentation and Examples
@@ -41,11 +41,29 @@ pnpm add v-dropdown
 
 ## Usage
 
+### Quick dropdown
+
+```vue
+<template>
+  <Dropdown>
+    <DropdownContent>
+      <div>some contents</div>
+    </DropdownContent>
+  </Dropdown>
+</template>
+
+<script setup>
+import { Dropdown, DropdownContent } from 'v-dropdown'
+</script>
+```
+
+### Custom trigger content
+
 ```vue
 <template>
   <Dropdown>
     <template #trigger>
-      <DropdownTrigger />
+      <DropdownTrigger>Click me</DropdownTrigger>
     </template>
 
     <DropdownContent>
