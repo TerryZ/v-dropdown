@@ -13,7 +13,7 @@ describe('v-dropdown methods', () => {
   })
 
   it('call `display` method, the dropdown container should be display', async () => {
-    wrapper.vm.display()
+    wrapper.vm.open()
     await nextTick()
     expect(wrapper.vm.visible).equal(true)
   })

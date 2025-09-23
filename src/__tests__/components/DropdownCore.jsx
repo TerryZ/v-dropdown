@@ -25,7 +25,7 @@ export function DropdownBaseTrigger (props) {
 }
 export function PropsToDropdownContent (props) {
   const slots = {
-    default: () => <DropdownBaseContent {...props} />,
+    default: () => <DropdownContent {...props}>abc</DropdownContent>,
     trigger: () => <DropdownTrigger />
   }
   return <Dropdown align="center" v-slots={slots} />

@@ -54,7 +54,7 @@ describe('v-dropdown props', () => {
       await wrapper.trigger('click')
       expect(wrapper.vm.visible).equal(false)
 
-      wrapper.vm.display()
+      wrapper.vm.open()
       await nextTick()
       expect(wrapper.vm.visible).equal(true)
     })
@@ -67,7 +67,7 @@ describe('v-dropdown props', () => {
       await wrapper.trigger('click')
       expect(wrapper.vm.visible).equal(false)
 
-      wrapper.vm.display()
+      wrapper.vm.open()
       await nextTick()
       expect(wrapper.vm.visible).equal(false)
     })

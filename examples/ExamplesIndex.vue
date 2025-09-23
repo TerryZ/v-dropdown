@@ -30,7 +30,7 @@ function handleVisibleChange (val) {
 }
 function inputChange (e) {
   if (e.target.value === '3') {
-    dropdownInput.value.display()
+    dropdownInput.value.open()
   } else {
     if (visible.value) {
       dropdownInput.value.close()
@@ -38,7 +38,7 @@ function inputChange (e) {
   }
 }
 function toggleOffDisplay () {
-  toggleOff.value.display()
+  toggleOff.value.open()
 }
 function toggleOffClose () {
   toggleOff.value.close()
@@ -175,9 +175,6 @@ function removeItems () {
             <div>0123456789012345678901234567890123456789</div>
             <div>0123456789012345678901234567890123456789</div>
             <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
             <div>
               <button
                 type="button"
@@ -232,9 +229,15 @@ function removeItems () {
       </template>
       <DropdownContent>
         <div class="p-5">
-          <div>0123456789</div>
-          <div>0123456789</div>
-          <div>0123456789</div>
+          <div>0123456789012345678901234567890123456789</div>
+          <div>0123456789012345678901234567890123456789</div>
+          <div>0123456789012345678901234567890123456789</div>
+          <div>0123456789012345678901234567890123456789</div>
+          <div>0123456789012345678901234567890123456789</div>
+          <div>0123456789012345678901234567890123456789</div>
+          <div>0123456789012345678901234567890123456789</div>
+          <div>0123456789012345678901234567890123456789</div>
+          <div>0123456789012345678901234567890123456789</div>
         </div>
       </DropdownContent>
     </Dropdown>
@@ -292,9 +295,6 @@ function removeItems () {
           </template>
           <DropdownContent :border="false">
             <div class="p-5">
-              <div>0123456789012345678901234567890123456789</div>
-              <div>0123456789012345678901234567890123456789</div>
-              <div>0123456789012345678901234567890123456789</div>
               <div>0123456789012345678901234567890123456789</div>
               <div>0123456789012345678901234567890123456789</div>
               <div>0123456789012345678901234567890123456789</div>
@@ -439,40 +439,6 @@ function removeItems () {
             <div>0123456789012345678901234567890123456789</div>
             <div>0123456789012345678901234567890123456789</div>
             <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
-          </div>
-        </DropdownContent>
-      </Dropdown>
-    </div>
-
-    <h5 class="mt-5 mb-1">
-      Specify width with events
-    </h5>
-    <div class="text-body-tertiary mb-3">
-      不指定 trigger 插槽，v-dropdown 应渲染默认的内置按钮
-    </div>
-    <div>
-      <Dropdown
-        :disabled="disabledSlot"
-        @open="onOpen"
-        @close="onClose"
-        @opened="onOpened"
-        @closed="onClosed"
-        @visible-change="handleVisibleChange"
-      >
-        <DropdownContent style="width: 350px;">
-          <div class="d-flex flex-column">
-            <CustomContent />
-            <div class="p-3">
-              <button
-                class="btn btn-dark"
-                @click="disabledSlot = !disabledSlot"
-              >
-                change disabled
-              </button>
-            </div>
           </div>
         </DropdownContent>
       </Dropdown>
@@ -548,6 +514,37 @@ function removeItems () {
       </Dropdown>
     </div>
 
+    <h5 class="mt-5 mb-1">
+      Specify width with events
+    </h5>
+    <div class="text-body-tertiary mb-3">
+      不指定 trigger 插槽，v-dropdown 应渲染默认的内置按钮
+    </div>
+    <div>
+      <Dropdown
+        :disabled="disabledSlot"
+        @open="onOpen"
+        @close="onClose"
+        @opened="onOpened"
+        @closed="onClosed"
+        @visible-change="handleVisibleChange"
+      >
+        <DropdownContent style="width: 350px;">
+          <div class="d-flex flex-column">
+            <CustomContent />
+            <div class="p-3">
+              <button
+                class="btn btn-dark"
+                @click="disabledSlot = !disabledSlot"
+              >
+                change disabled
+              </button>
+            </div>
+          </div>
+        </DropdownContent>
+      </Dropdown>
+    </div>
+
     <div class="d-flex gap-3 my-3">
       <button
         type="button"
@@ -581,9 +578,6 @@ function removeItems () {
       <div>
         <DropdownContent>
           <div class="p-3">
-            <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
-            <div>0123456789012345678901234567890123456789</div>
             <div>0123456789012345678901234567890123456789</div>
             <div>0123456789012345678901234567890123456789</div>
             <div>0123456789012345678901234567890123456789</div>

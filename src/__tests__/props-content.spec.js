@@ -1,10 +1,11 @@
 import { describe, expect, test } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { nextTick } from 'vue'
 
 import { PropsToDropdownContent } from './components/DropdownCore'
 // import PropsToDropdownContent from './components/PropsToDropdownContent.vue'
 
-describe('dropdown content props', () => {
+describe('dropdown content props', async () => {
   const wrapper = mount(PropsToDropdownContent, {
     props: {
       border: false
@@ -16,21 +17,25 @@ describe('dropdown content props', () => {
     }
   })
 
-  const content = wrapper.findComponent('.dd-content')
+  await nextTick()
+
+  // const content = wrapper.findComponent('.dd-content')
+  const content = document.body.querySelector('.dd-content')
 
   test('默认的圆角尺寸应为 `small`', () => {
-    expect(content.classes()).toContain('dd-content-rounded--small')
+    expect(content.classList.contains('dd-content-rounded--small')).toBeTruthy()
   })
   test('`border` prop 设置为 false, 下拉栏容器应包含 `dd-no-border` 样式名', () => {
-    expect(content.classes()).toContain('dd-no-border')
+    expect(content.classList.contains('dd-no-border')).toBeTruthy()
   })
   test('`z-index` prop 设置为 1000, 下拉栏容器的 `z-index` 样式值应为 1000', async () => {
     await wrapper.setProps({ zIndex: 1000 })
+    // 手动触发更新
     await wrapper.trigger('click')
 
-    expect(content.element.style.zIndex).toBe('1000')
+    expect(content.style.zIndex).toBe('1000')
   })
-  // TODO: ResizeObserver 功能目前无法测试，关注后续是否有解决方案
+  // TODO: ResizeObserver 与 IntersectionObserver 功能目前无法测试，关注后续是否有解决方案
   // test('修改下拉栏宽度，应响应重定位', async () => {
   //   console.log(content.html())
   //   content.element.style.width = '500px'
@@ -41,10 +46,12 @@ describe('dropdown content props', () => {
   // })
   test('`rounded` prop 设置为 `large`, 容器的圆角尺寸应为 `large`', async () => {
     await wrapper.setProps({ rounded: 'large' })
-    expect(content.classes()).toContain('dd-content-rounded--large')
+    await wrapper.trigger('click')
+    expect(content.classList.contains('dd-content-rounded--large')).toBeTruthy()
   })
   test('`rounded` prop 设置为 `medium11`, 容器的圆角尺寸应恢复为 `small`', async () => {
     await wrapper.setProps({ rounded: 'medium11' })
-    expect(content.classes()).toContain('dd-content-rounded--small')
+    await wrapper.trigger('click')
+    expect(content.classList.contains('dd-content-rounded--small')).toBeTruthy()
   })
 })

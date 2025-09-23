@@ -19,7 +19,7 @@ describe('v-dropdown core', () => {
     expect(wrapper.vm.visible).equal(false)
   })
   // it('call display method, set visible to true, the dropdown container should be displayed', async () => {
-  //   wrapper.vm.display()
+  //   wrapper.vm.open()
   //   await nextTick()
 
   //   expect(wrapper.vm.visible).equal(true)
