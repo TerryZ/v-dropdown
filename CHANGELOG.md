@@ -2,6 +2,16 @@
 
 Please refer to [CHANGELOG-CN](CHANGELOG-CN.md) for Chinese changelog
 
+## [3.5.0](https://github.com/TerryZ/v-dropdown/compare/v3.4.0...v3.5.0) (2025-09-23)
+
+### Features
+
+- Removed the `animated` prop from `DropdownContent`
+- Added the `animated` prop to the `Dropdown` component, which sets whether to use a transition animation when the dropdown is opened
+- Refactored some core implementations to optimize performance
+- Added edge overflow handling when the dropdown is opened
+- When no `trigger` slot content is specified, the built-in `DropdownTrigger` component will be used by default
+
 ## [3.4.0](https://github.com/TerryZ/v-dropdown/compare/v3.3.0...v3.4.0) (2025-03-14)
 
 ### Features

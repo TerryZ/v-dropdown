@@ -2,11 +2,21 @@
 
 英文 changelog 内容请访问 [CHANGELOG](CHANGELOG.md)
 
+## [3.5.0](https://github.com/TerryZ/v-dropdown/compare/v3.4.0...v3.5.0) (2025-09-23)
+
+### 新特性
+
+- `DropdownContent` 移除 `animated` prop
+- `Dropdown` 组件添加 `animated` prop，用于设置下拉层打开时是否使用过渡动画
+- 重构部分核心实现，优化性能
+- 下拉层打开时，添加边缘溢出处理
+- 不指定 `trigger` 插槽内容时，默认应用内置的 `DropdownTrigger` 组件
+
 ## [3.4.0](https://github.com/TerryZ/v-dropdown/compare/v3.3.0...v3.4.0) (2025-03-14)
 
 ### 新特性
 
-- `Dropdown` 组件添加 `appendTo` prop，用于指定下拉容器插入到哪个元素之后
+- `Dropdown` 组件添加 `appendTo` prop，用于指定下拉容器挂载到哪个元素中
 
 ## [3.3.0](https://github.com/TerryZ/v-dropdown/compare/v3.2.1...v3.3.0) (2025-03-08)
 
