@@ -1,4 +1,4 @@
-import { ref, inject, onMounted, onBeforeUnmount, onUnmounted } from 'vue'
+import { ref, inject, onMounted, onBeforeUnmount, onUnmounted, toRef } from 'vue'
 import { getTriggerState } from './helper'
 import { getElementRect } from './util'
 import {
@@ -34,7 +34,7 @@ export function useDropdownContentDirection (
   visible,
   props
 ) {
-  const { trigger, gap, align } = props
+  const { trigger, gap } = props
   const { isTriggerByContextmenu } = getTriggerState(trigger)
 
   /**
@@ -103,6 +103,8 @@ export function useDropdownContentDirection (
     const isLeftOverRight = (leftOfAlignLeft + contentRect.width) > (scrollLeft + viewWidth)
     const isCenterOverRight = (leftOfAlignCenter + contentRect.width) > (scrollLeft + viewWidth)
     const isRightOverLeft = leftOfAlignRight < scrollLeft
+
+    const align = toRef(props, 'align')
 
     if (align.value === DIRECTION_CENTER) {
       direction.value.horizontal = isCenterOverRight ? DIRECTION_LEFT : DIRECTION_RIGHT
