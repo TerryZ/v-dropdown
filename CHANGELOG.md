@@ -2,6 +2,12 @@
 
 Please refer to [CHANGELOG-CN](CHANGELOG-CN.md) for Chinese changelog
 
+## [3.5.1](https://github.com/TerryZ/v-dropdown/compare/v3.5.0...v3.5.1) (2025-09-24)
+
+### Bug Fixes
+
+- `align` alignment setting is invalid
+
 ## [3.5.0](https://github.com/TerryZ/v-dropdown/compare/v3.4.0...v3.5.0) (2025-09-23)
 
 ### Features

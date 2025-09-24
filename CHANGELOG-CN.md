@@ -2,6 +2,12 @@
 
 英文 changelog 内容请访问 [CHANGELOG](CHANGELOG.md)
 
+## [3.5.1](https://github.com/TerryZ/v-dropdown/compare/v3.5.0...v3.5.1) (2025-09-24)
+
+### 问题修复
+
+- `align` 对齐方向设置无效
+
 ## [3.5.0](https://github.com/TerryZ/v-dropdown/compare/v3.4.0...v3.5.0) (2025-09-23)
 
 ### 新特性
