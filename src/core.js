@@ -11,22 +11,23 @@ import { getTriggerState } from './helper'
 import {
   HOVER_RESPONSE_TIME,
   APPEND_TO_BODY,
-  DIRECTION_RIGHT, DIRECTION_DOWN,
-  keyContainer, keyDropdown, keyInternal
+  DIRECTION_RIGHT,
+  DIRECTION_DOWN,
+  keyContainer,
+  keyDropdown,
+  keyInternal
 } from './constants'
 
-export function useDropdownCore (
-  triggerRef,
-  contentRef,
-  props,
-  context
-) {
+export function useDropdownCore (triggerRef, contentRef, props, context) {
   const { emit, expose } = context
   const { disabled, manual, toggle } = toRefs(props)
 
   const visible = ref(false)
   const position = ref({ x: null, y: null })
-  const direction = ref({ vertical: DIRECTION_DOWN, horizontal: DIRECTION_RIGHT })
+  const direction = ref({
+    vertical: DIRECTION_DOWN,
+    horizontal: DIRECTION_RIGHT
+  })
   const getContentClass = ref()
   const contentStyles = ref({})
   const transitionName = computed(() => {
@@ -38,18 +39,23 @@ export function useDropdownCore (
   const defer = props.appendTo !== APPEND_TO_BODY
 
   const hoverDebounce = useDebounce(HOVER_RESPONSE_TIME)
-  const {
-    isTriggerByClick, isTriggerByHover, isTriggerByContextmenu
-  } = getTriggerState(props.trigger)
-  const {
-    getDirection
-  } = useDropdownContentDirection(triggerRef, contentRef, position, direction, visible, props)
-  const {
-    startObserving, stopObserving
-  } = useResizeObserver(triggerRef, contentRef, adjustContentPosition)
-  const {
-    startIntersectionObserving, stopIntersectionObserving
-  } = useIntersectionObserver(contentRef, adjustContentPosition)
+  const { isTriggerByClick, isTriggerByHover, isTriggerByContextmenu } =
+    getTriggerState(props.trigger)
+  const { getDirection } = useDropdownContentDirection(
+    triggerRef,
+    contentRef,
+    position,
+    direction,
+    visible,
+    props
+  )
+  const { startObserving, stopObserving } = useResizeObserver(
+    triggerRef,
+    contentRef,
+    adjustContentPosition
+  )
+  const { startIntersectionObserving, stopIntersectionObserving } =
+    useIntersectionObserver(contentRef, adjustContentPosition)
 
   watch(visible, val => {
     emit('visible-change', val)
@@ -155,7 +161,11 @@ export function useDropdownCore (
     useEventListener(() => contentRef.value, 'mouseleave', handleHoverLeave)
   }
   if (isTriggerByContextmenu) {
-    useEventListener(() => triggerRef.value, 'contextmenu', handleTriggerContextMenu)
+    useEventListener(
+      () => triggerRef.value,
+      'contextmenu',
+      handleTriggerContextMenu
+    )
   }
 
   const slotData = {
@@ -170,7 +180,9 @@ export function useDropdownCore (
   provide(keyDropdown, slotData)
   provide(keyInternal, {
     contentStyles,
-    setContentClassGetter: fn => { getContentClass.value = fn }
+    setContentClassGetter: fn => {
+      getContentClass.value = fn
+    }
   })
   provide(keyContainer, {
     appendTo,
@@ -182,13 +194,7 @@ export function useDropdownCore (
     onDropdownClosed
   })
 
-  expose({
-    open,
-    close,
-    toggleVisible,
-    adjust: adjustContentPosition,
-    visible
-  })
+  expose(slotData)
 
   return {
     visible,
