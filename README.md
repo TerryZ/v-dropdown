@@ -43,6 +43,8 @@ pnpm add v-dropdown
 
 ### Quick dropdown
 
+Use the built-in component `DropdownTrigger` as the trigger element
+
 ```vue
 <template>
   <Dropdown>
@@ -58,6 +60,8 @@ import { Dropdown, DropdownContent } from 'v-dropdown'
 ```
 
 ### Custom trigger content
+
+Customize the trigger element through the `trigger` slot
 
 ```vue
 <template>
