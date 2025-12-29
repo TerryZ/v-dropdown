@@ -7,8 +7,10 @@
     "moduleResolution": "node",
     "allowJs": true,
     "jsx": "preserve",
+    "outDir": "dist",
     "paths": {
       "@/*": ["./src/*"]
     }
-  }
+  },
+  "include": ["src"]
 }
