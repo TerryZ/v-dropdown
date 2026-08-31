@@ -3,9 +3,6 @@ import DropdownTrigger from './DropdownTrigger'
 import DropdownContent from './DropdownContent'
 import { useDropdown } from './use'
 
-export {
-  Dropdown,
-  DropdownTrigger,
-  DropdownContent,
-  useDropdown
-}
+export * from './types'
+
+export { Dropdown, DropdownTrigger, DropdownContent, useDropdown }

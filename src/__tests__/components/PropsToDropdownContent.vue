@@ -4,14 +4,12 @@
       <DropdownTrigger />
     </template>
     <DropdownContent v-bind="$attrs">
-      <slot>
-        abc123
-      </slot>
+      <slot> abc123 </slot>
     </DropdownContent>
   </Dropdown>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { Dropdown, DropdownContent, DropdownTrigger } from '../../'
 
 defineOptions({

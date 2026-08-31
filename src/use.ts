@@ -3,21 +3,25 @@ import { getTriggerState } from './helper'
 import { getElementRect } from './util'
 import {
   keyDropdown,
-  DIRECTION_UP, DIRECTION_DOWN, DIRECTION_LEFT, DIRECTION_CENTER, DIRECTION_RIGHT
+  DIRECTION_UP,
+  DIRECTION_DOWN,
+  DIRECTION_LEFT,
+  DIRECTION_CENTER,
+  DIRECTION_RIGHT
 } from './constants'
 
 export const useDropdown = () => inject(keyDropdown, {})
-export function useDebounce (time = 300) {
+export function useDebounce(time = 300) {
   let timer
 
-  return fn => {
+  return (fn) => {
     clearTimeout(timer)
     timer = setTimeout(fn, time)
   }
 }
-export function useThrottle (delay = 300) {
+export function useThrottle(delay = 300) {
   let timer = null
-  return fn => {
+  return (fn) => {
     if (timer) return
     timer = setTimeout(() => {
       fn?.()
@@ -26,7 +30,7 @@ export function useThrottle (delay = 300) {
   }
 }
 
-export function useDropdownContentDirection (
+export function useDropdownContentDirection(
   triggerRef,
   contentRef,
   position,
@@ -44,7 +48,7 @@ export function useDropdownContentDirection (
    * @param {DOMRect} contentRect - content element bounding client rect
    * @return {number}
    */
-  function getTop (y, triggerRect, contentRect) {
+  function getTop(y: number, triggerRect: DOMRect, contentRect: DOMRect) {
     // Reset direction when content is not visible
     if (!visible.value) {
       direction.value.vertical = DIRECTION_DOWN
@@ -59,7 +63,7 @@ export function useDropdownContentDirection (
       : triggerRect.top + triggerRect.height + gap + scrollTop
     const upwardTop = startTop - gap - contentRect.height
     // Is there enough space to expand downwards
-    const overBelow = (downwardTop + contentRect.height) > (scrollTop + viewHeight)
+    const overBelow = downwardTop + contentRect.height > scrollTop + viewHeight
     // Is there enough space to expand upwards
     const overAbove = upwardTop < scrollTop
 
@@ -84,7 +88,7 @@ export function useDropdownContentDirection (
    * @param {DOMRect} contentRect - content element bounding client rect
    * @returns {number}
    */
-  function getLeft (x, triggerRect, contentRect) {
+  function getLeft(x: number, triggerRect: DOMRect, contentRect: DOMRect) {
     if (!visible.value) {
       direction.value.horizontal = DIRECTION_RIGHT
     }
@@ -96,12 +100,12 @@ export function useDropdownContentDirection (
     // Left axis of align left
     const leftOfAlignLeft = isTriggerByContextmenu ? x : triggerRect.left + scrollLeft
     // Left axis of align center
-    const leftOfAlignCenter = (leftOfAlignLeft + (triggerWidth / 2)) - (contentRect.width / 2)
+    const leftOfAlignCenter = leftOfAlignLeft + triggerWidth / 2 - contentRect.width / 2
     // Left axis of align right
-    const leftOfAlignRight = (leftOfAlignLeft + triggerWidth) - contentRect.width
+    const leftOfAlignRight = leftOfAlignLeft + triggerWidth - contentRect.width
 
-    const isLeftOverRight = (leftOfAlignLeft + contentRect.width) > (scrollLeft + viewWidth)
-    const isCenterOverRight = (leftOfAlignCenter + contentRect.width) > (scrollLeft + viewWidth)
+    const isLeftOverRight = leftOfAlignLeft + contentRect.width > scrollLeft + viewWidth
+    const isCenterOverRight = leftOfAlignCenter + contentRect.width > scrollLeft + viewWidth
     const isRightOverLeft = leftOfAlignRight < scrollLeft
 
     const align = toRef(props, 'align')
@@ -110,7 +114,9 @@ export function useDropdownContentDirection (
       direction.value.horizontal = isCenterOverRight ? DIRECTION_LEFT : DIRECTION_RIGHT
       return isCenterOverRight
         ? leftOfAlignRight
-        : isRightOverLeft ? leftOfAlignLeft : leftOfAlignCenter
+        : isRightOverLeft
+          ? leftOfAlignLeft
+          : leftOfAlignCenter
     }
     if (align.value === DIRECTION_RIGHT) {
       direction.value.horizontal = isRightOverLeft ? DIRECTION_RIGHT : DIRECTION_LEFT
@@ -121,7 +127,7 @@ export function useDropdownContentDirection (
     return isLeftOverRight ? leftOfAlignRight : leftOfAlignLeft
   }
 
-  function getDirection () {
+  function getDirection() {
     const triggerRect = getElementRect(triggerRef.value)
     const contentRect = getElementRect(contentRef.value)
     return {
@@ -133,7 +139,7 @@ export function useDropdownContentDirection (
   return { getDirection }
 }
 
-export function useIntersectionObserver (contentRef, handler) {
+export function useIntersectionObserver(contentRef, handler) {
   let observer = null
 
   const options = {
@@ -143,14 +149,14 @@ export function useIntersectionObserver (contentRef, handler) {
   }
   const EPS = 1e-7
 
-  const handleObserver = entries => {
+  const handleObserver = (entries) => {
     const entry = entries[0]
     if (Math.abs(entry.intersectionRatio - 1) < EPS) return
     // console.log(entry)
     handler?.()
   }
 
-  function startIntersectionObserving () {
+  function startIntersectionObserving() {
     if (!contentRef.value) return
 
     if (!observer) {
@@ -160,12 +166,12 @@ export function useIntersectionObserver (contentRef, handler) {
     observer.observe(contentRef.value)
   }
 
-  function stopIntersectionObserving () {
+  function stopIntersectionObserving() {
     if (!observer) return
     observer.unobserve(contentRef.value)
   }
 
-  function cleanupObserver () {
+  function cleanupObserver() {
     if (observer) {
       observer.disconnect()
       observer = null
@@ -180,7 +186,7 @@ export function useIntersectionObserver (contentRef, handler) {
   }
 }
 
-export function useResizeObserver (triggerRef, contentRef, handler) {
+export function useResizeObserver(triggerRef, contentRef, handler) {
   const isObserving = ref(false)
   const skipFirst = ref(false)
   let observer = null
@@ -243,7 +249,7 @@ export function useResizeObserver (triggerRef, contentRef, handler) {
  * @param {boolean | AddEventListenerOptions} options
  * @returns
  */
-export function useEventListener (target, event, handler, options) {
+export function useEventListener(target, event, handler, options) {
   let el = null
 
   const cleanup = () => {

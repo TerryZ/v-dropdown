@@ -11,30 +11,26 @@ export default defineComponent({
   props: {
     rounded: { type: String, default: ROUNDED_MEDIUM }
   },
-  setup (props, { slots }) {
+  setup(props, { slots }) {
     const dropdown = useDropdown()
 
-    const buttonClasses = computed(() => (['dd-default-trigger',
+    const buttonClasses = computed(() => [
+      'dd-default-trigger',
       { 'dd-opened': dropdown?.visible?.value },
       getRoundedClass(props.rounded)
-    ]))
+    ])
     const containerClasses = computed(() => ({
       'dd-trigger-container': true,
       'dd-disabled': dropdown?.disabled?.value
     }))
 
-    const ButtonText = () => slots.default ? slots.default() : 'Open'
+    const ButtonText = () => <>{slots.default ? slots.default() : 'Open'}</>
     const ButtonIcon = () => {
       if (props.rounded === ROUNDED_CIRCLE) return null
-      return (
-        slots.append ? slots.append() : <span class='dd-caret-down' />
-      )
+      return slots.append ? <>{slots.append()}</> : <span class="dd-caret-down" />
     }
     const TriggerButton = () => (
-      <button
-        type='button'
-        class={buttonClasses.value}
-      >
+      <button type="button" class={buttonClasses.value}>
         <ButtonText />
         <ButtonIcon />
       </button>

@@ -1,8 +1,8 @@
-function isHidden (el) {
+function isHidden(el: HTMLDivElement) {
   return window.getComputedStyle(el).display === 'none'
 }
 
-function getRect (el) {
+function getRect(el: HTMLDivElement) {
   // 通过 getComputedStyle(el).width 获得的值更精准，精确到小数点后三位
   const rect = el.getBoundingClientRect()
   return {
@@ -12,7 +12,7 @@ function getRect (el) {
     left: rect.left
   }
 }
-export function getElementRect (el) {
+export function getElementRect(el: HTMLDivElement) {
   if (!el) {
     return {
       width: 0,
