@@ -1,8 +1,10 @@
+import type { DropdownElementRect } from './types'
+
 function isHidden(el: HTMLDivElement) {
   return window.getComputedStyle(el).display === 'none'
 }
 
-function getRect(el: HTMLDivElement) {
+function getRect(el: HTMLDivElement): DropdownElementRect {
   // 通过 getComputedStyle(el).width 获得的值更精准，精确到小数点后三位
   const rect = el.getBoundingClientRect()
   return {
@@ -12,7 +14,7 @@ function getRect(el: HTMLDivElement) {
     left: rect.left
   }
 }
-export function getElementRect(el: HTMLDivElement) {
+export function getElementRect(el: HTMLDivElement | null): DropdownElementRect {
   if (!el) {
     return {
       width: 0,

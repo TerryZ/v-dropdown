@@ -8,6 +8,9 @@ import { TRIGGER_CLICK, APPEND_TO_BODY } from './constants'
 import DropdownTrigger from './DropdownTrigger'
 import DropdownContentContainer from './DropdownContentContainer'
 
+import type { ExtractPropTypes, SetupContext } from 'vue'
+import type { DropdownProps } from './types'
+
 export default defineComponent({
   name: 'VDropdown',
   props: {
@@ -38,20 +41,20 @@ export default defineComponent({
     appendTo: { type: [String, Object], default: APPEND_TO_BODY }
   },
   emits: ['visible-change', 'open', 'close', 'opened', 'closed'],
-  setup (props, context) {
+  setup(props, context) {
     const { slots } = context
 
     const triggerRef = ref()
     const contentRef = ref()
 
-    const {
-      slotData,
-      visible,
-      getContentClass,
-      contentStyles
-    } = useDropdownCore(triggerRef, contentRef, props, context)
+    const { slotData, visible, getContentClass, contentStyles } = useDropdownCore(
+      triggerRef,
+      contentRef,
+      props as ExtractPropTypes<DropdownProps>,
+      context as SetupContext
+    )
 
-    const Trigger = () => slots.trigger ? slots.trigger(slotData) : <DropdownTrigger />
+    const Trigger = () => (slots.trigger ? <>{slots.trigger(slotData)}</> : <DropdownTrigger />)
     const Content = () => {
       return (
         <DropdownContentContainer>
@@ -61,14 +64,16 @@ export default defineComponent({
               style={contentStyles.value}
               class={getContentClass?.value?.()}
               v-show={visible.value}
-            >{slots?.default?.(slotData)}</div>
+            >
+              {slots?.default?.(slotData)}
+            </div>
           )}
         </DropdownContentContainer>
       )
     }
 
     return () => (
-      <div ref={triggerRef} class={getTriggerClasses(props)}>
+      <div ref={triggerRef} class={getTriggerClasses(props?.block)}>
         <Trigger />
         <Content />
       </div>

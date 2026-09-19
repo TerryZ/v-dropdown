@@ -10,18 +10,26 @@ import {
   DIRECTION_RIGHT
 } from './constants'
 
-export const useDropdown = () => inject(keyDropdown, {})
-export function useDebounce(time = 300) {
-  let timer
+import type { TemplateRef, Ref, ExtractPropTypes } from 'vue'
+import type {
+  DropdownContentPosition,
+  DropdownProps,
+  DropdownElementRect,
+  DropdownSlotData
+} from './types'
 
-  return (fn) => {
+export const useDropdown = () => inject(keyDropdown, {}) as DropdownSlotData
+export function useDebounce(time = 300) {
+  let timer: number
+
+  return (fn: () => void) => {
     clearTimeout(timer)
     timer = setTimeout(fn, time)
   }
 }
 export function useThrottle(delay = 300) {
-  let timer = null
-  return (fn) => {
+  let timer: number | null = null
+  return (fn: () => void) => {
     if (timer) return
     timer = setTimeout(() => {
       fn?.()
@@ -31,24 +39,28 @@ export function useThrottle(delay = 300) {
 }
 
 export function useDropdownContentDirection(
-  triggerRef,
-  contentRef,
-  position,
-  direction,
-  visible,
-  props
+  triggerRef: TemplateRef<HTMLDivElement>,
+  contentRef: TemplateRef<HTMLDivElement>,
+  position: Ref<DropdownContentPosition>,
+  direction: Ref<{ vertical: string; horizontal: string }>,
+  visible: Ref<boolean>,
+  props: ExtractPropTypes<DropdownProps>
 ) {
   const { trigger, gap } = props
   const { isTriggerByContextmenu } = getTriggerState(trigger)
 
   /**
    * Calculation display direction and top axis
-   * @param {number} y
-   * @param {DOMRect} triggerRect - trigger element bounding client rect
-   * @param {DOMRect} contentRect - content element bounding client rect
-   * @return {number}
+   * @param y
+   * @param triggerRect - trigger element bounding client rect
+   * @param contentRect - content element bounding client rect
+   * @return
    */
-  function getTop(y: number, triggerRect: DOMRect, contentRect: DOMRect) {
+  function getTop(
+    y: number,
+    triggerRect: DropdownElementRect,
+    contentRect: DropdownElementRect
+  ): number {
     // Reset direction when content is not visible
     if (!visible.value) {
       direction.value.vertical = DIRECTION_DOWN
@@ -60,8 +72,8 @@ export function useDropdownContentDirection(
     const startTop = isTriggerByContextmenu ? y : triggerRect.top + scrollTop
     const downwardTop = isTriggerByContextmenu
       ? y
-      : triggerRect.top + triggerRect.height + gap + scrollTop
-    const upwardTop = startTop - gap - contentRect.height
+      : triggerRect.top + triggerRect.height + gap! + scrollTop
+    const upwardTop = startTop - gap! - contentRect.height
     // Is there enough space to expand downwards
     const overBelow = downwardTop + contentRect.height > scrollTop + viewHeight
     // Is there enough space to expand upwards
@@ -83,12 +95,16 @@ export function useDropdownContentDirection(
   }
   /**
    * Calculation left axis
-   * @param {number} x
-   * @param {DOMRect} triggerRect - trigger element bounding client rect
-   * @param {DOMRect} contentRect - content element bounding client rect
-   * @returns {number}
+   * @param x
+   * @param triggerRect - trigger element bounding client rect
+   * @param contentRect - content element bounding client rect
+   * @returns
    */
-  function getLeft(x: number, triggerRect: DOMRect, contentRect: DOMRect) {
+  function getLeft(
+    x: number,
+    triggerRect: DropdownElementRect,
+    contentRect: DropdownElementRect
+  ): number {
     if (!visible.value) {
       direction.value.horizontal = DIRECTION_RIGHT
     }
@@ -131,16 +147,19 @@ export function useDropdownContentDirection(
     const triggerRect = getElementRect(triggerRef.value)
     const contentRect = getElementRect(contentRef.value)
     return {
-      top: getTop(position.value.y, triggerRect, contentRect),
-      left: getLeft(position.value.x, triggerRect, contentRect)
+      top: getTop(position.value.y!, triggerRect, contentRect),
+      left: getLeft(position.value.x!, triggerRect, contentRect)
     }
   }
 
   return { getDirection }
 }
 
-export function useIntersectionObserver(contentRef, handler) {
-  let observer = null
+export function useIntersectionObserver(
+  contentRef: TemplateRef<HTMLDivElement>,
+  handler: () => void
+) {
+  let observer: IntersectionObserver | null = null
 
   const options = {
     root: null,
@@ -149,9 +168,9 @@ export function useIntersectionObserver(contentRef, handler) {
   }
   const EPS = 1e-7
 
-  const handleObserver = (entries) => {
+  const handleObserver: IntersectionObserverCallback = (entries) => {
     const entry = entries[0]
-    if (Math.abs(entry.intersectionRatio - 1) < EPS) return
+    if (!entry || Math.abs(entry.intersectionRatio - 1) < EPS) return
     // console.log(entry)
     handler?.()
   }
@@ -168,7 +187,7 @@ export function useIntersectionObserver(contentRef, handler) {
 
   function stopIntersectionObserving() {
     if (!observer) return
-    observer.unobserve(contentRef.value)
+    observer.unobserve(contentRef.value!)
   }
 
   function cleanupObserver() {
@@ -186,10 +205,14 @@ export function useIntersectionObserver(contentRef, handler) {
   }
 }
 
-export function useResizeObserver(triggerRef, contentRef, handler) {
+export function useResizeObserver(
+  triggerRef: TemplateRef<HTMLDivElement>,
+  contentRef: TemplateRef<HTMLDivElement>,
+  handler: () => void
+) {
   const isObserving = ref(false)
   const skipFirst = ref(false)
-  let observer = null
+  let observer: ResizeObserver | null = null
 
   const handleResize = () => {
     // Skip first time callback when ResizeObserver observe elements
@@ -243,14 +266,19 @@ export function useResizeObserver(triggerRef, contentRef, handler) {
 }
 /**
  *
- * @param {EventTarget | function} target
- * @param {string} event
- * @param {EventListenerOrEventListenerObject} handler
- * @param {boolean | AddEventListenerOptions} options
+ * @param target
+ * @param event
+ * @param handler
+ * @param options
  * @returns
  */
-export function useEventListener(target, event, handler, options) {
-  let el = null
+export function useEventListener(
+  target: HTMLDivElement | (() => HTMLDivElement),
+  event: string,
+  handler: EventListenerOrEventListenerObject,
+  options?: boolean | AddEventListenerOptions
+) {
+  let el: HTMLDivElement | null = null
 
   const cleanup = () => {
     if (!el) return

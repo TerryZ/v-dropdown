@@ -10,24 +10,30 @@ import {
 
 export { getElementRect } from './util'
 
-export function getTriggerClasses (props) {
-  return ['dd-trigger',
-    { 'dd-trigger--block': props.block }
-  ]
+import type {
+  DropdownTriggerType,
+  DropdownTriggerRoundedType,
+  DropdownContentRoundedType
+} from './types'
+
+export function getTriggerClasses(block: boolean) {
+  return ['dd-trigger', { 'dd-trigger--block': block }]
 }
-export function getRoundedClass (value) {
-  const level = !value || !roundedList.includes(value)
-    ? ROUNDED_MEDIUM
-    : roundedList.find(val => val === value)
+export function getRoundedClass(value: DropdownTriggerRoundedType) {
+  const level =
+    !value || !roundedList.includes(value)
+      ? ROUNDED_MEDIUM
+      : roundedList.find((val) => val === value)
   return `dd-rounded--${level}`
 }
-export function getContentRoundedClass (value) {
-  const level = !value || !contentRoundedList.includes(value)
-    ? ROUNDED_SMALL
-    : contentRoundedList.find(val => val === value)
+export function getContentRoundedClass(value: DropdownContentRoundedType) {
+  const level =
+    !value || !contentRoundedList.includes(value)
+      ? ROUNDED_SMALL
+      : contentRoundedList.find((val) => val === value)
   return `dd-content-rounded--${level}`
 }
-export function getTriggerState (trigger) {
+export function getTriggerState(trigger: DropdownTriggerType = TRIGGER_CLICK) {
   return {
     isTriggerByClick: trigger === TRIGGER_CLICK,
     isTriggerByHover: trigger === TRIGGER_HOVER,

@@ -6,10 +6,13 @@ import { ROUNDED_MEDIUM, ROUNDED_CIRCLE } from './constants'
 import { getRoundedClass } from './helper'
 import { useDropdown } from './use'
 
+import type { PropType } from 'vue'
+import type { DropdownTriggerRoundedType } from './types'
+
 export default defineComponent({
   name: 'DropdownTrigger',
   props: {
-    rounded: { type: String, default: ROUNDED_MEDIUM }
+    rounded: { type: String as PropType<DropdownTriggerRoundedType>, default: ROUNDED_MEDIUM }
   },
   setup(props, { slots }) {
     const dropdown = useDropdown()

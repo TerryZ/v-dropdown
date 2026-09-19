@@ -2,9 +2,11 @@ import { defineComponent, Teleport, Transition, inject } from 'vue'
 
 import { keyContainer } from './constants'
 
+import type { DropdownContainerContext } from './types'
+
 export default defineComponent({
   name: 'DropdownContentContainer',
-  setup (props, { slots }) {
+  setup(_, { slots }) {
     const {
       appendTo,
       defer,
@@ -13,20 +15,20 @@ export default defineComponent({
       onDropdownOpened,
       onDropdownClose,
       onDropdownClosed
-    } = inject(keyContainer, {})
+    } = inject(keyContainer, {}) as DropdownContainerContext
 
-    const handleOnEnter = (el, done) => {
+    const handleOnEnter = (_: Element, done: () => void) => {
       onDropdownOpen()
       setTimeout(done, 150)
     }
-    const handleOnAfterEnter = el => {
+    const handleOnAfterEnter = () => {
       onDropdownOpened()
     }
-    const handleOnLeave = (el, done) => {
+    const handleOnLeave = (_: Element, done: () => void) => {
       onDropdownClose()
       setTimeout(done, 75)
     }
-    const handleOnAfterLeave = el => {
+    const handleOnAfterLeave = () => {
       onDropdownClosed()
     }
 
@@ -38,7 +40,9 @@ export default defineComponent({
           onAfterEnter={handleOnAfterEnter}
           onLeave={handleOnLeave}
           onAfterLeave={handleOnAfterLeave}
-        >{() => slots?.default?.()}</Transition>
+        >
+          {() => slots?.default?.()}
+        </Transition>
       </Teleport>
     )
   }
