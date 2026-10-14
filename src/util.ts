@@ -1,10 +1,10 @@
 import type { DropdownElementRect } from './types'
 
-function isHidden(el: HTMLDivElement) {
+function isHidden(el: HTMLElement) {
   return window.getComputedStyle(el).display === 'none'
 }
 
-function getRect(el: HTMLDivElement): DropdownElementRect {
+function getRect(el: HTMLElement): DropdownElementRect {
   // 通过 getComputedStyle(el).width 获得的值更精准，精确到小数点后三位
   const rect = el.getBoundingClientRect()
   return {
@@ -14,7 +14,7 @@ function getRect(el: HTMLDivElement): DropdownElementRect {
     left: rect.left
   }
 }
-export function getElementRect(el: HTMLDivElement | null): DropdownElementRect {
+export function getElementRect(el: HTMLElement | null): DropdownElementRect {
   if (!el) {
     return {
       width: 0,
@@ -24,6 +24,9 @@ export function getElementRect(el: HTMLDivElement | null): DropdownElementRect {
     }
   }
   if (isHidden(el)) {
+    // 防止空间占用时，内容超出边界，导致出现不应出现的滚动条
+    el.style.left = '10px'
+    el.style.top = '10px'
     /**
      * change the way to hide dropdown container from
      * 'display:none' to 'visibility:hidden'
@@ -31,12 +34,15 @@ export function getElementRect(el: HTMLDivElement | null): DropdownElementRect {
      */
     el.style.visibility = 'hidden'
     el.style.display = 'inline-flex'
+
     const rect = getRect(el)
     /**
-     * restore dropdown style after getting position data
+     * restore style after getting position data
      */
     el.style.visibility = 'visible'
     el.style.display = 'none'
+    el.style.left = ''
+    el.style.top = ''
     return rect
   }
   return getRect(el)

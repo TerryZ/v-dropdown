@@ -46,8 +46,9 @@ export function useDropdownContentDirection(
   visible: Ref<boolean>,
   props: ExtractPropTypes<DropdownProps>
 ) {
-  const { trigger, gap } = props
+  const { trigger } = props
   const { isTriggerByContextmenu } = getTriggerState(trigger)
+  const gap = toRef(props, 'gap')
 
   /**
    * Calculation display direction and top axis
@@ -72,8 +73,8 @@ export function useDropdownContentDirection(
     const startTop = isTriggerByContextmenu ? y : triggerRect.top + scrollTop
     const downwardTop = isTriggerByContextmenu
       ? y
-      : triggerRect.top + triggerRect.height + gap! + scrollTop
-    const upwardTop = startTop - gap! - contentRect.height
+      : triggerRect.top + triggerRect.height + gap.value! + scrollTop
+    const upwardTop = startTop - gap.value! - contentRect.height
     // Is there enough space to expand downwards
     const overBelow = downwardTop + contentRect.height > scrollTop + viewHeight
     // Is there enough space to expand upwards

@@ -18,7 +18,7 @@ import {
   keyInternal
 } from './constants'
 
-import type { SetupContext, TemplateRef, ExtractPropTypes, Ref } from 'vue'
+import type { SetupContext, TemplateRef, ExtractPropTypes, Ref, ClassValue } from 'vue'
 import type { DropdownProps, DropdownContentPosition } from './types'
 
 export function useDropdownCore(
@@ -38,6 +38,7 @@ export function useDropdownCore(
   })
   const getContentClass = ref()
   const contentStyles = ref({ top: '0px', left: '0px' })
+  const contentClasses: Ref<ClassValue[]> = ref([])
   const transitionName = computed(() => {
     if (!props.animated) return ''
     return `drop-${direction.value.vertical}-${direction.value.horizontal}`
@@ -145,9 +146,9 @@ export function useDropdownCore(
     if (!inContent) close()
   }
   function adjustContentPosition() {
-    const result = getDirection()
-    contentStyles.value.top = `${result.top}px`
-    contentStyles.value.left = `${result.left}px`
+    const position = getDirection()
+    contentStyles.value.top = `${position.top}px`
+    contentStyles.value.left = `${position.left}px`
   }
   const handleTriggerClick = (e: Event) => {
     if (!isTriggerByClick || manual!.value) return
@@ -192,6 +193,7 @@ export function useDropdownCore(
   provide(keyDropdown, slotData)
   provide(keyInternal, {
     contentStyles,
+    contentClasses,
     setContentClassGetter: (fn: () => string[]) => {
       getContentClass.value = fn
     }
@@ -215,6 +217,7 @@ export function useDropdownCore(
     toggleVisible,
     slotData,
     getContentClass,
-    contentStyles
+    contentStyles,
+    contentClasses
   }
 }

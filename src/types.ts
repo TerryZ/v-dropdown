@@ -1,14 +1,14 @@
-import type { ComputedRef, Ref } from 'vue'
+import type { ComputedRef, Ref, ClassValue } from 'vue'
 
 export type DropdownTriggerType = 'click' | 'hover' | 'contextmenu'
-
+export type DropdownAlignType = 'left' | 'center' | 'right'
 export type DropdownContentRoundedType = 'small' | 'medium' | 'large' | 'pill'
 export type DropdownTriggerRoundedType = DropdownContentRoundedType | 'circle'
 
 export interface DropdownProps {
   disabled?: boolean
   /** Content show up alignment direction */
-  align?: 'left' | 'center' | 'right'
+  align?: DropdownAlignType
   /**
    * Toggle display / close dropdown content
    * @default true
@@ -68,6 +68,7 @@ export interface DropdownSlotData {
 }
 export interface DropdownInternalContext {
   contentStyles: Ref<Record<string, string | number>>
+  contentClasses: Ref<ClassValue[]>
   setContentClassGetter: (fn: () => string[]) => void
 }
 export interface DropdownContainerContext {

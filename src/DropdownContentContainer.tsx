@@ -17,6 +17,10 @@ export default defineComponent({
       onDropdownClosed
     } = inject(keyContainer, {}) as DropdownContainerContext
 
+    // const handleOnBeforeEnter = (el: Element) => {
+    //   // console.log(el.getBoundingClientRect())
+    //   // console.log(getElementRect(el as HTMLElement))
+    // }
     const handleOnEnter = (_: Element, done: () => void) => {
       onDropdownOpen()
       setTimeout(done, 150)

@@ -19,14 +19,14 @@ import type {
 export function getTriggerClasses(block: boolean) {
   return ['dd-trigger', { 'dd-trigger--block': block }]
 }
-export function getRoundedClass(value: DropdownTriggerRoundedType) {
+export function getRoundedClass(value: DropdownTriggerRoundedType = ROUNDED_MEDIUM) {
   const level =
     !value || !roundedList.includes(value)
       ? ROUNDED_MEDIUM
       : roundedList.find((val) => val === value)
   return `dd-rounded--${level}`
 }
-export function getContentRoundedClass(value: DropdownContentRoundedType) {
+export function getContentRoundedClass(value: DropdownContentRoundedType = ROUNDED_SMALL) {
   const level =
     !value || !contentRoundedList.includes(value)
       ? ROUNDED_SMALL

@@ -3,20 +3,20 @@ import './styles/dropdown.sass'
 import { ref, defineComponent } from 'vue'
 import { getTriggerClasses } from './helper'
 import { useDropdownCore } from './core'
-import { TRIGGER_CLICK, APPEND_TO_BODY } from './constants'
+import { TRIGGER_CLICK, APPEND_TO_BODY, DIRECTION_LEFT } from './constants'
 
 import DropdownTrigger from './DropdownTrigger'
 import DropdownContentContainer from './DropdownContentContainer'
 
-import type { ExtractPropTypes, SetupContext } from 'vue'
-import type { DropdownProps } from './types'
+import type { ExtractPropTypes, SetupContext, PropType } from 'vue'
+import type { DropdownProps, DropdownTriggerType, DropdownAlignType } from './types'
 
 export default defineComponent({
   name: 'VDropdown',
   props: {
     disabled: { type: Boolean, default: false },
     /** Content show up alignment direction */
-    align: { type: String, default: 'left' },
+    align: { type: String as PropType<DropdownAlignType>, default: DIRECTION_LEFT },
     /** Toggle display / close dropdown content */
     toggle: { type: Boolean, default: true },
     /** Manual control the display and hiding of dropdown */
@@ -33,7 +33,7 @@ export default defineComponent({
      * - `hover`
      * - `contextmenu`
      */
-    trigger: { type: String, default: TRIGGER_CLICK },
+    trigger: { type: String as PropType<DropdownTriggerType>, default: TRIGGER_CLICK },
     animated: { type: Boolean, default: true },
     /** The distance(px) between the trigger and the content */
     gap: { type: Number, default: 5 },
@@ -47,7 +47,7 @@ export default defineComponent({
     const triggerRef = ref()
     const contentRef = ref()
 
-    const { slotData, visible, getContentClass, contentStyles } = useDropdownCore(
+    const { slotData, visible, contentStyles, contentClasses } = useDropdownCore(
       triggerRef,
       contentRef,
       props as ExtractPropTypes<DropdownProps>,
@@ -62,7 +62,7 @@ export default defineComponent({
             <div
               ref={contentRef}
               style={contentStyles.value}
-              class={getContentClass?.value?.()}
+              class={contentClasses.value}
               v-show={visible.value}
             >
               {slots?.default?.(slotData)}

@@ -1,4 +1,4 @@
-import { inject, defineComponent } from 'vue'
+import { ref, inject, defineComponent } from 'vue'
 import { keyInternal, ROUNDED_SMALL, Z_INDEX } from './constants'
 import { getContentRoundedClass } from './helper'
 
@@ -13,23 +13,39 @@ export default defineComponent({
     rounded: { type: String as PropType<DropdownContentRoundedType>, default: ROUNDED_SMALL },
     zIndex: { type: Number, default: Z_INDEX }
   },
-  setup(props, { slots }) {
-    const { setContentClassGetter, contentStyles } = inject(
-      keyInternal,
-      {}
-    ) as DropdownInternalContext
+  setup(props, { slots, attrs }) {
+    const contentClass = ref<string[]>(['dd-content-body', getContentRoundedClass(props.rounded)])
+    const { contentStyles, contentClasses } = inject(keyInternal, {}) as DropdownInternalContext
 
-    setContentClassGetter?.(() => {
-      const classes = ['dd-content', getContentRoundedClass(props.rounded)]
-      if (!props.border) classes.push('dd-no-border')
-      return classes
-    })
+    if (!props.border) contentClass.value.push('dd-no-border')
 
-    return () => {
-      if (contentStyles) {
-        contentStyles.value['z-index'] = props.zIndex
-      }
-      return <div class="dd-content-body">{slots?.default?.()}</div>
+    // setContentClassGetter?.(() => {
+    //   const classes = ['dd-content', getContentRoundedClass(props.rounded)]
+    //   // const classes = ['dd-content']
+    //   // if (!props.border) classes.push('dd-no-border')
+    //   return classes
+    // })
+
+    console.log(contentClasses)
+    if (contentClasses) {
+      contentClasses.value = ['dd-content', getContentRoundedClass(props?.rounded)]
+      console.log(attrs)
+      if (attrs.class) contentClasses?.value.push(attrs.class)
     }
+
+    if (contentStyles) {
+      contentStyles.value['z-index'] = props.zIndex
+    }
+
+    return () => slots?.default?.({ text: '123' })
+
+    // TODO: 这里的 div 考虑是否可以去掉
+    // return () => {
+    //   if (contentStyles) {
+    //     contentStyles.value['z-index'] = props.zIndex
+    //   }
+
+    //   return <div class={contentClass.value}>{slots?.default?.()}</div>
+    // }
   }
 })
