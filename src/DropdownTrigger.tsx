@@ -27,6 +27,9 @@ export default defineComponent({
       'dd-disabled': dropdown?.disabled?.value
     }))
 
+    const ButtonPrepend = () => {
+      return slots.prepend ? <>{slots.prepend()}</> : null
+    }
     const ButtonText = () => <>{slots.default ? slots.default() : 'Open'}</>
     const ButtonIcon = () => {
       if (props.rounded === ROUNDED_CIRCLE) return null
@@ -34,6 +37,7 @@ export default defineComponent({
     }
     const TriggerButton = () => (
       <button type="button" class={buttonClasses.value}>
+        <ButtonPrepend />
         <ButtonText />
         <ButtonIcon />
       </button>
